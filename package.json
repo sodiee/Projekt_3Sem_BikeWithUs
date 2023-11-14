@@ -2,13 +2,16 @@
   "name": "projekt",
   "version": "1.0.0",
   "description": "semesterprojekt",
-  "main": "index.js",
+  "main": "App.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "author": "mathias, lasse, lucas, kamilla, maksym, mikkel, simon",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "firebase": "^10.6.0",
+    "mocha": "^10.2.0"
   }
 }

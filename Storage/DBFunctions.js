@@ -54,7 +54,7 @@ const deleteCustomer = async (id) => {
 const addCustomer = async (fornavn, efternavn, fødselsdag, by) => {
     const customer = {Fornavn: fornavn, Efternavn: efternavn, Fødselsdag: fødselsdag, By: by};
     const docRef = await addDoc(CustomersCollection, car);
-    return docRef.id;
+    return customer;
 }
 
 const editCustomer = async (customer) => {
