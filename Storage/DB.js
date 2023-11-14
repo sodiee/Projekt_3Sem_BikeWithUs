@@ -17,3 +17,4 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 //hjælp
+//hjælp2
