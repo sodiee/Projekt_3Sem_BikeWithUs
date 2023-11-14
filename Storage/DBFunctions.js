@@ -1,3 +1,4 @@
+// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import {getFirestore, 
     collection, 
@@ -8,9 +9,6 @@ import {getFirestore,
     addDoc,
     updateDoc
 } from 'firebase/firestore';
-
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -48,13 +46,13 @@ const getCustomer = async (id) => {
 }
 
 const deleteCustomer = async (id) => {
-    const deletedCustomer = await deleteDoc(doc(db, 'Customer', id)); 
+    const deletedCustomer = await deleteDoc(doc(db, 'Customers', id)); 
 }
 
 const addCustomer = async (fornavn, efternavn, fødselsdag, by) => {
     const customer = {Fornavn: fornavn, Efternavn: efternavn, Fødselsdag: fødselsdag, By: by};
-    const docRef = await addDoc(CustomersCollection, car);
-    return customer;
+    const docRef = await addDoc(CustomersCollection, customer);
+    return docRef.id;
 }
 
 const editCustomer = async (customer) => {
@@ -65,5 +63,20 @@ const editCustomer = async (customer) => {
         By: customer.by
     });
 };
+
+//virker
+//addCustomer("Mikkel", "Lindhøj", "xxxxxx", "Aarhus C");
+
+//virker
+//deleteCustomer('jek5aZVkK8ZykHJCNmhK');
+
+//virker ikke
+//var customer = getCustomer('mQXkR23ziq2gJMgFUe7P')
+//customer.fornavn = "Bølle"
+//editCustomer('mQXkR23ziq2gJMgFUe7P');
+
+//virker ik
+//var customers = getCustomers();
+//console.log(customers)
 
 export default {getCustomer, getCustomer, deleteCustomer, addCustomer, editCustomer}
