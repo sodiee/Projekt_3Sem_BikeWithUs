@@ -21,3 +21,4 @@ const app = initializeApp(firebaseConfig);
 //hjælp3
 //Hjælp 4 - Lars
 //Hjælp 5 - Lars
+//hjælp 6
