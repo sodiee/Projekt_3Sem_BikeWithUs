@@ -1,0 +1,11 @@
+{
+  "name": "projekt",
+  "version": "1.0.0",
+  "description": "semesterprojekt",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "mathias, lasse, lucas, kamilla, maksym, mikkel, simon",
+  "license": "ISC"
+}
