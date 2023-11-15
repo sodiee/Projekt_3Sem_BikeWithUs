@@ -1,8 +1,6 @@
 import DBFunctions from "./Storage/DBFunctions";
-import express, {response} from 'express'
-import pug from 'pug'
-
-const app = express();
+const express = require('express')
+const app = express()
 app.set('view engine', 'pug')
 
 
