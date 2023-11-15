@@ -70,7 +70,7 @@ const editCustomerDB = async (customer) => {
 //addCustomer("Mikkel", "Lindhøj", "xxxxxx", "Aarhus C");
 
 //virker
-deleteCustomerDB('jek5aZVkK8ZykHJCNmhK');
+//deleteCustomerDB('CBAB0zieWucV3kRPNGgF');
 
 //virker ikke
 //var customer = getCustomer('mQXkR23ziq2gJMgFUe7P')

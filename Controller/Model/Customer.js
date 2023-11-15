@@ -24,4 +24,9 @@ function deleteCustomer(customer) {
 }
 
 let customer1 = new Customer("Lucas", "Holm", "xxxxxx", "Viby");
-deleteCustomer(customer1.id);
+addCustomer(customer1);
+//deleteCustomer('CBAB0zieWucV3kRPNGgF');
+console.log('CBAB0zieWucV3kRPNGgF');
+console.log(customer1.id);
+
+export default {addCustomer, getCustomer, deleteCustomer, editCustomer}
