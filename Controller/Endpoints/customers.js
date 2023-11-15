@@ -49,4 +49,5 @@ router.get('/Customer/Get/:id', async (req, res) => {
         res.status(500).send('Der opstod en fejl ved hentning af kunde.');
     }
 });
+
 module.exports = router;
