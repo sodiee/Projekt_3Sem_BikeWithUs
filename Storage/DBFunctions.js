@@ -25,6 +25,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+//CustomerCollection
 const CustomersCollection = collection(db, 'Customers')
 
 const getCustomersDB = async () => {
