@@ -1,6 +1,6 @@
-import DBFunctions from './Storage/DBFunctions.js';
+import DBFunctions from '../Storage/DBFunctions.js';
 import chai from 'chai'
-import assert from 'chai.assert'
+const assert = chai.assert
 
 //DBFunctions-script test
 describe('DBFunctions TESTS', () => {
