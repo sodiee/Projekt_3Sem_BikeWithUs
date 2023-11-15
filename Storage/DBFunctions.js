@@ -27,7 +27,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const CustomersCollection = collection(db, 'Customers')
 
-const getCustomers = async () => {
+const getCustomersDB = async () => {
     let customersQueryDocs = await getDocs(customersQueryDocs);
     let customers = customersQueryDocs.docs.map(doc => {
         let data = doc.data();
@@ -37,7 +37,7 @@ const getCustomers = async () => {
     return customers;
 }
 
-const getCustomer = async (id) => {
+const getCustomerDB = async (id) => {
     const docRef = doc(db, 'Customers', id);
     const customerQueryDoc = await getDoc(docRef);
     let customer = customerQueryDoc.data();
@@ -45,22 +45,22 @@ const getCustomer = async (id) => {
     return customer;
 }
 
-const deleteCustomer = async (id) => {
+const deleteCustomerDB = async (id) => {
     const deletedCustomer = await deleteDoc(doc(db, 'Customers', id)); 
 }
 
-const addCustomer = async (fornavn, efternavn, fødselsdag, by) => {
-    const customer = {Fornavn: fornavn, Efternavn: efternavn, Fødselsdag: fødselsdag, By: by};
+const addCustomerDB = async (firstName, lastName, birthday, city) => {
+    const customer = {FirstName: firstName, LastName: lastName, Birthday: birthday, City: city};
     const docRef = await addDoc(CustomersCollection, customer);
     return docRef.id;
 }
 
-const editCustomer = async (customer) => {
+const editCustomerDB = async (customer) => {
     await updateDoc(doc(db, 'Customers', customer.customerID), {
-        Fornavn: customer.fornavn,
-        Efternavn: customer.efternavn,
-        Fødselsdag: customer.fødselsdag,
-        By: customer.by
+        FirstName: firstName, 
+        LastName: lastName, 
+        Birthday: birthday, 
+        City: city
     });
 };
 
@@ -79,4 +79,4 @@ const editCustomer = async (customer) => {
 //var customers = getCustomers();
 //console.log(customers)
 
-export default {getCustomer, getCustomer, deleteCustomer, addCustomer, editCustomer}
+export default {getCustomerDB, getCustomerDB, deleteCustomerDB, addCustomerDB, editCustomerDB}
