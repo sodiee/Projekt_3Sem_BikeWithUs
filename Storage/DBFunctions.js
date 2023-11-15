@@ -47,12 +47,13 @@ const getCustomerDB = async (id) => {
 }
 
 const deleteCustomerDB = async (id) => {
-    const deletedCustomer = await deleteDoc(doc(db, 'Customers', id)); 
+    const deletedCustomer = await deleteDoc(doc(db, 'Customers', id));
 }
 
 const addCustomerDB = async (firstName, lastName, birthday, city) => {
     const customer = {FirstName: firstName, LastName: lastName, Birthday: birthday, City: city};
     const docRef = await addDoc(CustomersCollection, customer);
+    customer.id = docRef.id
     return docRef.id;
 }
 
@@ -69,7 +70,7 @@ const editCustomerDB = async (customer) => {
 //addCustomer("Mikkel", "Lindhøj", "xxxxxx", "Aarhus C");
 
 //virker
-//deleteCustomer('jek5aZVkK8ZykHJCNmhK');
+deleteCustomerDB('jek5aZVkK8ZykHJCNmhK');
 
 //virker ikke
 //var customer = getCustomer('mQXkR23ziq2gJMgFUe7P')
