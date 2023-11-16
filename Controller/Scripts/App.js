@@ -1,5 +1,5 @@
 import DBFunctions from '../../Storage/DBFunctions.js';
-const express = require('express')
+import express from 'express'
 const app = express()
 app.set('view engine', 'pug')
 
@@ -10,7 +10,7 @@ app.use(express.static('GUI'))
 
 
 // Endpoints (routes)
-const customerRouter = require('./Controller/Endpoints/customers')
+import customerRouter from '../../Endpoints/customers.js'
 app.use('/customers', customerRouter)
 const adminRouter = require('./Controller/Endpoints/admins')
 app.use('/admins', adminRouter)
