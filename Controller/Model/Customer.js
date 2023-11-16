@@ -7,28 +7,39 @@ function Customer(firstName, lastName, birthday, city) {
     this.city = city;
 }
 
+async function getAllCustomers() {
+    return await DBFunctions.getCustomersDB();
+}
+
 async function addCustomer(customer) {
-    let c = {FirstName: customer.firstName, LastName: customer.lastName, Birthday: customer.birthday, City: customer.city}
+    let c = {firstName: customer.firstName, lastName: customer.lastName, birthday: customer.birthday, city: customer.city}
     return await DBFunctions.addCustomerDB(c);
 }
 
 function editCustomer(customer) {
-    let c = {FirstName: customer.firstName, LastName: customer.lastName, Birthday: customer.birthday, City: customer.city, Id: customer.Id}
-    DBFunctions.editCustomerDB(c);
+    let c = {firstName: customer.firstName, lastName: customer.lastName, birthday: customer.birthday, city: customer.city, id: customer.id}
+    return DBFunctions.editCustomerDB(c);
 }
 
 function getCustomer(customer) {
-    DBFunctions.getCustomerDB(customer.id);
+    return DBFunctions.getCustomerDB(customer.Id);
 }
 
-function deleteCustomer(customer) {
-    let c = {FirstName: customer.firstName, LastName: customer.lastName, Birthday: customer.birthday, City: customer.city, Id: customer.Id}
+async function deleteCustomer(customer) {
+    let c = {firstName: customer.firstName, lastName: customer.lastName, birthday: customer.birthday, city: customer.city, id: customer.id}
     DBFunctions.deleteCustomerDB(c);
 }
 
-let customer1 = new Customer("Lucas", "Holm", "123456", "Viby");
-customer1 = await addCustomer(customer1)
-customer1.firstName = 'Celina'
-await editCustomer(customer1);
+async function getCustomers() {
+    return await DBFunctions.getCustomersDB();
+}
 
-export default {addCustomer, getCustomer, deleteCustomer, editCustomer}
+/*
+let customer1 = new Customer("Lucas", "Holm", "123456", "Viby");
+customer1 = await addCustomer(customer1);
+
+customer1.FirstName = 'bølle'
+await editCustomer(customer1)
+*/
+
+export default {addCustomer, getCustomer, deleteCustomer, editCustomer, getCustomers}

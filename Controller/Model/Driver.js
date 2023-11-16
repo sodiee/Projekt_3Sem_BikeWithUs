@@ -7,21 +7,70 @@ this.lastName = lastName;
 
 
 async function addDriver(driver) {
-    let d = {FirstName: driver.firstName, LastName: driver.lastName}
+    let d = {firstName: driver.firstName, lastName: driver.lastName}
     return await DBFunctions.addDriverDB(d);
 }
 
 function getDriver(driver) {
-    DBFunctions.getDriverDB(driver.id);
+    return DBFunctions.getDriverDB(driver.id);
 }
 
 function deleteDriver(driver) {
-    let d = {FirstName: driver.firstName, LastName: driver.lastName}
+    let d = {firstName: driver.firstName, lastName: driver.lastName, id: driver.id}
     DBFunctions.deleteDriverDB(d);
 }
 
 function editDriver(driver) {
-    let d = {FirstName: driver.firstName, LastName: driver.lastName}
+    let d = {firstName: driver.firstName, lastName: driver.lastName, id: driver.id}
     DBFunctions.editDriverDB(d);
 }
-export default {addDriver, getDriver, deleteDriver, editDriver}
+
+async function getDrivers() {
+    return await DBFunctions.getDriversDB();
+}
+
+/*
+//add
+let driver = new Driver('Mikkel', 'Lindhøj');
+driver = await addDriver(driver);
+*/
+
+/*
+//delete
+let driver = new Driver('Mikkel', 'Lindhøj');
+driver = await addDriver(driver);
+console.log(driver);
+await deleteDriver(driver);
+*/
+
+/*
+//edit
+let driver = new Driver('Mikkel', 'Lindhøj');
+driver = await addDriver(driver);
+
+driver.firstName = 'bølle';
+console.log(driver)
+await editDriver(driver);
+*/
+
+//
+
+/*
+//get
+let driver = new Driver("Mikkel", "Lindhøj");
+driver = await addDriver(driver);
+
+let c = await getDriver(driver);
+console.log(c);
+*/
+
+/*
+//getALL
+let driver = new Driver("Mikkel", "Lindhøj");
+driver = await addDriver(driver);
+
+let drivers = await getDrivers();
+console.log(drivers);
+*/
+
+export default {addDriver, getDrivers, deleteDriver, editDriver, getDriver}

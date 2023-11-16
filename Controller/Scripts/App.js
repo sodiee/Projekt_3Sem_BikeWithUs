@@ -1,5 +1,5 @@
-import DBFunctions from "./Storage/DBFunctions";
-const express = require('express')
+import DBFunctions from '../../Storage/DBFunctions.js';
+import express from 'express'
 const app = express()
 app.set('view engine', 'pug')
 
@@ -10,12 +10,12 @@ app.use(express.static('GUI'))
 
 
 // Endpoints (routes)
-const customerRouter = require('./Controller/Endpoints/customers')
-app.use('/customers', customerRouter)
-const adminRouter = require('./Controller/Endpoints/admins')
-app.use('/admins', adminRouter)
-const driverRouter = require('./Controller/Endpoints/drivers')
-app.use('/drivers', driverRouter)
+import customerRouter from '../Endpoints/customers.js'
+app.use('/', customerRouter)
+//import adminRouter from'Controller/Endpoints/admins.js'
+//app.use('/admins', adminRouter)
+import driverRouter from '../Endpoints/drivers.js'
+app.use('/', driverRouter)
 
 
 
@@ -24,4 +24,3 @@ app.listen(8000, () => {
     console.log('Så kører lortet')
 })
 
-DBFunctions.addCustomer("Mikkel", "Lindhøj", "xxxxxx", "Aarhus C");

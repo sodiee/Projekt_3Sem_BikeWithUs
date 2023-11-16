@@ -2,7 +2,7 @@
   "name": "projekt",
   "version": "1.0.0",
   "description": "semesterprojekt",
-  "main": "App.js",
+  "main": "Controller/Scripts/App.js",
   "type": "module",
   "scripts": {
     "test": "mocha"

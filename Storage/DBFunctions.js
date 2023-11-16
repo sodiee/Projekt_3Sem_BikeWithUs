@@ -22,14 +22,21 @@ const firebaseConfig = {
   appId: "1:285890761175:web:ece7f116b6154b440ebb92"
 };
 
+
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 //CustomerCollection
-const CustomersCollection = collection(db, 'Customers')
+const CustomersCollection = collection(db, 'Customers');
+const DriversCollection = collection(db, 'Drivers');
+const AdminsCollection = collection(db, 'Admins');
 
+// ------------------------
+// DB functions for customer
+// ------------------------
 const getCustomersDB = async () => {
-    let customersQueryDocs = await getDocs(customersQueryDocs);
+    let customersQueryDocs = await getDocs(CustomersCollection);
     let customers = customersQueryDocs.docs.map(doc => {
         let data = doc.data();
         data.docID = doc.id;
@@ -47,7 +54,7 @@ const getCustomerDB = async (id) => {
 }
 
 const deleteCustomerDB = async (customer) => {
-    const deletedCustomer = await deleteDoc(doc(db, 'Customers', customer.Id));
+    const deletedCustomer = await deleteDoc(doc(db, 'Customers', customer.id));
     return customer;
 }
 
@@ -58,28 +65,97 @@ const addCustomerDB = async (customer) => {
 }
 
 const editCustomerDB = async (customer) => {
-    console.log(customer)
-    await updateDoc(doc(db, 'Customers', customer.Id), {
+    await updateDoc(doc(db, 'Customers', customer.id), {
         FirstName: customer.firstName, 
         LastName: customer.lastName, 
         Birthday: customer.birthday, 
-        City: customer.city
+        City: customer.city,
     });
 };
 
-//virker
-//addCustomer("Mikkel", "Lindhøj", "xxxxxx", "Aarhus C");
+// ------------------------
+// DB functions for driver
+// ------------------------
+const getDriversDB = async () => {
+    let driversQueryDocs = await getDocs(DriversCollection);
+    let drivers = driversQueryDocs.docs.map(doc => {
+        let data = doc.data();
+        data.docID = doc.id;
+        return data;
+    });
+    return drivers;
+}
 
-//virker
-//deleteCustomerDB('CBAB0zieWucV3kRPNGgF');
+const getDriverDB = async (id) => {
+    const docRef = doc(db, 'Drivers', id);
+    const driverQueryDoc = await getDoc(docRef);
+    let driver = driverQueryDoc.data();
+    driver.docID = driverQueryDoc.id;
+    return driver;
+}
 
-//virker ikke
-//var customer = getCustomer('mQXkR23ziq2gJMgFUe7P')
-//customer.fornavn = "Bølle"
-//editCustomer('mQXkR23ziq2gJMgFUe7P');
+const deleteDriverDB = async (driver) => {
+    const deletedDriver = await deleteDoc(doc(db, 'Drivers', driver.id));
+    return driver;
+}
 
-//virker ik
-//var customers = getCustomers();
-//console.log(customers)
+const addDriverDB = async (driver) => {
+    const docRef = await addDoc(DriversCollection, driver);
+    driver.id = docRef.id;
+    return driver;
+}
 
-export default {getCustomerDB, getCustomerDB, deleteCustomerDB, addCustomerDB, editCustomerDB}
+const editDriverDB = async (driver) => {
+    console.log(driver)
+    await updateDoc(doc(db, 'Drivers', driver.id), {
+        firstName: driver.firstName, 
+        lastName: driver.lastName, 
+    });
+};
+
+
+// ------------------------
+// DB functions for admin
+// ------------------------
+const getAdminsDB = async () => {
+    let adminsQueryDocs = await getDocs(AdminsCollection);
+    let admins = adminsQueryDocs.docs.map(doc => {
+        let data = doc.data();
+        data.docID = doc.id;
+        return data;
+    });
+    return admins;
+}
+
+const getAdminDB = async (id) => {
+    const docRef = doc(db, 'Admins', id);
+    const adminQueryDoc = await getDoc(docRef);
+    let admin = adminQueryDoc.data();
+    admin.docID = adminQueryDoc.id;
+    return customer;
+}
+
+const deleteAdminDB = async (admin) => {
+    const deletedDriver = await deleteDoc(doc(db, 'Admins', driver.id));
+    return driver;
+}
+
+const addAdminDB = async (id) => {
+    const docRef = await addDoc(AdminsCollection, admin);
+    admin.Id = docRef.id;
+    return admin;
+}
+
+const editAdminDB = async (id) => {
+    console.log(driver)
+    await updateDoc(doc(db, 'Admins', admin.id), {
+        FirstName: admin.firstName, 
+        LastName: admin.lastName, 
+        Birthday: admin.birthday, 
+        City: admin.city
+    });
+};
+
+
+export default {getCustomerDB, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB,getAdminDB,
+getAdminsDB,deleteAdminDB,addAdminDB,editAdminDB,getDriverDB,getDriversDB,deleteDriverDB,addDriverDB,editDriverDB}
