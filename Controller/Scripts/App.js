@@ -12,6 +12,13 @@ app.use(express.static('GUI'))
 
 
 // Endpoints (routes)
+const customerRouter = require('./Controller/Endpoints/customers')
+app.use('/customers', customerRouter)
+const adminRouter = require('./Controller/Endpoints/admins')
+app.use('/admins', adminRouter)
+const driverRouter = require('./Controller/Endpoints/drivers')
+app.use('/drivers', driverRouter)
+
 
 
 
