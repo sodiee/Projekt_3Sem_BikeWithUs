@@ -10,7 +10,7 @@ app.use(express.static('GUI'))
 
 
 // Endpoints (routes)
-import customerRouter from '../Endpoints/customers.js'
+const customerRouter = require('./Controller/Endpoints/customers')
 app.use('/customers', customerRouter)
 //import adminRouter from'Controller/Endpoints/admins.js'
 //app.use('/admins', adminRouter)
