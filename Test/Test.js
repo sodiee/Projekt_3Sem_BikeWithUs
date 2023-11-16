@@ -3,43 +3,55 @@ import chai from 'chai'
 const assert = chai.assert
 
 //DBFunctions-script test
-describe('DBFunctions TESTS', () => {
-    it('should add a customer', async () => {
-        let customerID = await DBFunctions.addCustomer('Mikkel', 'Lindhøj', 'xxxxxx', 'Aarhus C');
-
-        assert.notStrictEqual(customerID, null, 'Customer ID should not be null');
-    })
-
-    it('should delete a customer', async () => {
-        let customerToDelete = await DBFunctions.addCustomer('Mikkel', 'Lindhøj', 'xxxxxx', 'Aarhus C');
-        await DBFunctions.deleteCustomer(customerToDelete);
-
-        let deletedCustomer = await DBFunctions.getCustomer(customerToDelete);
-        assert.strictEqual(deletedCustomer, null, 'Customer should be deleted');
+describe('CRUD test på Customer', () => {
+    let addedCustomerId;
+    // An after each to delete the object from the databse after each test
+    afterEach(async () => {
+        if (addedCustomerId) {
+            await DBFunctions.deleteCustomerDB(addedCustomerId);
+        }
     })
 
 
-     it('should return a customer', async () => {
-        let customerID = await DBFunctions.addCustomer('Mikkel', 'Lindhøj', 'xxxxxx', 'Aarhus C');
-        let customer = await DBFunctions.getCustomer(customerID);
+        it('should add a customer', async () => {
+            let customer = await DBFunctions.addCustomerDB('Mikkel', 'Lindhøj', 'xxxxxx', 'Aarhus C');
+            addedCustomerId = customer.id
 
-        assert.notStrictEqual(customer, null, 'Customer should exist');
-    })
+            assert.isNotNull(addedCustomerId,'The customers ID must not be null')
+        })
+        
 
-    it('should edit a customer', async () => {
-        let customer = await DBFunctions.getCustomer(customerID);
-        customer.fornavn = 'NyFornavn';
+        it('should delete a customer', async () => {
+            let customerToDelete = await DBFunctions.addCustomerDB('Mikkel', 'Lindhøj', 'xxxxxx', 'Aarhus C');
+            addedCustomerId = customerToDelete.id
+            DBFunctions.deleteCustomerDB(addedCustomerId)
+
+            
+            assert.isUndefined(addedCustomerId,'Customer should be removed')
+        })
+
+
+        it('should return a customer', async () => {
+            let customerC = await DBFunctions.addCustomerDB('Mikkel', 'Lindhøj', 'xxxxxx', 'Aarhus C');
+            let customerG = await DBFunctions.getCustomerDB(customerC);
+
+            assert.notStrictEqual(customerG, null, 'Customer should exist');
+        })
+
+        it('should edit a customer', async () => {
+            let customerC = await DBFunctions.addCustomerDB('Mikkel', 'Lindhøj', 'xxxxxx', 'Aarhus C');
+            let customerG = await DBFunctions.getCustomerDB(id);
+            customerG.fornavn = 'NyFornavn';
 
         
-        await DBFunctions.editCustomer(customerID, {
-            fornavn: customer.fornavn,
-            efternavn: customer.efternavn,
-            fødselsdag: customer.fødselsdag,
-            by: customer.by
+            await DBFunctions.editCustomerDB(customerID, {
+                fornavn: customer.fornavn,
+                efternavn: customer.efternavn,
+                fødselsdag: customer.fødselsdag,
+                by: customer.by
         });
 
-        let editedCustomer = await DBFunctions.getCustomer(customerID);
-        assert.strictEqual(editedCustomer.fornavn, 'NyFornavn', 'Customer should be edited');
+            let editedCustomer = await DBFunctions.getCustomerDB(customerID);
+            assert.strictEqual(editedCustomer.fornavn, 'NyFornavn', 'Customer should be edited');
     });
 })
-
