@@ -30,8 +30,9 @@ const db = getFirestore(app);
 //CustomerCollection
 const CustomersCollection = collection(db, 'Customers')
 
-//DB functions for customer
-
+// ------------------------
+// DB functions for customer
+// ------------------------
 const getCustomersDB = async () => {
     let customersQueryDocs = await getDocs(CustomersCollection);
     let customers = customersQueryDocs.docs.map(doc => {
@@ -70,7 +71,9 @@ const editCustomerDB = async (customer) => {
     });
 };
 
+// ------------------------
 // DB functions for driver
+// ------------------------
 const getDriversDB = async () => {
     let driversQueryDocs = await getDocs(DriversCollection);
     let drivers = driversQueryDocs.docs.map(doc => {
@@ -111,7 +114,9 @@ const editDriverDB = async (id) => {
 };
 
 
+// ------------------------
 // DB functions for admin
+// ------------------------
 const getAdminsDB = async () => {
     let adminsQueryDocs = await getDocs(AdminsCollection);
     let admins = adminsQueryDocs.docs.map(doc => {
@@ -152,4 +157,5 @@ const editAdminDB = async (id) => {
 };
 
 
-export default {getCustomerDB, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB,getAdminDB,getAdminsDB,deleteAdminDB,addAdminDB,editAdminDB,getDriverDB,getDriversDB,deleteDriverDB,addDriverDB,editDriverDB}
+export default {getCustomerDB, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB,getAdminDB,
+getAdminsDB,deleteAdminDB,addAdminDB,editAdminDB,getDriverDB,getDriversDB,deleteDriverDB,addDriverDB,editDriverDB}
