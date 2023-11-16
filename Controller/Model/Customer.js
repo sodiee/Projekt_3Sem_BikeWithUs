@@ -7,12 +7,14 @@ function Customer(firstName, lastName, birthday, city) {
     this.city = city;
 }
 
-function addCustomer(customer) {
-    DBFunctions.addCustomerDB(customer.firstName, customer.lastName, customer.birthday, customer.city);
+async function addCustomer(customer) {
+    let c = {FirstName: customer.firstName, LastName: customer.lastName, Birthday: customer.birthday, City: customer.city}
+    return await DBFunctions.addCustomerDB(c);
 }
 
 function editCustomer(customer) {
-    DBFunctions.editCustomerDB(customer.firstName, customer.lastName, customer.birthday, customer.city);
+    let c = {FirstName: customer.firstName, LastName: customer.lastName, Birthday: customer.birthday, City: customer.city, Id: customer.Id}
+    DBFunctions.editCustomerDB(c);
 }
 
 function getCustomer(customer) {
@@ -20,8 +22,13 @@ function getCustomer(customer) {
 }
 
 function deleteCustomer(customer) {
-    DBFunctions.deleteCustomerDB(customer.id);
+    let c = {FirstName: customer.firstName, LastName: customer.lastName, Birthday: customer.birthday, City: customer.city, Id: customer.Id}
+    DBFunctions.deleteCustomerDB(c);
 }
 
-let customer1 = new Customer("Lucas", "Holm", "xxxxxx", "Viby");
-deleteCustomer(customer1.id);
+let customer1 = new Customer("Lucas", "Holm", "123456", "Viby");
+customer1 = await addCustomer(customer1)
+customer1.firstName = 'Celina'
+await editCustomer(customer1);
+
+export default {addCustomer, getCustomer, deleteCustomer, editCustomer}
