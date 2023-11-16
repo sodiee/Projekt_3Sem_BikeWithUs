@@ -13,16 +13,19 @@ async function addCustomer(customer) {
 }
 
 function editCustomer(customer) {
-    let c = {FirstName: customer.firstName, LastName: customer.lastName, Birthday: customer.birthday, City: customer.city, Id: customer.Id}
-    DBFunctions.editCustomerDB(c);
+    let c = {FirstName: customer.FirstName, LastName: customer.LastName, Birthday: customer.Birthday, City: customer.City, Id: customer.Id}
+    return DBFunctions.editCustomerDB(c);
 }
 
 function getCustomer(customer) {
-    DBFunctions.getCustomerDB(customer.id);
+    console.log('første metode: ')
+    console.log(customer)
+    console.log('1');
+    return DBFunctions.getCustomerDB(customer.Id);
 }
 
-function deleteCustomer(customer) {
-    let c = {FirstName: customer.firstName, LastName: customer.lastName, Birthday: customer.birthday, City: customer.city, Id: customer.Id}
+async function deleteCustomer(customer) {
+    let c = {FirstName: customer.FirstName, LastName: customer.LastName, Birthday: customer.Birthday, City: customer.City, Id: customer.Id}
     DBFunctions.deleteCustomerDB(c);
 }
 
@@ -31,8 +34,7 @@ async function getCustomers() {
 }
 
 let customer1 = new Customer("Lucas", "Holm", "123456", "Viby");
-customer1 = await addCustomer(customer1)
-customer1.firstName = 'Celina'
-await editCustomer(customer1);
+customer1 = await addCustomer(customer1);
+
 
 export default {addCustomer, getCustomer, deleteCustomer, editCustomer, getCustomers}
