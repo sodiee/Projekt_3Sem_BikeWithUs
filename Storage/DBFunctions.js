@@ -167,4 +167,4 @@ const editAdminDB = async (id) => {
 //var customers = getCustomers();
 //console.log(customers)
 
-export default {getCustomerDB, getCustomerDB, deleteCustomerDB, addCustomerDB, editCustomerDB}
+export default {getCustomerDB, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB}
