@@ -11,11 +11,11 @@ app.use(express.static('GUI'))
 
 // Endpoints (routes)
 import customerRouter from '../Endpoints/customers.js'
-app.use('/customers', customerRouter)
+app.use('/', customerRouter)
 //import adminRouter from'Controller/Endpoints/admins.js'
 //app.use('/admins', adminRouter)
 import driverRouter from '../Endpoints/drivers.js'
-app.use('/drivers', driverRouter)
+app.use('/', driverRouter)
 
 
 
