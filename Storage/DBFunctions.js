@@ -22,6 +22,8 @@ const firebaseConfig = {
   appId: "1:285890761175:web:ece7f116b6154b440ebb92"
 };
 
+
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -108,6 +110,8 @@ const editDriverDB = async (id) => {
     });
 };
 
+
+// DB functions for admin
 const getAdminsDB = async () => {
     let adminsQueryDocs = await getDocs(AdminsCollection);
     let admins = adminsQueryDocs.docs.map(doc => {
@@ -167,4 +171,4 @@ const editAdminDB = async (id) => {
 //var customers = getCustomers();
 //console.log(customers)
 
-export default {getCustomerDB, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB}
+export default {getCustomerDB, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB,getAdminDB,getAdminsDB,deleteAdminDB,addAdminDB,editAdminDB,getDriverDB,getDriversDB,deleteDriverDB,addDriverDB,editDriverDB}
