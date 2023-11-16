@@ -10,7 +10,7 @@ describe('CRUD test på Customer', () => {
         if (addedCustomerId) {
             await DBFunctions.deleteCustomerDB(addedCustomerId);
         }
-    })
+        })
 
 
         it('should add a customer', async () => {
@@ -39,19 +39,19 @@ describe('CRUD test på Customer', () => {
         })
 
         it('should edit a customer', async () => {
-            let customerC = await DBFunctions.addCustomerDB('Mikkel', 'Lindhøj', 'xxxxxx', 'Aarhus C');
-            let customerG = await DBFunctions.getCustomerDB(id);
-            customerG.fornavn = 'NyFornavn';
+            let newCustomer = await DBFunctions.addCustomerDB('Mikkel', 'Lindhøj', 'xxxxxx', 'Aarhus C');
+            let customer = await DBFunctions.getCustomerDB(newCustomer);
+            customer.fornavn = 'NyFornavn';
 
         
-            await DBFunctions.editCustomerDB(customerID, {
+            await DBFunctions.editCustomerDB(customer, {
                 fornavn: customer.fornavn,
                 efternavn: customer.efternavn,
                 fødselsdag: customer.fødselsdag,
                 by: customer.by
         });
 
-            let editedCustomer = await DBFunctions.getCustomerDB(customerID);
+            let editedCustomer = await DBFunctions.getCustomerDB(customer);
             assert.strictEqual(editedCustomer.fornavn, 'NyFornavn', 'Customer should be edited');
     });
 })
