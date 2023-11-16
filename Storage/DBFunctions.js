@@ -132,27 +132,26 @@ const getAdminDB = async (id) => {
     const adminQueryDoc = await getDoc(docRef);
     let admin = adminQueryDoc.data();
     admin.docID = adminQueryDoc.id;
-    return customer;
-}
-
-const deleteAdminDB = async (admin) => {
-    const deletedDriver = await deleteDoc(doc(db, 'Admins', driver.id));
-    return driver;
-}
-
-const addAdminDB = async (id) => {
-    const docRef = await addDoc(AdminsCollection, admin);
-    admin.Id = docRef.id;
     return admin;
 }
 
-const editAdminDB = async (id) => {
-    console.log(driver)
+const deleteAdminDB = async (admin) => {
+    const deletedAdmin = await deleteDoc(doc(db, 'Admins', admin.id));
+    return admin;
+}
+
+const addAdminDB = async (admin) => {
+    const docRef = await addDoc(AdminsCollection, admin);
+    admin.id = docRef.id;
+    return admin;
+}
+
+const editAdminDB = async (admin) => {
+    console.log(admin)
     await updateDoc(doc(db, 'Admins', admin.id), {
-        FirstName: admin.firstName, 
-        LastName: admin.lastName, 
-        Birthday: admin.birthday, 
-        City: admin.city
+        firstName: admin.firstName, 
+        lastName: admin.lastName, 
+        adminStatus: admin.adminStatus
     });
 };
 
