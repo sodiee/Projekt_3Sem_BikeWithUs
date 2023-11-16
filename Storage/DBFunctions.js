@@ -58,25 +58,28 @@ const addCustomerDB = async (customer) => {
 }
 
 const editCustomerDB = async (customer) => {
-    console.log(customer)
     await updateDoc(doc(db, 'Customers', customer.Id), {
-        FirstName: customer.firstName, 
-        LastName: customer.lastName, 
-        Birthday: customer.birthday, 
-        City: customer.city
+        FirstName: customer.FirstName, 
+        LastName: customer.LastName, 
+        Birthday: customer.Birthday, 
+        City: customer.City,
     });
 };
 
 //virker
-//addCustomer("Mikkel", "Lindhøj", "xxxxxx", "Aarhus C");
+//let customer = {FirstName: "Mikkel", LastName: "Lindhøj", Birthday: "xxxxxx", City: "Aarhus C"};
+//addCustomerDB(customer);
 
 //virker
-//deleteCustomerDB('CBAB0zieWucV3kRPNGgF');
+//deleteCustomerDB('x1r07fGRwLR2BgYpEtu2');
 
 //virker ikke
-//var customer = getCustomer('mQXkR23ziq2gJMgFUe7P')
+//var customer = getCustomerDB('JaR4YWPQMoVlS7vzPSGv')
 //customer.fornavn = "Bølle"
-//editCustomer('mQXkR23ziq2gJMgFUe7P');
+//console.log('udenfor metode')
+//console.log(customer);
+//console.log('udenfor metode')
+//await editCustomerDB(customer);
 
 //virker ik
 //var customers = getCustomers();
