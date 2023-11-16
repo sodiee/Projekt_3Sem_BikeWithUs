@@ -28,4 +28,4 @@ function editDriver(driver) {
 async function getDrivers() {
     return await DBFunctions.getDriversDB();
 }
-export default {addDriver, getDriver, deleteDriver, editDriver, getDriver}
+export default {addDriver, getDrivers, deleteDriver, editDriver, getDriver}

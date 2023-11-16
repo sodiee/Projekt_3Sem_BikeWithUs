@@ -109,23 +109,4 @@ const editDriverDB = async (customer) => {
 };
 
 
-//virker
-//let customer = {FirstName: "Mikkel", LastName: "Lindhøj", Birthday: "xxxxxx", City: "Aarhus C"};
-//addCustomerDB(customer);
-
-//virker
-//deleteCustomerDB('x1r07fGRwLR2BgYpEtu2');
-
-//virker ikke
-//var customer = getCustomerDB('JaR4YWPQMoVlS7vzPSGv')
-//customer.fornavn = "Bølle"
-//console.log('udenfor metode')
-//console.log(customer);
-//console.log('udenfor metode')
-//await editCustomerDB(customer);
-
-//virker ik
-//var customers = getCustomers();
-//console.log(customers)
-
 export default {getCustomerDB, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB}
