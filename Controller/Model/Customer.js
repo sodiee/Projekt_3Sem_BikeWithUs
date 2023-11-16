@@ -24,4 +24,4 @@ function deleteCustomer(customer) {
 }
 
 let customer1 = new Customer("Lucas", "Holm", "xxxxxx", "Viby");
-deleteCustomer(customer1);
+deleteCustomer(customer1.id);
