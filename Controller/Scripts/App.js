@@ -10,11 +10,11 @@ app.use(express.static('GUI'))
 
 
 // Endpoints (routes)
-import customerRouter from '../../Endpoints/customers.js'
+const customerRouter = require('./Controller/Endpoints/customers')
 app.use('/customers', customerRouter)
-const adminRouter = require('./Controller/Endpoints/admins')
-app.use('/admins', adminRouter)
-const driverRouter = require('./Controller/Endpoints/drivers')
+//import adminRouter from'Controller/Endpoints/admins.js'
+//app.use('/admins', adminRouter)
+import driverRouter from '../Endpoints/drivers.js'
 app.use('/drivers', driverRouter)
 
 
@@ -24,4 +24,3 @@ app.listen(8000, () => {
     console.log('Så kører lortet')
 })
 
-DBFunctions.addCustomer("Mikkel", "Lindhøj", "xxxxxx", "Aarhus C");

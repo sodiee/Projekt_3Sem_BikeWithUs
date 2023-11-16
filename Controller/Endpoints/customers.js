@@ -1,6 +1,6 @@
 import express from 'express';
 const customerRouter = express.Router();
-import controller from '../Controller/Model/Customer';
+import controller from '../Endpoints/customers.js';
 
 customerRouter.get('/customers', async (req, res) => {
     try {
