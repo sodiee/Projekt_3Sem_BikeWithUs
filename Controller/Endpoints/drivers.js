@@ -1,6 +1,6 @@
 import express from 'express';
 const driverRouter = express.Router();
-import controller from '../Controller/Model/Driver';
+import controller from '../Model/Driver.js';
 
 driverRouter.get('/Drivers', async (req, res) => {
     try {
