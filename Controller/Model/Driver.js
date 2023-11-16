@@ -24,4 +24,8 @@ function editDriver(driver) {
     let d = {FirstName: driver.firstName, LastName: driver.lastName}
     DBFunctions.editDriverDB(d);
 }
-export default {addDriver, getDriver, deleteDriver, editDriver}
+
+async function getDrivers() {
+    return await DBFunctions.getDriversDB();
+}
+export default {addDriver, getDriver, deleteDriver, editDriver, getDriver}

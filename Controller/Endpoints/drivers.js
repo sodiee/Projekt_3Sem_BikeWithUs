@@ -1,8 +1,19 @@
-const express = require('express');
-const router = express.Router();
-const controller = require('../Controller/Model/Driver');
+import express from 'express';
+const driverRouter = express.Router();
+import controller from '../Controller/Model/Driver';
 
-router.post('/Driver/Add', async (req, res) => {
+driverRouter.get('/Drivers', async (req, res) => {
+    try {
+        // Finder alle Drivers
+        const drivers = await controller.getDrivers();
+        res.render('drivers', { drivers });
+    } catch (error) {
+        console.error('Fejl ved hentning af drivers:', error);
+        res.status(500).send('Der opstod en fejl ved hentning af drivers.');
+    }
+});
+
+driverRouter.post('/Driver/Add', async (req, res) => {
     try{
     const {firstName, lastName} = req.body;
     await controller.addDriver({firstName, lastName});
@@ -14,7 +25,7 @@ router.post('/Driver/Add', async (req, res) => {
     }
 });
 
-router.get('/Driver/Edit/:id', async (req, res) => {
+driverRouter.get('/Driver/Edit/:id', async (req, res) => {
     try {
         const driverId = req.params.id;
         const driver = await controller.getDriver(driverId)
@@ -27,7 +38,7 @@ router.get('/Driver/Edit/:id', async (req, res) => {
     }
 });
 
-router.post('/Driver/Delete/:id', async (req, res) => {
+driverRouter.post('/Driver/Delete/:id', async (req, res) => {
     try {
         const driverId = req.params.id;
         await controller.deleteDriver(driverId);
@@ -39,7 +50,7 @@ router.post('/Driver/Delete/:id', async (req, res) => {
     }
 });
 
-router.get('/Driver/Get/:id', async (req, res) => {
+driverRouter.get('/Driver/Get/:id', async (req, res) => {
     try {
         const driverId = req.params.id;
         const driver = await controller.getDriver(driverId)
@@ -51,4 +62,4 @@ router.get('/Driver/Get/:id', async (req, res) => {
     }
 });
 
-module.exports = router;
+export default driverRouter;

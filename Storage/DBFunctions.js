@@ -28,6 +28,8 @@ const db = getFirestore(app);
 //CustomerCollection
 const CustomersCollection = collection(db, 'Customers')
 
+//DB functions for customer
+
 const getCustomersDB = async () => {
     let customersQueryDocs = await getDocs(customersQueryDocs);
     let customers = customersQueryDocs.docs.map(doc => {
@@ -65,6 +67,47 @@ const editCustomerDB = async (customer) => {
         City: customer.City,
     });
 };
+
+// DB functions for driver
+const getDriversDB = async () => {
+    let driversQueryDocs = await getDocs(driversQueryDocs);
+    let drivers = driversQueryDocs.docs.map(doc => {
+        let data = doc.data();
+        data.docID = doc.id;
+        return data;
+    });
+    return drivers;
+}
+
+const getDriverDB = async (id) => {
+    const docRef = doc(db, 'Drivers', id);
+    const driverQueryDoc = await getDoc(docRef);
+    let driver = customerQueryDoc.data();
+    driver.docID = driverQueryDoc.id;
+    return customer;
+}
+
+const deleteDriverDB = async (driver) => {
+    const deletedDriver = await deleteDoc(doc(db, 'Drivers', driver.Id));
+    return driver;
+}
+
+const addDriverDB = async (driver) => {
+    const docRef = await addDoc(DriversCollection, driver);
+    driver.Id = docRef.id;
+    return driver;
+}
+
+const editDriverDB = async (customer) => {
+    console.log(customer)
+    await updateDoc(doc(db, 'Customers', customer.Id), {
+        FirstName: customer.firstName, 
+        LastName: customer.lastName, 
+        Birthday: customer.birthday, 
+        City: customer.city
+    });
+};
+
 
 //virker
 //let customer = {FirstName: "Mikkel", LastName: "Lindhøj", Birthday: "xxxxxx", City: "Aarhus C"};
