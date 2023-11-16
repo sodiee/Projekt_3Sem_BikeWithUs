@@ -28,7 +28,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 //CustomerCollection
-const CustomersCollection = collection(db, 'Customers')
+const CustomersCollection = collection(db, 'Customers');
+const DriversCollection = collection(db, 'Drivers');
+const AdminsCollection = collection(db, 'Admins');
 
 //DB functions for customer
 
@@ -96,17 +98,15 @@ const deleteDriverDB = async (driver) => {
 
 const addDriverDB = async (driver) => {
     const docRef = await addDoc(DriversCollection, driver);
-    driver.Id = docRef.id;
+    driver.id = docRef.id;
     return driver;
 }
 
-const editDriverDB = async (id) => {
+const editDriverDB = async (driver) => {
     console.log(driver)
     await updateDoc(doc(db, 'Drivers', driver.id), {
-        FirstName: driver.firstName, 
-        LastName: driver.lastName, 
-        Birthday: driver.birthday, 
-        City: driver.city
+        firstName: driver.firstName, 
+        lastName: driver.lastName, 
     });
 };
 
