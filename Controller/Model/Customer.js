@@ -12,12 +12,12 @@ async function getAllCustomers() {
 }
 
 async function addCustomer(customer) {
-    let c = {FirstName: customer.firstName, LastName: customer.lastName, Birthday: customer.birthday, City: customer.city}
+    let c = {firstName: customer.firstName, lastName: customer.lastName, birthday: customer.birthday, city: customer.city}
     return await DBFunctions.addCustomerDB(c);
 }
 
 function editCustomer(customer) {
-    let c = {FirstName: customer.FirstName, LastName: customer.LastName, Birthday: customer.Birthday, City: customer.City, Id: customer.Id}
+    let c = {firstName: customer.firstName, lastName: customer.lastName, birthday: customer.birthday, city: customer.city, id: customer.id}
     return DBFunctions.editCustomerDB(c);
 }
 
@@ -26,7 +26,7 @@ function getCustomer(customer) {
 }
 
 async function deleteCustomer(customer) {
-    let c = {FirstName: customer.FirstName, LastName: customer.LastName, Birthday: customer.Birthday, City: customer.City, Id: customer.Id}
+    let c = {firstName: customer.firstName, lastName: customer.lastName, birthday: customer.birthday, city: customer.city, id: customer.id}
     DBFunctions.deleteCustomerDB(c);
 }
 
