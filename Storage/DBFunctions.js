@@ -46,23 +46,24 @@ const getCustomerDB = async (id) => {
     return customer;
 }
 
-const deleteCustomerDB = async (id) => {
-    const deletedCustomer = await deleteDoc(doc(db, 'Customers', id));
+const deleteCustomerDB = async (customer) => {
+    const deletedCustomer = await deleteDoc(doc(db, 'Customers', customer.Id));
+    return customer;
 }
 
-const addCustomerDB = async (firstName, lastName, birthday, city) => {
-    const customer = {FirstName: firstName, LastName: lastName, Birthday: birthday, City: city};
+const addCustomerDB = async (customer) => {
     const docRef = await addDoc(CustomersCollection, customer);
-    customer.id = docRef.id
-    return docRef.id;
+    customer.Id = docRef.id;
+    return customer;
 }
 
 const editCustomerDB = async (customer) => {
-    await updateDoc(doc(db, 'Customers', customer.customerID), {
-        FirstName: firstName, 
-        LastName: lastName, 
-        Birthday: birthday, 
-        City: city
+    console.log(customer)
+    await updateDoc(doc(db, 'Customers', customer.Id), {
+        FirstName: customer.firstName, 
+        LastName: customer.lastName, 
+        Birthday: customer.birthday, 
+        City: customer.city
     });
 };
 
