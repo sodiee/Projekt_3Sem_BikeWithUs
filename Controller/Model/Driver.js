@@ -28,4 +28,27 @@ function editDriver(driver) {
 async function getDrivers() {
     return await DBFunctions.getDriversDB();
 }
+
+//add
+let driver = new Driver('Mikkel', 'Lindhøj');
+driver = await addDriver(driver);
+
+/*
+//delete
+let driver = new Driver('Mikkel', 'Lindhøj');
+driver = await addDriver(driver);
+
+await deleteDriver(driver);
+*/
+
+/*
+//edit
+let driver = new Driver('Mikkel', 'Lindhøj');
+driver = await addDriver(driver);
+
+driver.firstName = 'bølle';
+await editCustomer(driver);
+*/
+
+
 export default {addDriver, getDrivers, deleteDriver, editDriver, getDriver}
