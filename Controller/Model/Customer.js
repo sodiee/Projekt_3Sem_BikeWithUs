@@ -26,9 +26,13 @@ function deleteCustomer(customer) {
     DBFunctions.deleteCustomerDB(c);
 }
 
+async function getCustomers() {
+    return await DBFunctions.getCustomersDB();
+}
+
 let customer1 = new Customer("Lucas", "Holm", "123456", "Viby");
 customer1 = await addCustomer(customer1)
 customer1.firstName = 'Celina'
 await editCustomer(customer1);
 
-export default {addCustomer, getCustomer, deleteCustomer, editCustomer}
+export default {addCustomer, getCustomer, deleteCustomer, editCustomer, getCustomers}

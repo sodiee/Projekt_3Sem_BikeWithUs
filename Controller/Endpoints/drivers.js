@@ -2,6 +2,17 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../Controller/Model/Driver');
 
+router.get('/Drivers', async (req, res) => {
+    try {
+        // Finder alle Drivers
+        const drivers = await controller.getDrivers();
+        res.render('drivers', { drivers });
+    } catch (error) {
+        console.error('Fejl ved hentning af drivers:', error);
+        res.status(500).send('Der opstod en fejl ved hentning af drivers.');
+    }
+});
+
 router.post('/Driver/Add', async (req, res) => {
     try{
     const {firstName, lastName} = req.body;

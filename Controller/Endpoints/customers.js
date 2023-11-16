@@ -2,6 +2,18 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../Controller/Model/Customer');
 
+
+router.get('/customers', async (req, res) => {
+    try {
+        // Finder alle customers
+        const customers = await controller.getCustomers();
+        res.render('customers', { customers });
+    } catch (error) {
+        console.error('Fejl ved hentning af kunder:', error);
+        res.status(500).send('Der opstod en fejl ved hentning af kunder.');
+    }
+});
+
 router.post('/Customer/Add', async (req, res) => {
     try {
         const { firstName, lastName, birthday, city } = req.body;
