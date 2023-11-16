@@ -29,7 +29,7 @@ const db = getFirestore(app);
 const CustomersCollection = collection(db, 'Customers')
 
 const getCustomersDB = async () => {
-    let customersQueryDocs = await getDocs(customersQueryDocs);
+    let customersQueryDocs = await getDocs(CustomersCollection);
     let customers = customersQueryDocs.docs.map(doc => {
         let data = doc.data();
         data.docID = doc.id;
@@ -85,4 +85,4 @@ const editCustomerDB = async (customer) => {
 //var customers = getCustomers();
 //console.log(customers)
 
-export default {getCustomerDB, getCustomerDB, deleteCustomerDB, addCustomerDB, editCustomerDB}
+export default {getCustomerDB, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB}
