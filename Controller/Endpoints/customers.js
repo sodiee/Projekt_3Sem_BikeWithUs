@@ -33,7 +33,7 @@ router.post('/Customer/Delete/:id', async (req, res) => {
         
         res.redirect('/customers'); // Redirect til en oversigtsside eller anden relevant side
     } catch (error) {
-        console.error('Fejl ved sletning af kunde:', error);
+        console.error('Fejl ved sletning af kunde: ', error);
         res.status(500).send('Der opstod en fejl ved sletning af kunde.');
     }
 });
