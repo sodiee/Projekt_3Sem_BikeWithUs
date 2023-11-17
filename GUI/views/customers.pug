@@ -1,0 +1,8 @@
+html 
+    head 
+        title= Customers 
+    body 
+        ul 
+            each customer in customers  
+                li
+                    a(href='/customers' + customer.docID)  #{customer.firstName} #{customer.lastName} #{customer.city}

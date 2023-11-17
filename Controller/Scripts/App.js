@@ -6,7 +6,7 @@ app.set('view engine', 'pug')
 
 // Middleware
 app.use(express.urlencoded({extended: true}))
-app.use(express.static('GUI'))
+app.use(express.static('./GUI/views'))
 
 
 // Endpoints (routes)
