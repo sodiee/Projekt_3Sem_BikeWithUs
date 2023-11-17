@@ -51,17 +51,19 @@ customerRouter.post('/Customer/Delete/:id', async (req, res) => {
 });
 
 customerRouter.get('/Customer/Get/:id', async (req, res) => {
-   // try {
+   try {
         const customerId = req.params.id;
         const customer = await controller.getCustomer(customerId);
 
-        res.render('CustomerDetails', { customer: customer });
-        /*
+            console.log(customer)
+        res.render('../GUI/Views/CustomerDetails', { customer: customer });
+
+        
     } catch (error) {
         console.error('Fejl ved hentning af kunde:', error);
         res.status(500).send('Der opstod en fejl ved hentning af kunde.');
     }
-    */
+    
 });
 
 export default customerRouter;
