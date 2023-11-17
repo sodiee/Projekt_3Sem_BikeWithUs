@@ -8,7 +8,7 @@ function Journey(startDate, endDate, customer, price) {
     this.price = price;
 }
 
-async function getAllJourneys() {
+async function getJourneys() {
     return await DBFunctions.getJourneysDB();
 }
 
@@ -36,7 +36,7 @@ async function deleteJourney(journey) {
     DBFunctions.deleteJourneyDB(j);
 }
 
-export default {getAllJourneys, addJourney3Days, addJourney4Days, editJourney, getJourney, deleteJourney}
+export default {getJourneys, addJourney3Days, addJourney4Days, editJourney, getJourney, deleteJourney}
 
 
 
