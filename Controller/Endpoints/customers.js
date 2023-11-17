@@ -31,7 +31,7 @@ customerRouter.get('/Customer/Edit/:id', async (req, res) => {
         const customerId = req.params.id;
         const customer = await controller.getCustomer(customerId);
         
-        res.render('EditCustomer', { customer });
+        res.render('../GUI/views/EditCustomer', { customer });
     } catch (error) {
         console.error('Fejl ved redigering af kunde:', error);
         res.status(500).send('Der opstod en fejl ved redigering af kunde.');
@@ -57,7 +57,7 @@ customerRouter.get('/Customer/Get/:id', async (req, res) => {
         const customer = await controller.getCustomer(req.params.id);
 
             console.log(customer)
-        res.render('../GUI/Views/CustomerDetails', { customer: customer });
+        res.render('../GUI/views/CustomerDetails', { customer: customer });
 
         
     } catch (error) {
