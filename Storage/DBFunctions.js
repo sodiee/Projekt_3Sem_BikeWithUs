@@ -31,6 +31,7 @@ const db = getFirestore(app);
 const CustomersCollection = collection(db, 'Customers');
 const DriversCollection = collection(db, 'Drivers');
 const AdminsCollection = collection(db, 'Admins');
+const JourneyCollection = collection(db, 'Journey');
 
 // ------------------------
 // DB functions for customer
@@ -155,6 +156,51 @@ const editAdminDB = async (admin) => {
     });
 };
 
+// ------------------------
+// DB functions for journey
+// ------------------------
+
+const addJourney3DaysDB = async (id) => {
+    let customer = getCustomerDB(id) 
+    const today = new Date()
+    const nextThreeDays = new Date(today.setDate(today.getDate() + 3))
+    let price = getPriceDB(this) //getPriceDB mangler at blive lavet
+    
+    let journey = new Journey(today, nextThreeDays, customer, price);
+    const docRef = await addDoc(JourneyCollection, id);
+    customer.id = docRef.id;
+    return id;
+}
+
+const addJourney4DaysDB = async (id) => {
+    let customer = getCustomerDB(id) 
+    const today = new Date()
+    const nextFourDays = new Date(today.setDate(today.getDate() + 4))
+    let price = getPriceDB(this) //getPriceDB mangler at blive lavet
+    
+    let journey = new Journey(today, nextFourDays, customer, price);
+    const docRef = await addDoc(JourneyCollection, id);
+    journey.id = docRef.id;
+    return id;
+}
+
+
+const deleteJourneyDB = async (id) => {
+    const deletedJourney = await deleteDoc(doc(db, 'Journeys', journey.id));
+    return id;
+}
+
+const editJourneyDB = async (id) => {
+    await updateDoc(doc(db, 'Journeys', id.id), {
+        startDate: id.startDate, 
+        endDate: id.endDate, 
+        customer: id.customer,
+        price: id.price
+    });
+};
+
+
 
 export default {getCustomerDB, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB,getAdminDB,
-getAdminsDB,deleteAdminDB,addAdminDB,editAdminDB,getDriverDB,getDriversDB,deleteDriverDB,addDriverDB,editDriverDB}
+getAdminsDB,deleteAdminDB,addAdminDB,editAdminDB,getDriverDB,getDriversDB,deleteDriverDB,addDriverDB,editDriverDB,
+addJourney3DaysDB, addJourney4DaysDB, editJourneyDB, deleteJourneyDB}
