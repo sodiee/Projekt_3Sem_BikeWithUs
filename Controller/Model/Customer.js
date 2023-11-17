@@ -21,8 +21,8 @@ function editCustomer(customer) {
     return DBFunctions.editCustomerDB(c);
 }
 
-function getCustomer(customer) {
-    return DBFunctions.getCustomerDB(customer.Id);
+function getCustomer(id) {
+    return DBFunctions.getCustomerDB(id);
 }
 
 async function deleteCustomer(customer) {

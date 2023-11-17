@@ -52,8 +52,9 @@ customerRouter.post('/Customer/Delete/:id', async (req, res) => {
 
 customerRouter.get('/Customer/Get/:id', async (req, res) => {
    try {
-        const customerId = req.params.id;
-        const customer = await controller.getCustomer(customerId);
+        //const customerId = req.params.id;
+        const customer1 = req.params.id
+        const customer = await controller.getCustomer(req.params.id);
 
             console.log(customer)
         res.render('../GUI/Views/CustomerDetails', { customer: customer });
