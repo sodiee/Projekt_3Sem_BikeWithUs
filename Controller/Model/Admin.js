@@ -29,6 +29,8 @@ async function getAdmins() {
     return await DBFunctions.getAdminsDB();
 }
 
+export default {addAdmin, getAdmin, deleteAdmin, editAdmin, getAdmins}
+
 /*
 //add
 let admin = new Admin('Admin', 'Admin');
