@@ -5,4 +5,4 @@ html
         ul 
             each customer in customers  
                 li
-                    a(href='/customers' + customer.docID)  #{customer.firstName} #{customer.lastName} #{customer.city}
+                    a(href='/customers/' + customer.docID) #{customer.FirstName} #{customer.LastName} #{customer.City}
