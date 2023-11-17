@@ -1,6 +1,6 @@
 import express from 'express';
 const adminRouter = express.Router();
-import controller from '../Model/Admin.js';
+import controller from '../Model/Journey.js';
 
 adminRouter.get('/Kundeinformation', async (req, res) => {
        
@@ -19,7 +19,7 @@ adminRouter.get('/Journey/Edit/:id', async (req, res) => {
     }
 })
 
-adminRouter.get('/Journey/Overview', async (req, res) => {
+adminRouter.get('/journey/Overview', async (req, res) => {
     try{
     //finder alle oversigter over journeys
     const journeys = await controller.getJourneys();

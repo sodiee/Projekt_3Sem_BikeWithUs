@@ -207,7 +207,7 @@ const addJourney4DaysDB = async (id) => {
 
 
 const deleteJourneyDB = async (id) => {
-    const deletedJourney = await deleteDoc(doc(db, 'Journeys', journey.id));
+    const deletedJourney = await deleteDoc(doc(db, 'Journeys', id));
     return id;
 }
 
