@@ -1,8 +1,7 @@
-html 
-    head 
-        title= Customers 
-    body 
-        ul 
-            each customer in customers  
-                li
-                    a(href='/customers' + customer.docID)  #{customer.FirstName} #{customer.LastName} #{customer.City}
+extends includes/layout 
+
+block content 
+    ul 
+        each customer in customers  
+            li
+                a(href='/customers' + customer.docID)  #{customer.FirstName} #{customer.LastName} #{customer.City}
