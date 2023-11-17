@@ -56,12 +56,16 @@ const getCustomerDB = async (id) => {
 
 const deleteCustomerDB = async (customer) => {
     const deletedCustomer = await deleteDoc(doc(db, 'Customers', customer.id));
+    customer.firstName = undefined;
+    customer.lastName = undefined;
+    customer.birthday = undefined;
+    customer.city = undefined;
     return customer;
 }
 
 const addCustomerDB = async (customer) => {
     const docRef = await addDoc(CustomersCollection, customer);
-    customer.Id = docRef.id;
+    customer.id = docRef.id;
     return customer;
 }
 
