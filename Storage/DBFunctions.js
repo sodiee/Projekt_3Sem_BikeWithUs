@@ -159,6 +159,23 @@ const editAdminDB = async (admin) => {
 // ------------------------
 // DB functions for journey
 // ------------------------
+const getJourneysDB = async () => {
+    let journeyQueryDocs = await getDocs(JourneyCollection);
+    let journey = journeyQueryDocs.docs.map(doc => {
+        let data = doc.data();
+        data.docID = doc.id;
+        return data;
+    });
+    return journey;
+}
+
+const getJourneyDB = async (id) => {
+    const docRef = doc(db, 'Journey', id);
+    const journeyQueryDoc = await getDoc(docRef);
+    let journey = journeyQueryDoc.data();
+    journey.docID = journeyQueryDoc.id;
+    return journey;
+}
 
 const addJourney3DaysDB = async (id) => {
     let customer = getCustomerDB(id) 
@@ -203,4 +220,4 @@ const editJourneyDB = async (id) => {
 
 export default {getCustomerDB, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB,getAdminDB,
 getAdminsDB,deleteAdminDB,addAdminDB,editAdminDB,getDriverDB,getDriversDB,deleteDriverDB,addDriverDB,editDriverDB,
-addJourney3DaysDB, addJourney4DaysDB, editJourneyDB, deleteJourneyDB}
+addJourney3DaysDB, addJourney4DaysDB, editJourneyDB, deleteJourneyDB, getJourneyDB, getJourneysDB}
