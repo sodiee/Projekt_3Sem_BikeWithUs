@@ -8,6 +8,11 @@ app.set('view engine', 'pug')
 app.use(express.urlencoded({extended: true}))
 app.use(express.static('./GUI/views'))
 app.use(express.static('./GUI/assets'))
+app.use(session({
+    secret: 'Maksym',
+    saveUninitialized: true,
+    resave: true
+}))
 
 
 // Endpoints (routes)
