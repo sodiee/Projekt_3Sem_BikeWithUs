@@ -6,28 +6,12 @@ import controllerDriver from '../Model/Driver.js';
 import controllerCustomer from '../Model/Customer.js';
 import controllerAdmin from '../Model/Admin.js'
 
-
-function checkSecretPages(request, respons, next) {
-    let secretPages = '/secret'
-    if (request.url === secretPages) {
-        if (!request.session.isLoggedIn) {
-            console.log('Forsøg på ulovlig  indtrængen')
-            respons.redirect('/')
-        } else {
-            next()
-        }
-    } else {
-        next()
-    }
-}
-
 // ----------------------------
 // admin-ENDPOINTS for oversigt|
 // ----------------------------
-
-adminRouter.get('/Journey/Overview', async (req, res) => {
+adminRouter.get('/Journeys/Overview', async (req, res) => {
     try{
-    //finder alle oversigter over journeys
+    //finder alle journeys
     const journeys = await controllerJourney.getJourneys();
 
     
@@ -42,7 +26,7 @@ adminRouter.get('/Customers/Overview', async (req, res) => {
     try {
         // Finder alle customers
         const customers = await controllerCustomer.getCustomers();
-        console.log(customers)
+       
         res.render('../GUI/views/customers', { customers: customers });
     } catch (error) {
         console.error('Fejl ved hentning af kunder:', error);
@@ -61,7 +45,16 @@ adminRouter.get('/Drivers/Overview', async (req, res) => {
     }
 });
 
-
+adminRouter.get('/Overview', async (req, res) => {
+    try {
+        //Finder alle admins
+        const admins = await controllerAdmin.getAdmins();
+        res.render('../GUI/views/admins', {admins});
+    } catch (error) {
+        console.error('Fejl ved hentning af admins', error);
+        res.status(500).send('Der opstod en fejl ved hentning af admins');
+    }
+});
 
 
 
@@ -125,10 +118,7 @@ adminRouter.get('/Customer/Get/:id', async (req, res) => {
         const customerId = req.params.id;
         const customer = await controllerCustomer.getCustomer(customerId);
 
-            console.log(customer)
         res.render('../GUI/views/CustomerDetails', { customer: customer });
-
-        
     } catch (error) {
         console.error('Fejl ved hentning af kunde:', error);
         res.status(500).send('Der opstod en fejl ved hentning af kunde.');
@@ -176,6 +166,44 @@ adminRouter.get('/Customer/Edit/:id', async (req, res) => {
 // --------------------------------------
 // admin-ENDPOINTS for CRUD til Journeys|
 // --------------------------------------
+
+
+adminRouter.post('/Journey/Add/4day', async (req, res) => {
+    try {
+        const { startDate, endDate, customer, price } = req.body;
+        await controllerJourney.addJourney4Days({ startDate, endDate, customer, price });
+        
+        res.redirect('/Journeys/Overview'); // Redirect til en oversigtsside eller anden relevant side
+    } catch (error) {
+        console.error('Fejl ved tilføjelse af Rejse:', error);
+        res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
+    }
+});
+
+adminRouter.post('/Journey/Add/3day', async (req, res) => {
+    try {
+        const { startDate, endDate, customer, price } = req.body;
+        await controllerJourney.addJourney3Days({ startDate, endDate, customer, price });
+        
+        res.redirect('/Journeys/Overview'); // Redirect til en oversigtsside eller anden relevant side
+    } catch (error) {
+        console.error('Fejl ved tilføjelse af Rejse:', error);
+        res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
+    }
+});
+
+adminRouter.post('/Journey/Delete/:id', async (req, res) => {
+    try {
+        const journeyId = req.params.id;
+        await controllerJourney.deleteJourney(journeyId);
+        
+        res.redirect('/Journeys/Overview'); // Redirect til en oversigtsside eller anden relevant side
+    } catch (error) {
+        console.error('Fejl ved sletning af Rejse: ', error);
+        res.status(500).send('Der opstod en fejl ved sletning af rejse.');
+    }
+});
+
 adminRouter.get('/Journey/Edit/:id', async (req, res) => {
     try {
         const journeyId = req.params.id;
@@ -183,10 +211,64 @@ adminRouter.get('/Journey/Edit/:id', async (req, res) => {
         
         res.render('../GUI/views/EditJourney', { journey });
     } catch (error) {
-        console.error('Fejl ved redigering af rejse:', error);
+        console.error('Fejl ved redigering af Rejse:', error);
         res.status(500).send('Der opstod en fejl ved redigering af rejse.');
     }
-})
+});
+
+
+// -----------------------------------
+// admin-ENDPOINTS for CRUD til Admins|
+// -----------------------------------
+adminRouter.get('/Get/:id', async (req, res) => {
+    try {
+        const adminId = req.params.id;
+        const admin = await controllerAdmin.getAdmin(adminId);
+
+        res.render('../GUI/views/AdminDetails', { admin: admin });
+    } catch (error) {
+        console.error('Fejl ved hentning af admin:', error);
+        res.status(500).send('Der opstod en fejl ved hentning af admin.');
+    }
+}) 
+
+adminRouter.post('/Add', async (req, res) => {
+    try {
+        const { firstName, lastName, adminStatus } = req.body;
+        await controllerAdmin.addAdmin({ firstName, lastName, adminStatus });
+        
+        res.redirect('/Overview'); // Redirect til en oversigtsside eller anden relevant side
+    } catch (error) {
+        console.error('Fejl ved tilføjelse af Admin:', error);
+        res.status(500).send('Der opstod en fejl ved tilføjelse af admin.');
+    }
+});
+
+adminRouter.post('/Delete/:id', async (req, res) => {
+    try {
+        const adminId = req.params.id;
+        await controllerAdmin.deleteAdmin(adminId);
+        
+        res.redirect('/Overview'); // Redirect til en oversigtsside eller anden relevant side
+    } catch (error) {
+        console.error('Fejl ved sletning af Admin: ', error);
+        res.status(500).send('Der opstod en fejl ved sletning af admin.');
+    }
+});
+
+adminRouter.get('/Edit/:id', async (req, res) => {
+    try {
+        const adminId = req.params.id;
+        const admin = await controllerAdmin.getAdmin(adminId);
+        
+        res.render('../GUI/views/EditAdmin', { admin });
+    } catch (error) {
+        console.error('Fejl ved redigering af Admin:', error);
+        res.status(500).send('Der opstod en fejl ved redigering af admin.');
+    }
+});
+
+
 
 //----------------------------
 // admin-ENDPOINTS for LOGIN |

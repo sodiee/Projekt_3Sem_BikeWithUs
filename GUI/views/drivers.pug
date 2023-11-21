@@ -1,0 +1,20 @@
+extends includes/layout 
+
+block content 
+    h1 Drivers content here
+    block Kalender
+        table
+            thead
+                tr
+                    th Mandag
+                    th Tirsdag
+                    th Onsdag
+                    th Torsdag
+                    th Fredag
+                    th Lørdag
+                    th Søndag
+            tbody
+                - for (var i = 0; i < 4; i++)
+                    tr
+                        - for (var j = 0; j < 7; j++)
+                            td Note
