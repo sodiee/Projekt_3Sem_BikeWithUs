@@ -218,44 +218,6 @@ adminRouter.get('/Journey/Edit/:id', async (req, res) => {
     }
 });
 
-//----------------------------
-// admin-ENDPOINTS for LOGIN |
-//----------------------------
-
-app.get('/', (req, res) => {
-    let isLoggedIn = false
-    if (req.session.isLoggedIn) {
-        isLoggedIn = true
-    }
-    res.render('home', {knownUser: isLoggedIn})
-})
-
-app.post('/login', (req, res) => {
-    const {username, password} = req.body
-    if (checkUser(username, password)) {
-        req.session.isLoggedIn = true
-    }
-    res.redirect('/')
-})
-
-app.get('/secret', (req, res) => {
-    res.render('secret', {knownUser: req.session.isLoggedIn})
-})
-
-app.get('/logout', (req, res) => {
-    req.session.destroy()
-    res.redirect('/')
-})
-
-// Simulator af databaseopkald
-function checkUser(user, password) {
-    let returnValue = false
-    if (user == 'BENT' && password == '123') {
-        returnValue = true
-    }
-    return returnValue
-}
-
 
 // -----------------------------------
 // admin-ENDPOINTS for CRUD til Admins|
@@ -307,5 +269,45 @@ adminRouter.get('/Edit/:id', async (req, res) => {
         res.status(500).send('Der opstod en fejl ved redigering af admin.');
     }
 });
+
+
+
+//----------------------------
+// admin-ENDPOINTS for LOGIN |
+//----------------------------
+
+app.get('/', (req, res) => {
+    let isLoggedIn = false
+    if (req.session.isLoggedIn) {
+        isLoggedIn = true
+    }
+    res.render('home', {knownUser: isLoggedIn})
+})
+
+app.post('/login', (req, res) => {
+    const {username, password} = req.body
+    if (checkUser(username, password)) {
+        req.session.isLoggedIn = true
+    }
+    res.redirect('/')
+})
+
+app.get('/secret', (req, res) => {
+    res.render('secret', {knownUser: req.session.isLoggedIn})
+})
+
+app.get('/logout', (req, res) => {
+    req.session.destroy()
+    res.redirect('/')
+})
+
+// Simulator af databaseopkald
+function checkUser(user, password) {
+    let returnValue = false
+    if (user == 'BENT' && password == '123') {
+        returnValue = true
+    }
+    return returnValue
+}
 
 export default adminRouter;
