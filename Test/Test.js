@@ -20,6 +20,12 @@ describe('CRUD test på Customer', () => {
     it('should add a customer', async () => {
         customer = await DBFunctions.addCustomerDB(customer);
         addedCustomerId = customer.id
+        })
+        
+        
+        it('should add a customer', async () => {
+            let customer = await DBFunctions.addCustomerDB('Mikkel', 'Lindhøj', 'xxxxxx', 'Aarhus C');
+            addedCustomerId = customer.id
 
         assert.isNotNull(addedCustomerId, 'The customers ID must not be null')
     })
