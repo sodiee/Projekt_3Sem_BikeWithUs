@@ -309,9 +309,9 @@ function checkUser(user, password) {
 }
 
 
-adminRouter.get('/secret', checkSecretPages, (req, res) => {
-    res.render('adminMain', { knownUser: req.session.isLoggedIn });
-});
+//adminRouter.get('/secret', checkSecretPages, (req, res) => {
+    //res.render('adminMain', { knownUser: req.session.isLoggedIn });
+//});
 
 
 
