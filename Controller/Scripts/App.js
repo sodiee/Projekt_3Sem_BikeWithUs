@@ -8,13 +8,18 @@ app.set('view engine', 'pug')
 app.use(express.urlencoded({extended: true}))
 app.use(express.static('./GUI/views'))
 app.use(express.static('./GUI/assets'))
+app.use(session({
+    secret: 'Maksym',
+    saveUninitialized: true,
+    resave: true
+}))
 
 
 // Endpoints (routes)
 import customerRouter from '../Endpoints/customers.js'
 app.use('/', customerRouter)
-//import adminRouter from'Controller/Endpoints/admins.js'
-//app.use('/admins', adminRouter)
+import adminRouter from'../Endpoints/admins.js'
+app.use('/admin', adminRouter)
 import driverRouter from '../Endpoints/drivers.js'
 app.use('/', driverRouter)
 
