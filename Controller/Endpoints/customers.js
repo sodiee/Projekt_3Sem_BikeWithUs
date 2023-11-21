@@ -31,7 +31,7 @@ customerRouter.post('/Journey/Book/3day', async (req, res) => {
     }
 });
 
-customerRouter.get('/Journey/MyJourneys/:id', async (req, res) => {
+customerRouter.get('/Journey/Mypage/:id', async (req, res) => {
     
         try {
             const customerId = req.params.customerId;
