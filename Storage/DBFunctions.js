@@ -163,6 +163,23 @@ const editAdminDB = async (admin) => {
 // ------------------------
 // DB functions for journey
 // ------------------------
+
+const getCustomerJourneysDB = async (customerId) => {
+    try {
+        const journeyQueryDocs = await getDocs(collection(db, 'Journey', where('customer.id', '==', customerId)));
+        const journeys = journeyQueryDocs.docs.map(doc => {
+            let data = doc.data();
+            data.docID = doc.id;
+            return data;
+        });
+
+        return journeys;
+    } catch (error) {
+        console.error('Fejl ved hentning af kundens rejser i DBFunctions:', error);
+        throw new Error('Der opstod en fejl ved hentning af kundens rejser i DBFunctions.');
+    }
+};
+
 const getJourneysDB = async () => {
     let journeyQueryDocs = await getDocs(JourneyCollection);
     let journey = journeyQueryDocs.docs.map(doc => {
@@ -224,4 +241,4 @@ const editJourneyDB = async (id) => {
 
 export default {getCustomerDB, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB,getAdminDB,
 getAdminsDB,deleteAdminDB,addAdminDB,editAdminDB,getDriverDB,getDriversDB,deleteDriverDB,addDriverDB,editDriverDB,
-addJourney3DaysDB, addJourney4DaysDB, editJourneyDB, deleteJourneyDB, getJourneyDB, getJourneysDB}
+addJourney3DaysDB, addJourney4DaysDB, editJourneyDB, deleteJourneyDB, getJourneyDB, getJourneysDB, getCustomerJourneysDB}
