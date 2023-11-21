@@ -34,10 +34,12 @@ adminRouter.get('/customers', async (req, res) => {
     }
 });
 
-adminRouter.get('/Kundeinformation/:id', async (req, res) => {
+adminRouter.get('/Customer/info/:id', async (req, res) => {
        
 
 }) 
+
+
 
 
 // ------------------------------------
@@ -49,8 +51,23 @@ adminRouter.get('/Kundeinformation/:id', async (req, res) => {
 // admin-ENDPOINTS for CRUD til customers|
 // --------------------------------------
 
+adminRouter.get('/Customer/Get/:id', async (req, res) => {
+    try {
+         const customerId = req.params.id;
+         const customer = await controllerCustomer.getCustomer(customerId);
+ 
+             console.log(customer)
+         res.render('../GUI/views/CustomerDetails', { customer: customer });
+ 
+         
+     } catch (error) {
+         console.error('Fejl ved hentning af kunde:', error);
+         res.status(500).send('Der opstod en fejl ved hentning af kunde.');
+     }
+     
+ });
 
-customerRouter.post('/Customer/Add', async (req, res) => {
+adminRouter.post('/Customer/Add', async (req, res) => {
     try {
         const { firstName, lastName, birthday, city } = req.body;
         await controllerCustomer.addCustomer({ firstName, lastName, birthday, city });
@@ -62,12 +79,35 @@ customerRouter.post('/Customer/Add', async (req, res) => {
     }
 });
 
+adminRouter.post('/Customer/Delete/:id', async (req, res) => {
+    try {
+        const customerId = req.params.id;
+        await controllerCustomer.deleteCustomer(customerId);
+        
+        res.redirect('/customers'); // Redirect til en oversigtsside eller anden relevant side
+    } catch (error) {
+        console.error('Fejl ved sletning af kunde: ', error);
+        res.status(500).send('Der opstod en fejl ved sletning af kunde.');
+    }
+});
+
+adminRouter.get('/Customer/Edit/:id', async (req, res) => {
+    try {
+        const customerId = req.params.id;
+        const customer = await controllerCustomer.getCustomer(customerId);
+        
+        res.render('../GUI/views/EditCustomer', { customer });
+    } catch (error) {
+        console.error('Fejl ved redigering af kunde:', error);
+        res.status(500).send('Der opstod en fejl ved redigering af kunde.');
+    }
+});
 
 
 
-// ----------------------------
-// admin-ENDPOINTS for oversigt|
-// ----------------------------
+// --------------------------------------
+// admin-ENDPOINTS for CRUD til Journeys|
+// --------------------------------------
 
 
 adminRouter.get('/Journey/Edit/:id', async (req, res) => {
