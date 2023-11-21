@@ -31,7 +31,7 @@ const db = getFirestore(app);
 const CustomersCollection = collection(db, 'Customers');
 const DriversCollection = collection(db, 'Drivers');
 const AdminsCollection = collection(db, 'Admins');
-const JourneyCollection = collection(db, 'Journey');
+const JourneyCollection = collection(db, 'Journeys');
 
 // ------------------------
 // DB functions for customer
@@ -160,9 +160,11 @@ const editAdminDB = async (admin) => {
     });
 };
 
-// ------------------------
-// DB functions for journey
-// ------------------------
+// ------------------------\\
+// DB functions for journey\\
+// ------------------------\\
+
+let journey = {id: 'WRtB92faJCOjwS9vah8R'};
 
 const getCustomerJourneysDB = async (customerId) => {
     try {
@@ -211,31 +213,42 @@ const addJourney3DaysDB = async (id) => {
 }
 
 const addJourney4DaysDB = async (id) => {
-    let customer = getCustomerDB(id) 
+    let customer = await getCustomerDB(id) 
     const today = new Date()
-    const nextFourDays = new Date(today.setDate(today.getDate() + 4))
-    let price = getPriceDB(this) //getPriceDB mangler at blive lavet
+    const endDate = new Date(today.setDate(today.getDate() + 4))
+    let price = 5000 //getPriceDB(this) //getPriceDB mangler at blive lavet
     
-    let journey = new Journey(today, nextFourDays, customer, price);
-    const docRef = await addDoc(JourneyCollection, id);
+    let journey = {startDate: today, endDate: endDate, customer: customer, price: price};
+    const docRef = await addDoc(JourneyCollection, journey);
     journey.id = docRef.id;
     return id;
 }
+//virker
+//addJourney4DaysDB('gCpdvCjNnQfJby3cQf9d');
 
 
-const deleteJourneyDB = async (id) => {
-    const deletedJourney = await deleteDoc(doc(db, 'Journeys', id));
+const deleteJourneyDB = async (journey) => {
+    const deletedJourney = await deleteDoc(doc(db, 'Journeys', journey.id));
     return id;
 }
 
-const editJourneyDB = async (id) => {
-    await updateDoc(doc(db, 'Journeys', id.id), {
-        startDate: id.startDate, 
-        endDate: id.endDate, 
-        customer: id.customer,
-        price: id.price
+//virker
+//deleteJourneyDB(journey);
+
+
+
+const editJourneyDB = async (journey) => {
+    await updateDoc(doc(db, 'Journeys', journey.id), {
+        startDate: journey.startDate, 
+        endDate: journey.endDate, 
+        customer: journey.customer,
+        price: journey.price,
+        id: journey.id
     });
 };
+//let today = new Date()
+//journey = {startDate: today, endDate: today.getDate() + 4, customer: await getCustomerDB('gCpdvCjNnQfJby3cQf9d'), price: 3000};
+//editJourneyDB(journey)
 
 
 
