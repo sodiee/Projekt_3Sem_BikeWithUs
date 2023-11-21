@@ -6,7 +6,8 @@ app.set('view engine', 'pug')
 
 // Middleware
 app.use(express.urlencoded({extended: true}))
-app.use(express.static('GUI'))
+app.use(express.static('./GUI/views'))
+app.use(express.static('./GUI/assets'))
 
 
 // Endpoints (routes)
@@ -20,7 +21,7 @@ app.use('/', driverRouter)
 
 
 
-app.listen(8000, () => {
+app.listen(8801, () => {
     console.log('Så kører lortet')
 })
 

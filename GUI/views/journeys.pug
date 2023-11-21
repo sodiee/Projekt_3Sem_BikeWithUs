@@ -1,0 +1,7 @@
+extends includes/layout
+
+block content 
+    ul 
+        each journey in journeys  
+            li
+                a(href='/journey/get/' + journey.docID)  #{journey.startDate} #{journey.endDate} #{journey.customer} #{journey.price}

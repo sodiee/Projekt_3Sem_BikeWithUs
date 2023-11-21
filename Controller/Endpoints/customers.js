@@ -6,7 +6,8 @@ customerRouter.get('/customers', async (req, res) => {
     try {
         // Finder alle customers
         const customers = await controller.getCustomers();
-        res.render('customers', { customers });
+        console.log(customers)
+        res.render('../GUI/views/customers', { customers: customers });
     } catch (error) {
         console.error('Fejl ved hentning af kunder:', error);
         res.status(500).send('Der opstod en fejl ved hentning af kunder.');
@@ -30,7 +31,7 @@ customerRouter.get('/Customer/Edit/:id', async (req, res) => {
         const customerId = req.params.id;
         const customer = await controller.getCustomer(customerId);
         
-        res.render('EditCustomer', { customer });
+        res.render('../GUI/views/EditCustomer', { customer });
     } catch (error) {
         console.error('Fejl ved redigering af kunde:', error);
         res.status(500).send('Der opstod en fejl ved redigering af kunde.');
@@ -50,15 +51,20 @@ customerRouter.post('/Customer/Delete/:id', async (req, res) => {
 });
 
 customerRouter.get('/Customer/Get/:id', async (req, res) => {
-    try {
-        const customerId = req.params.id;
-        const customer = await controller.getCustomer(customerId);
+   try {
+        //const customerId = req.params.id;
+        const customer1 = req.params.id
+        const customer = await controller.getCustomer(req.params.id);
 
-        res.render('CustomerDetails', { customer });
+            console.log(customer)
+        res.render('../GUI/views/CustomerDetails', { customer: customer });
+
+        
     } catch (error) {
         console.error('Fejl ved hentning af kunde:', error);
         res.status(500).send('Der opstod en fejl ved hentning af kunde.');
     }
+    
 });
 
 export default customerRouter;
