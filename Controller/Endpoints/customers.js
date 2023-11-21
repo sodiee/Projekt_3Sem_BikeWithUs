@@ -2,69 +2,50 @@ import express from 'express';
 const customerRouter = express.Router();
 import controller from '../Model/Customer.js';
 
-customerRouter.get('/customers', async (req, res) => {
+
+// -------------------------------
+// customer-ENDPOINTS for booking |
+// -------------------------------
+
+customerRouter.post('/Journey/Book/4day', async (req, res) => {
     try {
-        // Finder alle customers
-        const customers = await controller.getCustomers();
-        console.log(customers)
-        res.render('../GUI/views/customers', { customers: customers });
+        const { startDate, endDate, customer, price } = req.body;
+        await controller.addJourney4Days({ startDate, endDate, customer, price });
+        
+        res.redirect('/Journeys/Overview'); // Redirect til en oversigtsside eller anden relevant side
     } catch (error) {
-        console.error('Fejl ved hentning af kunder:', error);
-        res.status(500).send('Der opstod en fejl ved hentning af kunder.');
+        console.error('Fejl ved tilføjelse af Rejse:', error);
+        res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
     }
 });
 
-customerRouter.post('/Customer/Add', async (req, res) => {
+customerRouter.post('/Journey/Book/3day', async (req, res) => {
     try {
-        const { firstName, lastName, birthday, city } = req.body;
-        await controller.addCustomer({ firstName, lastName, birthday, city });
+        const { startDate, endDate, customer, price } = req.body;
+        await controller.addJourney3Days({ startDate, endDate, customer, price });
         
-        res.redirect('/customers'); // Redirect til en oversigtsside eller anden relevant side
+        res.redirect('/Journeys/Overview'); // Redirect til en oversigtsside eller anden relevant side
     } catch (error) {
-        console.error('Fejl ved tilføjelse af kunde:', error);
-        res.status(500).send('Der opstod en fejl ved tilføjelse af kunde.');
+        console.error('Fejl ved tilføjelse af Rejse:', error);
+        res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
     }
 });
 
-customerRouter.get('/Customer/Edit/:id', async (req, res) => {
-    try {
-        const customerId = req.params.id;
-        const customer = await controller.getCustomer(customerId);
-        
-        res.render('../GUI/views/EditCustomer', { customer });
-    } catch (error) {
-        console.error('Fejl ved redigering af kunde:', error);
-        res.status(500).send('Der opstod en fejl ved redigering af kunde.');
-    }
-});
-
-customerRouter.post('/Customer/Delete/:id', async (req, res) => {
-    try {
-        const customerId = req.params.id;
-        await controller.deleteCustomer(customerId);
-        
-        res.redirect('/customers'); // Redirect til en oversigtsside eller anden relevant side
-    } catch (error) {
-        console.error('Fejl ved sletning af kunde: ', error);
-        res.status(500).send('Der opstod en fejl ved sletning af kunde.');
-    }
-});
-
-customerRouter.get('/Customer/Get/:id', async (req, res) => {
-   try {
-        //const customerId = req.params.id;
-        const customer1 = req.params.id
-        const customer = await controller.getCustomer(req.params.id);
-
-            console.log(customer)
-        res.render('../GUI/views/CustomerDetails', { customer: customer });
-
-        
-    } catch (error) {
-        console.error('Fejl ved hentning af kunde:', error);
-        res.status(500).send('Der opstod en fejl ved hentning af kunde.');
-    }
+customerRouter.get('/Journey/MyJourneys/:id', async (req, res) => {
     
+        try {
+            const customerId = req.params.customerId;
+            const customerJourneys = await controller.getCustomerJourneys(customerId);
+            const customer = await controller.getCustomer(customerId);
+    
+            res.render('../GUI/views/CustomerPage', { trips: customerJourneys, customer: customer });
+        } catch (error) {
+            console.error('Fejl ved hentning af kundens side:', error);
+            res.status(500).send('Der opstod en fejl ved hentning af kundens side.');
+        }
 });
+    
+     
+
 
 export default customerRouter;
