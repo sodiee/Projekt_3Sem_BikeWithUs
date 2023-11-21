@@ -11,8 +11,8 @@ describe('CRUD test på Customer', () => {
             await DBFunctions.deleteCustomerDB(addedCustomerId);
         }
         })
-
-
+        
+        
         it('should add a customer', async () => {
             let customer = await DBFunctions.addCustomerDB('Mikkel', 'Lindhøj', 'xxxxxx', 'Aarhus C');
             addedCustomerId = customer.id
