@@ -18,8 +18,8 @@ app.use(session({
 // Endpoints (routes)
 import customerRouter from '../Endpoints/customers.js'
 app.use('/', customerRouter)
-import adminRouter from '..Endpoints/admins.js'
-app.use('/', adminRouter)
+//import adminRouter from'..Endpoints/admins.js'
+//app.use('/admins', adminRouter)
 import driverRouter from '../Endpoints/drivers.js'
 app.use('/', driverRouter)
 
