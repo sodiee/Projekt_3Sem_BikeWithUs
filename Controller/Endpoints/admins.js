@@ -6,8 +6,6 @@ import controllerDriver from '../Model/Driver.js';
 import controllerCustomer from '../Model/Customer.js';
 import controllerAdmin from '../Model/Admin.js'
 
-
-
 // ----------------------------
 // admin-ENDPOINTS for oversigt|
 // ----------------------------
@@ -276,15 +274,15 @@ adminRouter.get('/Edit/:id', async (req, res) => {
 // admin-ENDPOINTS for LOGIN |
 //----------------------------
 
-app.get('/', (req, res) => {
+adminRouter.get('/', (req, res) => {
     let isLoggedIn = false
     if (req.session.isLoggedIn) {
         isLoggedIn = true
     }
-    res.render('home', {knownUser: isLoggedIn})
+    res.render('../GUI/views/adminMain.pug', {knownUser: isLoggedIn})
 })
 
-app.post('/login', (req, res) => {
+adminRouter.post('/login', (req, res) => {
     const {username, password} = req.body
     if (checkUser(username, password)) {
         req.session.isLoggedIn = true
@@ -292,11 +290,11 @@ app.post('/login', (req, res) => {
     res.redirect('/')
 })
 
-app.get('/secret', (req, res) => {
-    res.render('secret', {knownUser: req.session.isLoggedIn})
+adminRouter.get('/secret', (req, res) => {
+    res.render('adminMain', {knownUser: req.session.isLoggedIn})
 })
 
-app.get('/logout', (req, res) => {
+adminRouter.get('/logout', (req, res) => {
     req.session.destroy()
     res.redirect('/')
 })
@@ -309,5 +307,12 @@ function checkUser(user, password) {
     }
     return returnValue
 }
+
+
+adminRouter.get('/secret', checkSecretPages, (req, res) => {
+    res.render('adminMain', { knownUser: req.session.isLoggedIn });
+});
+
+
 
 export default adminRouter;

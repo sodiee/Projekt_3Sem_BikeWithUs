@@ -5,6 +5,7 @@ this.firstName = firstName;
 this.lastName = lastName;
 }
 
+
 async function addDriver(driver) {
     let d = {firstName: driver.firstName, lastName: driver.lastName}
     return await DBFunctions.addDriverDB(d);

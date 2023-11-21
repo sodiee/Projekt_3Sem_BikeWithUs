@@ -1,5 +1,6 @@
 import DBFunctions from '../../Storage/DBFunctions.js';
 import express from 'express'
+import session  from 'express-session';
 const app = express()
 app.set('view engine', 'pug')
 
@@ -11,8 +12,9 @@ app.use(express.static('./GUI/assets'))
 app.use(session({
     secret: 'Maksym',
     saveUninitialized: true,
-    resave: true
+    resave: false
 }))
+
 
 
 // Endpoints (routes)

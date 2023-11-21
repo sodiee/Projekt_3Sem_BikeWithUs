@@ -2,3 +2,8 @@ extends includes/layout
 
 block content 
     h1 content here
+    p Forsiden 
+    if !knownUser
+        include includes/login 
+    else 
+        p Hej! Du er logget ind
