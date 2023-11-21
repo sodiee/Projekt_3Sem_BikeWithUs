@@ -1,5 +1,6 @@
 import DBFunctions from '../../Storage/DBFunctions.js';
 import express from 'express'
+import session  from 'express-session';
 const app = express()
 app.set('view engine', 'pug')
 
@@ -11,15 +12,16 @@ app.use(express.static('./GUI/assets'))
 app.use(session({
     secret: 'Maksym',
     saveUninitialized: true,
-    resave: true
+    resave: false
 }))
+
 
 
 // Endpoints (routes)
 import customerRouter from '../Endpoints/customers.js'
 app.use('/', customerRouter)
-//import adminRouter from'..Endpoints/admins.js'
-//app.use('/admins', adminRouter)
+import adminRouter from'../Endpoints/admins.js'
+app.use('/', adminRouter)
 import driverRouter from '../Endpoints/drivers.js'
 app.use('/', driverRouter)
 
