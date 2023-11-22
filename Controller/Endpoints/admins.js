@@ -16,12 +16,12 @@ adminRouter.get('/', (req, res) => {
         isLoggedIn = true
         res.render('../GUI/views/adminMain.pug', {knownUser: isLoggedIn})
     } else {
-        res.redirect('/login')
+        res.redirect('/adminLogin')
     }
     
 })
 
-adminRouter.post('/login', (req, res) => {
+adminRouter.post('/adminLogin', (req, res) => {
     const {username, password} = req.body
     if (checkUser(username, password)) {
         req.session.isLoggedIn = true
@@ -35,7 +35,7 @@ adminRouter.get('/secret', (req, res) => {
     if (req.session.isLoggedIn) {
         res.render('adminMain', {knownUser: req.session.isLoggedIn})
     } else {
-        res.redirect('/login')
+        res.redirect('/adminLogin')
     }
 })
 
@@ -82,7 +82,7 @@ adminRouter.get('/Customers/Overview', async (req, res) => {
        if (req.session.isLoggedIn) {
         res.render('../GUI/views/customers', { customers: customers });
     } else {
-        res.redirect('/login')
+        res.redirect('/adminLogin')
     }
     } catch (error) {
         console.error('Fejl ved hentning af kunder:', error);
@@ -97,7 +97,7 @@ adminRouter.get('/Drivers/Overview', async (req, res) => {
         if (req.session.isLoggedIn) {    
         res.render('../GUI/views/drivers', { drivers });
     } else {
-        res.redirect('/login')
+        res.redirect('/adminLogin')
     }
     } catch (error) {
         console.error('Fejl ved hentning af drivers:', error);
@@ -112,7 +112,7 @@ adminRouter.get('/Overview', async (req, res) => {
         if (req.session.isLoggedIn) {    
             res.render('../GUI/views/admins', {admins});
         } else {
-            res.redirect('/login')
+            res.redirect('/adminLogin')
         }
     } catch (error) {
         console.error('Fejl ved hentning af admins', error);
@@ -145,7 +145,7 @@ adminRouter.get('/Driver/Edit/:id', async (req, res) => {
         if (req.session.isLoggedIn) {    
             res.render('../GUI/views/EditDriver', {driver});
         } else {
-            res.redirect('/login')
+            res.redirect('/adminLogin')
         }
 
     } catch (error) {
@@ -175,7 +175,7 @@ adminRouter.get('/Driver/Get/:id', async (req, res) => {
         if (req.session.isLoggedIn) {    
             res.render('../GUI/views/DriverDetails', { driver });
         } else {
-            res.redirect('/login')
+            res.redirect('/adminLogin')
         }
         
     } catch (error) {
@@ -194,7 +194,7 @@ adminRouter.get('/Customer/Get/:id', async (req, res) => {
         if (req.session.isLoggedIn) {    
             res.render('../GUI/views/CustomerDetails', { customer: customer });
         } else {
-            res.redirect('/login')
+            res.redirect('/adminLogin')
         }
         
     } catch (error) {
@@ -235,7 +235,7 @@ adminRouter.get('/Customer/Edit/:id', async (req, res) => {
         if (req.session.isLoggedIn) {    
             res.render('../GUI/views/EditCustomer', { customer });
         } else {
-            res.redirect('/login')
+            res.redirect('/adminLogin')
         }
 
     } catch (error) {
@@ -295,7 +295,7 @@ adminRouter.get('/Journey/Edit/:id', async (req, res) => {
         if (req.session.isLoggedIn) {    
             res.render('../GUI/views/EditJourney', { journey });
         } else {
-            res.redirect('/login')
+            res.redirect('/adminLogin')
         }
         
     } catch (error) {
@@ -316,7 +316,7 @@ adminRouter.get('/Get/:id', async (req, res) => {
         if (req.session.isLoggedIn) {    
             res.render('../GUI/views/AdminDetails', { admin: admin });
         } else {
-            res.redirect('/login')
+            res.redirect('/adminLogin')
         }
         
     } catch (error) {
@@ -357,7 +357,7 @@ adminRouter.get('/Edit/:id', async (req, res) => {
         if (req.session.isLoggedIn) {    
             res.render('../GUI/views/EditAdmin', { admin });
         } else {
-            res.redirect('/login')
+            res.redirect('/adminLogin')
         }
         
     } catch (error) {
