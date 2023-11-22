@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <script src="/Controller/Calender/adminCalender.js" defer></script>
+        <link rel="stylesheet" href="/GUI/assets/CSS/adminCalender.css">
+    </head>
+
+    <body>
+      <div id="months">
+        <div id="radioButtons"></div>
+          <form>
+            <input type="radio" name="choice" value="Januar" id="choice-januar"> 
+            <label for="choice-januar">Januar</label>
+            <input type="radio" name="choice" value="Februar" id="choice-februar">
+            <label for="choice-februar">Februar</label>
+            <input type="radio" name="choice" value="Marts" id="choice-marts">
+            <label for="choice-marts">Marts</label>
+            <input type="radio" name="choice" value="April" id="choice-april">
+            <label for="choice-april">April</label>
+            <input type="radio" name="choice" value="Maj" id="choice-maj">
+            <label for="choice-maj">Maj</label>
+            <input type="radio" name="choice" value="Juni" id="choice-juni">
+            <label for="choice-juni">Juni</label>
+            <input type="radio" name="choice" value="Juli" id="choice-juli">
+            <label for="choice-juli">Juli</label>
+            <input type="radio" name="choice" value="August" id="choice-august">
+            <label for="choice-august">August</label>
+            <input type="radio" name="choice" value="September" id="choice-september">
+            <label for="choice-september">September</label>
+            <input type="radio" name="choice" value="Oktober" id="choice-oktober">
+            <label for="choice-oktober">Oktober</label>
+            <input type="radio" name="choice" value="November" id="choice-november">
+            <label for="choice-november">November</label>
+            <input type="radio" name="choice" value="December" id="choice-december">
+            <label for="choice-december">December</label>
+          </form>
+        </div>
+
+      </div>
+      <div id="table-container">
+        <table id="table">
+            <thead>
+                <td><p><b>Dato</b></p></td>
+                <td><p><b>Rejse</b></p></td>
+                <td><p><b>Kunder</b></p></td>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </body>
+</html>

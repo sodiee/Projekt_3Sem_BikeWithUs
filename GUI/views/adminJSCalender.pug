@@ -1,0 +1,25 @@
+extends includes/layout 
+
+block content
+    script(src="/Controller/Calender/adminCalender.js", defer)
+    #months
+      #radioButtons
+      form
+        each month in ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December']
+          input(type="radio", name="choice", value=month.toLowerCase(), id=`choice-${month.toLowerCase()}`)
+          label(for=`choice-${month.toLowerCase()}`)= month
+
+    #table-container
+      table#table
+        thead
+          tr
+            td
+              p
+                b Dato
+            td
+              p
+                b Rejse
+            td
+              p
+                b Kunder
+        tbody#tableBody
