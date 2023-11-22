@@ -27,6 +27,8 @@ for (let i = 1; i <= 31; i++) {
     let tdElementDato = document.createElement('td');
     let tdElementRejse = document.createElement('td');
     let tdElementKunde = document.createElement('td');
+    let tdElementTilvalg = document.createElement('td');
+
 
     //Tilfører værdier til elementer
     tdElementDato.id = i;
@@ -35,11 +37,14 @@ for (let i = 1; i <= 31; i++) {
     tdElementRejse.textContent = '-'
     tdElementKunde.id = i + ': Kunde'
     tdElementKunde.textContent = '-'
+    tdElementTilvalg.id = i + ': Tilvalg';
+    tdElementTilvalg.textContent = '-';
 
     //appender elementer til tabel
     trElement.appendChild(tdElementDato);
     trElement.appendChild(tdElementRejse);
     trElement.appendChild(tdElementKunde);
+    trElement.appendChild(tdElementTilvalg);
     table.appendChild(trElement);
 }
 
@@ -70,9 +75,9 @@ function updateMonth() {
 }
 
 
-// Tilføj denne funktion til at tilføje et event
-function addEvent(startDate, endDate, eventName/*skal ændres til selve journey*/) {
-    // Find de relevante celler baseret på start- og slutdato
+//tilføj events
+function addEvent(startDate, endDate, eventName/*skal ændres til selve journey*/, kunde) {
+    
     for (let i = startDate; i <= endDate; i++) {
         let tdElementRejse = document.getElementById(i + ': Rejse');
         let tdElementKunde = document.getElementById(i + ': Kunde')
@@ -85,15 +90,13 @@ function addEvent(startDate, endDate, eventName/*skal ændres til selve journey*
         }
 
         if (tdElementKunde) {
-            tdElementKunde.textContent = ""
-
             let pElementKunde = document.createElement('p');
-            pElementKunde.textContent = 'Mikkel'; //journey.customer
+            pElementKunde.textContent = kunde; //journey.customer
             tdElementKunde.appendChild(pElementKunde);
         }
     }
 }
 
-addEvent(4, 4, "Mikkels fødselsdag");
+addEvent(4, 4, "Mikkels fødselsdag", 'Mikkel + ' + 0);
 
-addEvent(4, 4, "Mathias' fødselsdag");
+addEvent(4, 6, "Mathias' fødselsdag", 'Mathias + ' + 1000);
