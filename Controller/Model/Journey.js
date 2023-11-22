@@ -7,6 +7,7 @@ function Journey(startDate, endDate, customer, price) {
     this.customer = customer;
     this.price = price;
 }
+
 async function getCustomerJourneys(customerId) {
         const journeys = await DBFunctions.getCustomerTripsDB(customerId);
         return journeys;
@@ -39,6 +40,12 @@ async function deleteJourney(journey) {
     let j = {startDate: journey.startDate, endDate: journey.endDate, customer: journey.customer, price: journey.price}
     DBFunctions.deleteJourneyDB(j);
 }
+
+async function editStartDateDB(journey) {
+    let j = {startDate: journey.startDate, endDate: journey.endDate}
+    return DBFunctions.editStartDateDB(j);
+}
+
 
 export default {getJourneys, addJourney3Days, addJourney4Days, editJourney, getJourney, deleteJourney, getCustomerJourneys}
 

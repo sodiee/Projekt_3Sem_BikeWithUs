@@ -1,4 +1,4 @@
-let table = document.getElementById("table");
+let table = document.getElementById("tableBody");
 //måned
 let months = ['january',
     'february',
@@ -97,5 +97,3 @@ function addEvent(startDate, endDate, eventName/*skal ændres til selve journey*
 addEvent(4, 4, "Mikkels fødselsdag");
 
 addEvent(4, 4, "Mathias' fødselsdag");
-
-knapValue();
