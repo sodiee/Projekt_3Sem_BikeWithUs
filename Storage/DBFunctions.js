@@ -205,13 +205,14 @@ const getJourneysDB = async () => {
     return journey;
 }
 
+
 const getJourneyDB = async (docID) => {
     try {
-        const journeyDoc = await getDoc(doc(db, 'Journeys', docID));
-
-        if (journeyDoc.exists()) {
-            let journey = journeyDoc.data();
-            journey.docID = journeyDoc.id;
+        const docRef = doc(db, 'Journeys', docID);
+        if (docRef.exists()) {
+            const journeyQueryDoc = await getDoc(docRef);
+            let journey = journeyQueryDoc.data();
+            journey.docID = journeyQueryDoc.id;
             return journey;
         } else {
             throw new Error('Dokumentet eksisterer ikke.');
@@ -221,14 +222,11 @@ const getJourneyDB = async (docID) => {
         throw new Error('Der opstod en fejl ved hentning af rejse i DBFunctions.');
     }
 };
-const addJourneyDB = async (journey) => {
-    const docRef = await addDoc(JourneyCollection, journey);
+const addJourneyDB = async (journey, customerId) => {
+    const docRef = await addDoc(JourneyCollection, journey, customerId);
     journey.id = docRef.id;
     return journey;
 };
-
-//virker
-//addJourney4DaysDB('gCpdvCjNnQfJby3cQf9d');
 
 
 const deleteJourneyDB = async (journeyID) => {
@@ -241,10 +239,6 @@ const deleteJourneyDB = async (journeyID) => {
     }
 };
 
-//virker
-//deleteJourneyDB(journey);
-
-
 
 const editJourneyDB = async (docID, journeyData) => {
     try {
@@ -255,9 +249,6 @@ const editJourneyDB = async (docID, journeyData) => {
         throw new Error('There was an error updating the journey.');
     }
 };
-//let today = new Date()
-//journey = {startDate: today, endDate: today.getDate() + 4, customer: await getCustomerDB('gCpdvCjNnQfJby3cQf9d'), price: 3000};
-//editJourneyDB(journey)
 
 
 const editStartDateDB = async (journey) => {

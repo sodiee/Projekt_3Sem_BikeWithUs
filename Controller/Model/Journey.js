@@ -46,7 +46,6 @@ async function editStartDate(journey) {
     return DBFunctions.editStartDateDB(j);
 }
 
-
 export default {getJourneys, addJourney3Days, addJourney4Days, editJourney, getJourney, deleteJourney, getCustomerJourneys,editStartDate}
 
 
