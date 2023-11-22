@@ -250,6 +250,11 @@ const editJourneyDB = async (journey) => {
 //journey = {startDate: today, endDate: today.getDate() + 4, customer: await getCustomerDB('gCpdvCjNnQfJby3cQf9d'), price: 3000};
 //editJourneyDB(journey)
 
+const editStartDateDB = async (journey) => {
+    await updateDoc(doc(db, 'Journeys', journey.id), {
+        startDate: journey.startDate, 
+    });
+};  
 
 
 export default {getCustomerDB, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB,getAdminDB,
