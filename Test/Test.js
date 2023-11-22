@@ -5,20 +5,27 @@ const assert = chai.assert
 //DBFUNCTIONS TEST 
 
 describe('Crud test på Journey', () => {
-    let journeyM;
-    let customer = { firstName: "Mewkel", lastName: "Lindhøøøøøj", birthday: "160795", city: "Frederiksbjerg" };
-    let price = 5000;
-    let startDate = new Date();
-    let endDate = new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000);
-  
-    beforeEach(() => {
-      journeyM = { startDate, endDate, customer, price };
+  let customer;
+  let journey;
+  beforeEach(() => {
+     customer = { firstName: "Mewkel", lastName: "Lindhøøøøøj", birthday: "160795", city: "Frederiksbjerg" };
+     journey = {customer: customer, startDate: "092598", price: 5000};
+  })
+    
+  it('Should return a journey', async () => {
+      const result = await DBFunctions.getJourneyDB(journey);
+      assert.deepStrictEqual(result, journey);
     });
-  
-    it('Should return a journey', async () => {
-      const result = await DBFunctions.getJourneyDB(journeyM);
-      assert.deepStrictEqual(result, journeyM);
-    });
+
+    it('should edit a journeys start date', async () => {
+
+      let newJourney = await DBFunctions.addJourneyDB(journey, journey.customer);
+      
+      let newDate = '2024-05-05';
+      await newJourney.DBFunctions.editStartDateDB(newDate)
+
+      assert.strictEqual(newJourney.startDate, '2024-05-05', 'Journey start date should be edited');
+  })
   });
 
 
@@ -71,14 +78,4 @@ describe('CRUD test på Customer', () => {
         await DBFunctions.editCustomerDB(customer)
         assert.strictEqual(newCustomer.fornavn, 'NyFornavn', 'Customer should be edited');
         });
-
-        it('should edit a journeys start date', async () => {
-
-            let newJourney = await DBFunctions.addJourney3DaysDB(journey);
-            journey = {customer: customer, endDate: 25/11/2025, price: 4000, startDate: 21/11/2025};
-            newDate.startDate = '2024-05-05';
-
-            await DBFunctions.editStartDateDB(journey)
-            assert.strictEqual(newJourney.startDate, '2024-05-05', 'Journey should be edited');
-        })
 });

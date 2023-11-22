@@ -21,7 +21,7 @@ adminRouter.get('/', (req, res) => {
     
 })
 
-adminRouter.post('/adminLogin', (req, res) => {
+adminRouter.post('/login', (req, res) => {
     const {username, password} = req.body
     if (checkUser(username, password)) {
         req.session.isLoggedIn = true
@@ -365,9 +365,5 @@ adminRouter.get('/Edit/:id', async (req, res) => {
         res.status(500).send('Der opstod en fejl ved redigering af admin.');
     }
 });
-
-
-
-
 
 export default adminRouter;
