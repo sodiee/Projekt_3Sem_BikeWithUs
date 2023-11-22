@@ -1,12 +1,13 @@
 import DBFunctions from '../../Storage/DBFunctions.js';
 
 
-function Journey(startDate, endDate, customer, price) {
+function Journey(startDate, customer, price) {
     this.startDate = startDate;
     this.endDate = endDate;
     this.customer = customer;
     this.price = price;
 }
+
 async function getCustomerJourneys(customerId) {
         const journeys = await DBFunctions.getCustomerTripsDB(customerId);
         return journeys;
@@ -17,13 +18,13 @@ async function getJourneys() {
 }
 
 async function addJourney3Days(journey) {
-    let j = {startDate: journey.startDate, endDate: journey.endDate, customer: journey.customer, price: journey.price}
-    return await DBFunctions.addJourney3DaysDB(j);
+    let j = {startDate: journey.startDate, endDate: journey.startDate + 3, customer: journey.customer, price: journey.price}
+    return await DBFunctions.addJourneyDB(j);
 }
 
 async function addJourney4Days(journey) {
-    let j = {startDate: journey.startDate, endDate: journey.endDate, customer: journey.customer, price: journey.price}
-    return await DBFunctions.addJourney4DaysDB(j);
+    let j = {startDate: journey.startDate, endDate: journey.startDate + 4, customer: journey.customer, price: journey.price}
+    return await DBFunctions.addJourneyDB(j);
 }
 
 function editJourney(journey) {
@@ -40,13 +41,13 @@ async function deleteJourney(journey) {
     DBFunctions.deleteJourneyDB(j);
 }
 
-async function editStartDateDB(journey) {
+async function editStartDate(journey) {
     let j = {startDate: journey.startDate, endDate: journey.endDate}
     return DBFunctions.editStartDateDB(j);
 }
 
 
-export default {getJourneys, addJourney3Days, addJourney4Days, editJourney, getJourney, deleteJourney, getCustomerJourneys}
+export default {getJourneys, addJourney3Days, addJourney4Days, editJourney, getJourney, deleteJourney, getCustomerJourneys,editStartDate}
 
 
 

@@ -5,8 +5,11 @@ const assert = chai.assert
 //DBFUNCTIONS TEST 
 
 describe('Crud test på Journey', () => {
+  beforeEach(() => {
+    customer = { firstName: "Mewkel", lastName: "Lindhøøøøøj", birthday: "160795", city: "Frederiksbjerg" };
+    journey = {customer: customer, endDate: }
+  })
     let journeyM;
-    let customer = { firstName: "Mewkel", lastName: "Lindhøøøøøj", birthday: "160795", city: "Frederiksbjerg" };
     let price = 5000;
     let startDate = new Date();
     let endDate = new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000);
@@ -19,6 +22,16 @@ describe('Crud test på Journey', () => {
       const result = await DBFunctions.getJourneyDB(journeyM);
       assert.deepStrictEqual(result, journeyM);
     });
+
+    it('should edit a journeys start date', async () => {
+
+      let newJourney = await DBFunctions.addJourney3DaysDB(journey);
+      journey = {customer: customer, endDate: 25/11/2025, price: 4000, startDate: 21/11/2025};
+      newDate.startDate = '2024-05-05';
+
+      await DBFunctions.editStartDateDB(journey)
+      assert.strictEqual(newJourney.startDate, '2024-05-05', 'Journey start date should be edited');
+  })
   });
 
 
@@ -71,14 +84,4 @@ describe('CRUD test på Customer', () => {
         await DBFunctions.editCustomerDB(customer)
         assert.strictEqual(newCustomer.fornavn, 'NyFornavn', 'Customer should be edited');
         });
-
-        it('should edit a journeys start date', async () => {
-
-            let newJourney = await DBFunctions.addJourney3DaysDB(journey);
-            journey = {customer: customer, endDate: 25/11/2025, price: 4000, startDate: 21/11/2025};
-            newDate.startDate = '2024-05-05';
-
-            await DBFunctions.editStartDateDB(journey)
-            assert.strictEqual(newJourney.startDate, '2024-05-05', 'Journey should be edited');
-        })
 });

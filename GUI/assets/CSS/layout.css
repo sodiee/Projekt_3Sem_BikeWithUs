@@ -1,17 +1,17 @@
-*{
+* {
     margin: 0;
     padding: 0;
     font-family: 'Roboto', sans-serif;
 }
 
-body{
+body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
-header{
-    background-color: rgb(54,54,54);
+header {
+    background-color: rgb(54, 54, 54);
     padding: 10px;
     display: flex;
     flex-direction: row;
@@ -19,22 +19,17 @@ header{
     border-bottom: black 2px solid;
 }
 
-header a{
-    color: azure;
-    padding: 10px;
-}
-
-#logo{
+#logo {
     width: 150px;
     flex-shrink: 0;
 }
 
-#logo > img{
+#logo>img {
     width: auto;
     height: 40px;
 }
 
-header > p{
+header>p {
     color: rgb(230, 230, 230);
     display: flex;
     align-items: center;
@@ -42,7 +37,7 @@ header > p{
     flex: 1;
 }
 
-main{
+main {
     flex: 1;
     background-color: rgb(235, 235, 235);
     display: flex;
@@ -52,23 +47,23 @@ main{
 aside {
     width: 150px;
     flex-shrink: 0;
-    background-color: rgb(54,54,54);
+    background-color: rgb(54, 54, 54);
     color: white;
 }
 
-aside h2{
+aside h2 {
     padding: 10px;
 }
 
-aside ul li{
+aside ul li {
     padding: 10px;
 }
 
-aside ul li:hover{
-    background-color: rgb(246,147,28);
+aside ul li:hover {
+    background-color: rgb(246, 147, 28);
 }
 
-aside ul a{
+aside ul a {
     color: white;
     text-decoration: none;
 }
@@ -78,8 +73,56 @@ section {
     padding: 10px;
 }
 
-section > *{
+section>* {
     background-color: white;
     border-radius: 10px;
     padding: 10px;
+}
+
+#table-container table {
+    border-collapse: collapse;
+    width: 80%;
+    margin: auto;
+}
+
+#table-container th,
+td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+#table-container th {
+    background-color: #f2f2f2;
+}
+
+#table-container td:first-child {
+    width: 20%;
+    font-weight: bold;
+}
+
+#table-container td:last-child {
+    width: 80%;
+}
+
+#table-container tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#table-container p {
+    margin: 0;
+}
+
+#table-container {
+    margin-top: 30px;
+}
+
+#table-container thead,
+tbody {
+    display: block;
+}
+
+#table-container tbody {
+    height: 500px;
+    overflow: auto
 }
