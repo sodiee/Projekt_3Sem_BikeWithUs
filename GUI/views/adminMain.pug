@@ -1,10 +1,9 @@
 extends includes/layout 
 
 block content 
-    h1 content here
+    h1 Overblik
     p Forsiden 
     if !knownUser
         include login.pug
     else 
         p Hej! Du er logget ind
-        a(href="/logout") Logout 

@@ -19,6 +19,11 @@ header{
     border-bottom: black 2px solid;
 }
 
+header a{
+    color: azure;
+    padding: 10px;
+}
+
 #logo{
     width: 150px;
     flex-shrink: 0;
