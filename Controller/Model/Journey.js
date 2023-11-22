@@ -7,6 +7,7 @@ function Journey(startDate, endDate, customer, price) {
     this.customer = customer;
     this.price = price;
 }
+
 async function getCustomerJourneys(customerId) {
         const journeys = await DBFunctions.getCustomerTripsDB(customerId);
         return journeys;
