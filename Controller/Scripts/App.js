@@ -25,11 +25,13 @@ app.use('/', adminRouter)
 import driverRouter from '../Endpoints/drivers.js'
 app.use('/', driverRouter)
 
-app.get('/login', (req, res) => {
+app.get('/adminLogin', (req, res) => {
     res.render('../GUI/views/login.pug')
 })
 
-
+app.get('/customerLogin'), (req, res) => {
+    res.render('../GUI/views/customerLogin.pug')
+}
 
 
 app.listen(8801, () => {
