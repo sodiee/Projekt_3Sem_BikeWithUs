@@ -41,6 +41,12 @@ async function deleteJourney(journey) {
     DBFunctions.deleteJourneyDB(j);
 }
 
+async function editStartDateDB(journey) {
+    let j = {startDate: journey.startDate, endDate: journey.endDate}
+    return DBFunctions.editStartDateDB(j);
+}
+
+
 export default {getJourneys, addJourney3Days, addJourney4Days, editJourney, getJourney, deleteJourney, getCustomerJourneys}
 
 
