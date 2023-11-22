@@ -278,20 +278,29 @@ adminRouter.get('/', (req, res) => {
     let isLoggedIn = false
     if (req.session.isLoggedIn) {
         isLoggedIn = true
+        res.render('../GUI/views/adminMain.pug', {knownUser: isLoggedIn})
+    } else {
+        res.redirect('/login')
     }
-    res.render('../GUI/views/adminMain.pug', {knownUser: isLoggedIn})
+    
 })
 
 adminRouter.post('/login', (req, res) => {
     const {username, password} = req.body
     if (checkUser(username, password)) {
         req.session.isLoggedIn = true
+        res.redirect('/')
+    } else {
+        res.send('Forkert brugernavn eller adgangskode')
     }
-    res.redirect('/')
 })
 
 adminRouter.get('/secret', (req, res) => {
-    res.render('adminMain', {knownUser: req.session.isLoggedIn})
+    if (req.session.isLoggedIn) {
+        res.render('adminMain', {knownUser: req.session.isLoggedIn})
+    } else {
+        res.redirect('/login')
+    }
 })
 
 adminRouter.get('/logout', (req, res) => {
@@ -299,6 +308,7 @@ adminRouter.get('/logout', (req, res) => {
     res.redirect('/')
 })
 
+// TODO
 // Simulator af databaseopkald
 function checkUser(user, password) {
     let returnValue = false
