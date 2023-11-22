@@ -291,7 +291,7 @@ const editJourneyDB = async (journey) => {
 //journey = {startDate: today, endDate: today.getDate() + 4, customer: await getCustomerDB('gCpdvCjNnQfJby3cQf9d'), price: 3000};
 //editJourneyDB(journey)
 
-const runJourneyTests = async () => {
+const runJourneyTests2 = async () => {
     
     const customerId = 'gCpdvCjNnQfJby3cQf9d'
     const customerId2 = 'bFjjlEWC5soHOcTV0pGQ'
@@ -329,7 +329,7 @@ const runJourneyTests = async () => {
 };
 
 // Kald funktionen for at køre dine tests
-runJourneyTests();
+//runJourneyTests();
 
 const runJourneyTests = async () => {
     
