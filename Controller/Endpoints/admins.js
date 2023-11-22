@@ -6,6 +6,59 @@ import controllerDriver from '../Model/Driver.js';
 import controllerCustomer from '../Model/Customer.js';
 import controllerAdmin from '../Model/Admin.js'
 
+//----------------------------
+// admin-ENDPOINTS for LOGIN |
+//----------------------------
+
+adminRouter.get('/', (req, res) => {
+    let isLoggedIn = false
+    if (req.session.isLoggedIn) {
+        isLoggedIn = true
+        res.render('../GUI/views/adminMain.pug', {knownUser: isLoggedIn})
+    } else {
+        res.redirect('/login')
+    }
+    
+})
+
+adminRouter.post('/login', (req, res) => {
+    const {username, password} = req.body
+    if (checkUser(username, password)) {
+        req.session.isLoggedIn = true
+        res.redirect('/')
+    } else {
+        res.send('Forkert brugernavn eller adgangskode')
+    }
+})
+
+adminRouter.get('/secret', (req, res) => {
+    if (req.session.isLoggedIn) {
+        res.render('adminMain', {knownUser: req.session.isLoggedIn})
+    } else {
+        res.redirect('/login')
+    }
+})
+
+adminRouter.get('/logout', (req, res) => {
+    req.session.destroy()
+    res.redirect('/')
+})
+
+// TODO
+// Simulator af databaseopkald
+function checkUser(user, password) {
+    let returnValue = false
+    if (user == 'BENT' && password == '123') {
+        returnValue = true
+    }
+    return returnValue
+}
+
+
+//adminRouter.get('/secret', checkSecretPages, (req, res) => {
+    //res.render('adminMain', { knownUser: req.session.isLoggedIn });
+//});
+
 // ----------------------------
 // admin-ENDPOINTS for oversigt|
 // ----------------------------
@@ -13,7 +66,7 @@ adminRouter.get('/Journeys/Overview', async (req, res) => {
     try{
     //finder alle journeys
     const journeys = await controllerJourney.getJourneys();
-
+        
     
     res.render('../GUI/views/journeys', {journeys: journeys})
     } catch (error) {
@@ -26,8 +79,11 @@ adminRouter.get('/Customers/Overview', async (req, res) => {
     try {
         // Finder alle customers
         const customers = await controllerCustomer.getCustomers();
-       
+       if (req.session.isLoggedIn) {
         res.render('../GUI/views/customers', { customers: customers });
+    } else {
+        res.redirect('/login')
+    }
     } catch (error) {
         console.error('Fejl ved hentning af kunder:', error);
         res.status(500).send('Der opstod en fejl ved hentning af kunder.');
@@ -38,7 +94,11 @@ adminRouter.get('/Drivers/Overview', async (req, res) => {
     try {
         // Finder alle Drivers
         const drivers = await controllerDriver.getDrivers();
+        if (req.session.isLoggedIn) {    
         res.render('../GUI/views/drivers', { drivers });
+    } else {
+        res.redirect('/login')
+    }
     } catch (error) {
         console.error('Fejl ved hentning af drivers:', error);
         res.status(500).send('Der opstod en fejl ved hentning af drivers.');
@@ -49,7 +109,11 @@ adminRouter.get('/Overview', async (req, res) => {
     try {
         //Finder alle admins
         const admins = await controllerAdmin.getAdmins();
-        res.render('../GUI/views/admins', {admins});
+        if (req.session.isLoggedIn) {    
+            res.render('../GUI/views/admins', {admins});
+        } else {
+            res.redirect('/login')
+        }
     } catch (error) {
         console.error('Fejl ved hentning af admins', error);
         res.status(500).send('Der opstod en fejl ved hentning af admins');
@@ -78,8 +142,12 @@ adminRouter.get('/Driver/Edit/:id', async (req, res) => {
     try {
         const driverId = req.params.id;
         const driver = await controllerDriver.getDriver(driverId)
+        if (req.session.isLoggedIn) {    
+            res.render('../GUI/views/EditDriver', {driver});
+        } else {
+            res.redirect('/login')
+        }
 
-        res.render('../GUI/views/EditDriver', {driver});
     } catch (error) {
         console.error('Fejl ved redigering af Driver', error);
         res.status(500).send('Der opstod en fejl ved redigering af Driver')
@@ -104,7 +172,12 @@ adminRouter.get('/Driver/Get/:id', async (req, res) => {
         const driverId = req.params.id;
         const driver = await controllerDriver.getDriver(driverId)
 
-        res.render('../GUI/views/DriverDetails', { driver });
+        if (req.session.isLoggedIn) {    
+            res.render('../GUI/views/DriverDetails', { driver });
+        } else {
+            res.redirect('/login')
+        }
+        
     } catch (error) {
         console.error('Fejl ved hentning af Driver: ', error);
         res.status(500).send('Der opstod en fejl ved hentning af driver')
@@ -118,7 +191,12 @@ adminRouter.get('/Customer/Get/:id', async (req, res) => {
         const customerId = req.params.id;
         const customer = await controllerCustomer.getCustomer(customerId);
 
-        res.render('../GUI/views/CustomerDetails', { customer: customer });
+        if (req.session.isLoggedIn) {    
+            res.render('../GUI/views/CustomerDetails', { customer: customer });
+        } else {
+            res.redirect('/login')
+        }
+        
     } catch (error) {
         console.error('Fejl ved hentning af kunde:', error);
         res.status(500).send('Der opstod en fejl ved hentning af kunde.');
@@ -154,7 +232,12 @@ adminRouter.get('/Customer/Edit/:id', async (req, res) => {
         const customerId = req.params.id;
         const customer = await controllerCustomer.getCustomer(customerId);
         
-        res.render('../GUI/views/EditCustomer', { customer });
+        if (req.session.isLoggedIn) {    
+            res.render('../GUI/views/EditCustomer', { customer });
+        } else {
+            res.redirect('/login')
+        }
+
     } catch (error) {
         console.error('Fejl ved redigering af kunde:', error);
         res.status(500).send('Der opstod en fejl ved redigering af kunde.');
@@ -209,7 +292,12 @@ adminRouter.get('/Journey/Edit/:id', async (req, res) => {
         const journeyId = req.params.id;
         const journey = await controllerJourney.getJourney(journeyId);
         
-        res.render('../GUI/views/EditJourney', { journey });
+        if (req.session.isLoggedIn) {    
+            res.render('../GUI/views/EditJourney', { journey });
+        } else {
+            res.redirect('/login')
+        }
+        
     } catch (error) {
         console.error('Fejl ved redigering af Rejse:', error);
         res.status(500).send('Der opstod en fejl ved redigering af rejse.');
@@ -225,7 +313,12 @@ adminRouter.get('/Get/:id', async (req, res) => {
         const adminId = req.params.id;
         const admin = await controllerAdmin.getAdmin(adminId);
 
-        res.render('../GUI/views/AdminDetails', { admin: admin });
+        if (req.session.isLoggedIn) {    
+            res.render('../GUI/views/AdminDetails', { admin: admin });
+        } else {
+            res.redirect('/login')
+        }
+        
     } catch (error) {
         console.error('Fejl ved hentning af admin:', error);
         res.status(500).send('Der opstod en fejl ved hentning af admin.');
@@ -260,8 +353,13 @@ adminRouter.get('/Edit/:id', async (req, res) => {
     try {
         const adminId = req.params.id;
         const admin = await controllerAdmin.getAdmin(adminId);
+
+        if (req.session.isLoggedIn) {    
+            res.render('../GUI/views/EditAdmin', { admin });
+        } else {
+            res.redirect('/login')
+        }
         
-        res.render('../GUI/views/EditAdmin', { admin });
     } catch (error) {
         console.error('Fejl ved redigering af Admin:', error);
         res.status(500).send('Der opstod en fejl ved redigering af admin.');
@@ -269,59 +367,6 @@ adminRouter.get('/Edit/:id', async (req, res) => {
 });
 
 
-
-//----------------------------
-// admin-ENDPOINTS for LOGIN |
-//----------------------------
-
-adminRouter.get('/', (req, res) => {
-    let isLoggedIn = false
-    if (req.session.isLoggedIn) {
-        isLoggedIn = true
-        res.render('../GUI/views/adminMain.pug', {knownUser: isLoggedIn})
-    } else {
-        res.redirect('/login')
-    }
-    
-})
-
-adminRouter.post('/login', (req, res) => {
-    const {username, password} = req.body
-    if (checkUser(username, password)) {
-        req.session.isLoggedIn = true
-        res.redirect('/')
-    } else {
-        res.send('Forkert brugernavn eller adgangskode')
-    }
-})
-
-adminRouter.get('/secret', (req, res) => {
-    if (req.session.isLoggedIn) {
-        res.render('adminMain', {knownUser: req.session.isLoggedIn})
-    } else {
-        res.redirect('/login')
-    }
-})
-
-adminRouter.get('/logout', (req, res) => {
-    req.session.destroy()
-    res.redirect('/')
-})
-
-// TODO
-// Simulator af databaseopkald
-function checkUser(user, password) {
-    let returnValue = false
-    if (user == 'BENT' && password == '123') {
-        returnValue = true
-    }
-    return returnValue
-}
-
-
-//adminRouter.get('/secret', checkSecretPages, (req, res) => {
-    //res.render('adminMain', { knownUser: req.session.isLoggedIn });
-//});
 
 
 
