@@ -23,7 +23,7 @@ async function addJourney3Days(journey) {
 
 async function addJourney4Days(journey) {
     let j = {startDate: journey.startDate, endDate: journey.endDate, customer: journey.customer, price: journey.price}
-    return await DBFunctions.addJourney3DaysDB(j);
+    return await DBFunctions.addJourney4DaysDB(j);
 }
 
 function editJourney(journey) {
@@ -39,6 +39,12 @@ async function deleteJourney(journey) {
     let j = {startDate: journey.startDate, endDate: journey.endDate, customer: journey.customer, price: journey.price}
     DBFunctions.deleteJourneyDB(j);
 }
+
+async function editStartDateDB(journey) {
+    let j = {startDate: journey.startDate, endDate: journey.endDate}
+    return DBFunctions.editStartDateDB(j);
+}
+
 
 export default {getJourneys, addJourney3Days, addJourney4Days, editJourney, getJourney, deleteJourney, getCustomerJourneys}
 
