@@ -22,8 +22,8 @@ adminRouter.get('/', (req, res) => {
 })
 
 adminRouter.post('/adminLogin', (req, res) => {
-    const {username, password} = req.body
-    if (checkAdminUser(username, password)) {
+    const {adminUsername, adminPassword} = req.body
+    if (checkAdminUser(adminUsername, adminPassword)) {
         req.session.isAdminLoggedIn = true
         res.redirect('/')
     } else {
