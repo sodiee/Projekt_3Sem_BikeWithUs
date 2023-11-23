@@ -7,29 +7,29 @@ import controller from '../Model/Customer.js';
 //-------------------------------
 
 customerRouter.get('/', (req, res) => {
-    let isLoggedIn = false
+    let isCustomerLoggedIn = false
     if (req.session.isLoggedIn) {
-        isLoggedIn = true
-        res.render('../GUI/views/customers.pug', {knownUser: isLoggedIn})
+        isCustomerLoggedIn = true
+        res.render('../GUI/views/testAfterCustomerLogin.pug', {knownUser: isCustomerLoggedIn})
     } else {
         res.redirect('/customerLogin')
     }
     
 })
 
-customerRouter.post('/login', (req, res) => {
-    const {username, password} = req.body
-    if (checkUser(username, password)) {
-        req.session.isLoggedIn = true
-        res.redirect('/')
+customerRouter.post('/customerLogin', (req, res) => {
+    const {username, password} = req.body;
+    if (checkCustomerUser(username, password)) {
+        req.session.isLoggedIn = true;
+        res.redirect('/');
     } else {
-        res.send('Forkert brugernavn eller adgangskode')
+        res.send('Forkert brugernavn eller adgangskode');
     }
-})
+});
 
 customerRouter.get('/secret', (req, res) => {
     if (req.session.isLoggedIn) {
-        res.render('customers', {knownUser: req.session.isLoggedIn})
+        res.render('customers', {knownUser: req.session.isCustomerLoggedIn})
     } else {
         res.redirect('/customerLogin')
     }
@@ -40,11 +40,15 @@ customerRouter.get('/logout', (req, res) => {
     res.redirect('/')
 })
 
+customerRouter.get('/customerLogin', (req, res) => {
+    res.render('../GUI/views/customerLogin.pug')
+})
+
 // TODO
 // Simulator af databaseopkald
-function checkUser(user, password) {
+function checkCustomerUser(customerUsername, customerPassword) {
     let returnValue = false
-    if (user == 'Maksym' && password == '123') {
+    if (customerUsername == 'Maksym' && customerPassword == '123') {
         returnValue = true
     }
     return returnValue
