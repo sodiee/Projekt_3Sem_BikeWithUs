@@ -249,6 +249,7 @@ const editJourneyDB = async (docID, journeyData) => {
         throw new Error('There was an error updating the journey.');
     }
 };
+
 const editStartDateDB = async (journey) => {
     await updateDoc(doc(db, 'Journeys', journey.id), {
         startDate: journey.startDate, 

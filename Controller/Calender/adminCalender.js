@@ -1,3 +1,6 @@
+//import DBFunctions from '../../Storage/DBFunctions.js';
+//const DBFunctions = require('../../Storage/DBFunctions.js');
+
 let table = document.getElementById("tableBody");
 //måned
 let months = ['january',
@@ -12,11 +15,18 @@ let months = ['january',
     'october',
     'november',
     'december',]
+//let monthData = [[], [],[], [],[], [],[], [],[], [],[], [],]
 const localDate = new Date();
 let currentMonth = months[localDate.getMonth()];
 let selectedMonth = currentMonth;
 
+//afhentningsfunktion
+//- array med alle journeys for hver måned ?
+//- indsættelse af faktiske journeys
+//- tilvalg skal hentes ind
+
 //TR og TD
+
 for (let i = 1; i <= 31; i++) {
     //Click current month
     const rb = document.getElementById('choice-' + currentMonth + '');
