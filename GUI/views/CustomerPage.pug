@@ -1,3 +1,17 @@
 extends includes/layout 
 
 block content 
+    h2 Your Journeys
+    ul
+      each journey in journeys
+        li #{journey.startDate} - Price: #{journey.price}
+
+  h2 Your Information
+  p
+    | Name: #{customer.firstName}
+    br
+    | Email: #{customer.lastName}
+    br
+    | Address: #{customer.birthday}
+    br 
+    | City: #{customer.city}

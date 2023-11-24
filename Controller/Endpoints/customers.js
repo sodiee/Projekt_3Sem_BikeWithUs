@@ -1,6 +1,7 @@
 import express from 'express';
 const customerRouter = express.Router();
 import controller from '../Model/Customer.js';
+import journeyController from '../Model/Journey.js';
 
 //-------------------------------
 // customer-ENDPOINTS for LOGIN |
@@ -21,7 +22,7 @@ customerRouter.post('/customerLogin', (req, res) => {
     const {username, password} = req.body;
     if (checkCustomerUser(username, password)) {
         req.session.isLoggedIn = true;
-        res.redirect('/');
+        res.redirect('/Calender');
     } else {
         res.send('Forkert brugernavn eller adgangskode');
     }
@@ -62,13 +63,12 @@ customerRouter.get('/Calender', async (req, res) => {
     // Check for login status using sessions or cookies
     if (req.session.isLoggedIn) {
         try {
-            res.render('../GUI/views/customerCalender');
+            res.render('../GUI/views/CalenderCustomer');
         } catch (error) {
             console.error('Fejl ved hentning af rejser', error);
             res.status(500).send('Der opstod en fejl ved hentning af rejser');
         }
     } else {
-        res.send('Brugeren er ikke logget ind');
         res.redirect('/customerLogin');
     }
 });
@@ -95,7 +95,6 @@ customerRouter.post('/Calender/Book', async (req, res) => {
         }
     } else {
         res.redirect('/customerLogin');
-        res.send('Brugeren er ikke logget ind');
     }
 });
 
@@ -106,16 +105,15 @@ customerRouter.get('/Mypage/:id', async (req, res) => {
     if (req.session.isLoggedIn) {
         try {
             const customerId = req.params.id; 
-            const customerJourneys = await controller.getCustomerJourneys(customerId);
+            const customerJourneys = await journeyController.getCustomerJourneys(customerId);
             const customer = await controller.getCustomer(customerId);
     
-            res.render('../GUI/views/CustomerPage', { trips: customerJourneys, customer: customer });
+            res.render('../GUI/views/CustomerPage', { journeys: customerJourneys, customer: customer });
         } catch (error) {
             console.error('Fejl ved hentning af kundens side:', error);
             res.status(500).send('Der opstod en fejl ved hentning af kundens side.');
         }
     } else {
-        res.send('Brugeren er ikke logget ind');
         res.redirect('/customerLogin');
     }
 });
