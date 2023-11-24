@@ -7,7 +7,9 @@ import {getFirestore,
     doc, 
     deleteDoc, 
     addDoc,
-    updateDoc
+    updateDoc,
+    query,
+    where
 } from 'firebase/firestore';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -140,6 +142,28 @@ const getAdminDB = async (id) => {
     return admin;
 }
 
+const getAdminByUsernameAndPassword = async (adminUsername, adminPassword) => {
+    try {
+        const adminsCollectionRef = collection(db, 'Admins');
+        const adminQuerySnapshot = await getDocs(query(adminsCollectionRef, where('adminUsername', '==', adminUsername)));
+    
+        if (!adminQuerySnapshot.empty) {
+          const adminDoc = adminQuerySnapshot.docs[0];
+          const adminData = adminDoc.data();
+    
+          if (adminData.adminPassword === adminPassword && adminData.adminStatus === true) {
+            console.log(adminData)
+            return adminData; // Returner admin-data, hvis det matcher
+          }
+        }
+    
+        return null; // Ingen match fundet
+      } catch (error) {
+        console.error('Fejl under opslag i Firestore:', error);
+        throw error; // Kast fejlen igen for yderligere håndtering
+      }
+  }
+
 const deleteAdminDB = async (admin) => {
     const deletedAdmin = await deleteDoc(doc(db, 'Admins', admin.id));
     return admin;
@@ -257,5 +281,5 @@ const editStartDateDB = async (journey) => {
 
 
 export default {getCustomerDB, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB,getAdminDB,
-getAdminsDB,deleteAdminDB,addAdminDB,editAdminDB,getDriverDB,getDriversDB,deleteDriverDB,addDriverDB,editDriverDB,
+getAdminsDB,deleteAdminDB,addAdminDB,editAdminDB,getAdminByUsernameAndPassword,getDriverDB,getDriversDB,deleteDriverDB,addDriverDB,editDriverDB,
 addJourneyDB, editJourneyDB, deleteJourneyDB, getJourneyDB, getJourneysDB, getCustomerJourneysDB}

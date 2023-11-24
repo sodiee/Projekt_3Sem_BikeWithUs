@@ -14,23 +14,33 @@ adminRouter.get('/', (req, res) => {
     let isAdminLoggedIn = false
     if (req.session.isAdminLoggedIn) {
         isAdminLoggedIn = true
-        res.render('../GUI/views/adminMain.pug', {knownUser: isAdminLoggedIn})
+        //adminUser = req.session.adminData
+        res.render('../GUI/views/adminMain.pug', {knownUser: isAdminLoggedIn, /*adminUser: adminData*/})
     } else {
         res.redirect('/adminLogin')
     }
     
 })
 
-adminRouter.post('/adminLogin', (req, res) => {
-    const {adminUsername, adminPassword} = req.body
-    if (checkAdminUser(adminUsername, adminPassword)) {
-        req.session.isAdminLoggedIn = true
-        res.redirect('/')
-    } else {
-        res.send('Forkert brugernavn eller adgangskode')
+adminRouter.post('/adminLogin', async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      const adminData = await controllerAdmin.checkAdmin(username, password);
+  
+      if (adminData) {
+        req.session.isAdminLoggedIn = true;
+        req.session.adminUser = adminData;
+        res.redirect('/admins/');
+      } else {
+        res.status(401).send('Forkert brugernavn eller adgangskode');
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
     }
-})
+  });
 
+/*
 adminRouter.get('/secret', (req, res) => {
     if (req.session.isAdminLoggedIn) {
         res.render('adminMain', {knownUser: req.session.isAdminLoggedIn})
@@ -38,30 +48,17 @@ adminRouter.get('/secret', (req, res) => {
         res.redirect('/adminLogin')
     }
 })
+*/
 
 adminRouter.get('/adminLogin', (req, res) => {
     res.render('../GUI/views/adminLogin.pug')
 })
 
-adminRouter.get('/logout', (req, res) => {
+adminRouter.get('/adminLogout', (req, res) => {
     req.session.destroy()
-    res.redirect('/')
+    res.redirect('/adminLogin')
 })
 
-// TODO
-// Simulator af databaseopkald
-function checkAdminUser(adminUsername, adminPassword) {
-    let returnValue = false
-    if (adminUsername == 'BENT' && adminPassword == '123') {
-        returnValue = true
-    }
-    return returnValue
-}
-
-
-//adminRouter.get('/secret', checkSecretPages, (req, res) => {
-    //res.render('adminMain', { knownUser: req.session.isLoggedIn });
-//});
 
 // ----------------------------
 // admin-ENDPOINTS for oversigt|
@@ -84,7 +81,7 @@ adminRouter.get('/Customers/Overview', async (req, res) => {
         // Finder alle customers
         const customers = await controllerCustomer.getCustomers();
        if (req.session.isAdminLoggedIn) {
-        res.render('../GUI/views/customers', { customers: customers });
+        res.render('../GUI/views/customers', { knownUser: isAdminLoggedIn, customers: customers });
     } else {
         res.redirect('/adminLogin')
     }
