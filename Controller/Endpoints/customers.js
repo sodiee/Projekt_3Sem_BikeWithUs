@@ -55,38 +55,57 @@ function checkCustomerUser(customerUsername, customerPassword) {
 }
 
 
-// -------------------------------
-// customer-ENDPOINTS for booking |
-// -------------------------------
-
-customerRouter.post('/Journey/Book/4day', async (req, res) => {
-    try {
-        const { startDate, endDate, customer, price } = req.body;
-        await controller.addJourney4Days({ startDate, endDate, customer, price });
-        
-        res.redirect('/Journeys/Overview'); // Redirect til en oversigtsside eller anden relevant side
-    } catch (error) {
-        console.error('Fejl ved tilføjelse af Rejse:', error);
-        res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
-    }
-});
-
-customerRouter.post('/Journey/Book/3day', async (req, res) => {
-    try {
-        const { startDate, endDate, customer, price } = req.body;
-        await controller.addJourney3Days({ startDate, endDate, customer, price });
-        
-        res.redirect('/Journeys/Overview'); // Redirect til en oversigtsside eller anden relevant side
-    } catch (error) {
-        console.error('Fejl ved tilføjelse af Rejse:', error);
-        res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
-    }
-});
-
-customerRouter.get('/Journey/Mypage/:id', async (req, res) => {
-    
+// ------------------------------------------
+// customer-ENDPOINTS for booking / Calender |
+// ------------------------------------------
+customerRouter.get('/Calender', async (req, res) => {
+    // Check for login status using sessions or cookies
+    if (req.session.isLoggedIn) {
         try {
-            const customerId = req.params.customerId;
+            res.render('../GUI/views/customerCalender');
+        } catch (error) {
+            console.error('Fejl ved hentning af rejser', error);
+            res.status(500).send('Der opstod en fejl ved hentning af rejser');
+        }
+    } else {
+        res.send('Brugeren er ikke logget ind');
+        res.redirect('/customerLogin');
+    }
+});
+
+
+customerRouter.post('/Calender/Book', async (req, res) => {
+    // Check for login status using sessions or cookies
+    if (req.session.isLoggedIn) {
+        try {
+            const { startDate, endDate, customer, price } = req.body;
+
+            //dage mellem startdato og slutdato
+            const durationInDays = Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24)); //antallet af milisekunder på en dag
+
+            if (durationInDays === 4) {
+                await controller.addJourney4Days({ startDate, endDate, customer, price });
+            } else if (durationInDays === 3) {
+                await controller.addJourney3Days({ startDate, endDate, customer, price });
+            }
+            res.redirect('/Mypage/:id');
+        } catch (error) {
+            console.error('Fejl ved tilføjelse af Rejse:', error);
+            res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
+        }
+    } else {
+        res.redirect('/customerLogin');
+        res.send('Brugeren er ikke logget ind');
+    }
+});
+
+
+
+customerRouter.get('/Mypage/:id', async (req, res) => {
+    // Check for login status using sessions or cookies
+    if (req.session.isLoggedIn) {
+        try {
+            const customerId = req.params.id; 
             const customerJourneys = await controller.getCustomerJourneys(customerId);
             const customer = await controller.getCustomer(customerId);
     
@@ -95,9 +114,10 @@ customerRouter.get('/Journey/Mypage/:id', async (req, res) => {
             console.error('Fejl ved hentning af kundens side:', error);
             res.status(500).send('Der opstod en fejl ved hentning af kundens side.');
         }
+    } else {
+        res.send('Brugeren er ikke logget ind');
+        res.redirect('/customerLogin');
+    }
 });
-    
-     
-
 
 export default customerRouter;
