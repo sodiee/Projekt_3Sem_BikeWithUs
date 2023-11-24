@@ -63,7 +63,7 @@ adminRouter.get('/adminLogout', (req, res) => {
 // ----------------------------
 // admin-ENDPOINTS for oversigt|
 // ----------------------------
-adminRouter.get('/Journeys/Overview', async (req, res) => {
+adminRouter.get('/Journeys', async (req, res) => {
     try{
     //finder alle journeys
     const journeys = await controllerJourney.getJourneys();
@@ -76,7 +76,7 @@ adminRouter.get('/Journeys/Overview', async (req, res) => {
     }
 })
 
-adminRouter.get('/Customers/Overview', async (req, res) => {
+adminRouter.get('/Customers', async (req, res) => {
     try {
         // Finder alle customers
         const customers = await controllerCustomer.getCustomers();
@@ -91,7 +91,7 @@ adminRouter.get('/Customers/Overview', async (req, res) => {
     }
 });
 
-adminRouter.get('/Drivers/Overview', async (req, res) => {
+adminRouter.get('/Drivers', async (req, res) => {
     try {
         // Finder alle Drivers
         const drivers = await controllerDriver.getDrivers();
@@ -106,7 +106,7 @@ adminRouter.get('/Drivers/Overview', async (req, res) => {
     }
 });
 
-adminRouter.get('/Overview', async (req, res) => {
+adminRouter.get('/Admins', async (req, res) => {
     try {
         //Finder alle admins
         const admins = await controllerAdmin.getAdmins();
@@ -132,7 +132,7 @@ adminRouter.post('/Driver/Add', async (req, res) => {
     const {firstName, lastName} = req.body;
     await controllerDriver.addDriver({firstName, lastName});
 
-    res.redirect('/Drivers/Overview'); //redirecting to driver page
+    res.redirect('/Drivers'); //redirecting to driver page
     } catch(error) {
         console.error('Fejl ved tilføjelse af Driver');
         res.status(500).send('Der opstod en fejl ved tilføjelse af Driver');
@@ -161,7 +161,7 @@ adminRouter.post('/Driver/Delete/:id', async (req, res) => {
         const driverId = req.params.id;
         await controllerDriver.deleteDriver(driverId);
 
-        res.redirect('/Drivers/Overview'); //redirect til en oversigt over drivers
+        res.redirect('/Drivers'); //redirect til en oversigt over drivers
     } catch (error) {
         console.error('fejl ved sletning af driver: ', error);
         res.status(500).send('Der opstod en fejl ved sletning af driver')
@@ -209,7 +209,7 @@ adminRouter.post('/Customer/Add', async (req, res) => {
         const { firstName, lastName, birthday, city } = req.body;
         await controllerCustomer.addCustomer({ firstName, lastName, birthday, city });
         
-        res.redirect('/Customers/Overview'); // Redirect til en oversigtsside eller anden relevant side
+        res.redirect('/Customers'); // Redirect til en oversigtsside eller anden relevant side
     } catch (error) {
         console.error('Fejl ved tilføjelse af kunde:', error);
         res.status(500).send('Der opstod en fejl ved tilføjelse af kunde.');
@@ -221,7 +221,7 @@ adminRouter.post('/Customer/Delete/:id', async (req, res) => {
         const customerId = req.params.id;
         await controllerCustomer.deleteCustomer(customerId);
         
-        res.redirect('/Customers/Overview'); // Redirect til en oversigtsside eller anden relevant side
+        res.redirect('/Customers'); // Redirect til en oversigtsside eller anden relevant side
     } catch (error) {
         console.error('Fejl ved sletning af kunde: ', error);
         res.status(500).send('Der opstod en fejl ved sletning af kunde.');
@@ -257,7 +257,7 @@ adminRouter.post('/Journey/Add/4day', async (req, res) => {
         const { startDate, endDate, customer, price } = req.body;
         await controllerJourney.addJourney4Days({ startDate, endDate, customer, price });
         
-        res.redirect('/Journeys/Overview'); // Redirect til en oversigtsside eller anden relevant side
+        res.redirect('/Journeys'); // Redirect til en oversigtsside eller anden relevant side
     } catch (error) {
         console.error('Fejl ved tilføjelse af Rejse:', error);
         res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
@@ -269,7 +269,7 @@ adminRouter.post('/Journey/Add/3day', async (req, res) => {
         const { startDate, endDate, customer, price } = req.body;
         await controllerJourney.addJourney3Days({ startDate, endDate, customer, price });
         
-        res.redirect('/Journeys/Overview'); // Redirect til en oversigtsside eller anden relevant side
+        res.redirect('/Journeys'); // Redirect til en oversigtsside eller anden relevant side
     } catch (error) {
         console.error('Fejl ved tilføjelse af Rejse:', error);
         res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
@@ -281,7 +281,7 @@ adminRouter.post('/Journey/Delete/:id', async (req, res) => {
         const journeyId = req.params.id;
         await controllerJourney.deleteJourney(journeyId);
         
-        res.redirect('/Journeys/Overview'); // Redirect til en oversigtsside eller anden relevant side
+        res.redirect('/Journeys/'); // Redirect til en oversigtsside eller anden relevant side
     } catch (error) {
         console.error('Fejl ved sletning af Rejse: ', error);
         res.status(500).send('Der opstod en fejl ved sletning af rejse.');
@@ -331,7 +331,7 @@ adminRouter.post('/Add', async (req, res) => {
         const { firstName, lastName, adminStatus } = req.body;
         await controllerAdmin.addAdmin({ firstName, lastName, adminStatus });
         
-        res.redirect('/Overview'); // Redirect til en oversigtsside eller anden relevant side
+        res.redirect('/Admins'); // Redirect til en oversigtsside eller anden relevant side
     } catch (error) {
         console.error('Fejl ved tilføjelse af Admin:', error);
         res.status(500).send('Der opstod en fejl ved tilføjelse af admin.');
@@ -343,7 +343,7 @@ adminRouter.post('/Delete/:id', async (req, res) => {
         const adminId = req.params.id;
         await controllerAdmin.deleteAdmin(adminId);
         
-        res.redirect('/Overview'); // Redirect til en oversigtsside eller anden relevant side
+        res.redirect('/Admins'); // Redirect til en oversigtsside eller anden relevant side
     } catch (error) {
         console.error('Fejl ved sletning af Admin: ', error);
         res.status(500).send('Der opstod en fejl ved sletning af admin.');
