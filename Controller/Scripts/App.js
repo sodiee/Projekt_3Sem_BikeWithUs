@@ -21,18 +21,9 @@ app.use(session({
 import customerRouter from '../Endpoints/customers.js'
 app.use('/', customerRouter)
 import adminRouter from'../Endpoints/admins.js'
-app.use('/', adminRouter)
+app.use('/admins', adminRouter)
 import driverRouter from '../Endpoints/drivers.js'
-app.use('/', driverRouter)
-
-app.get('/adminLogin', (req, res) => {
-    res.render('../GUI/views/login.pug')
-})
-
-app.get('/customerLogin'), (req, res) => {
-    res.render('../GUI/views/customerLogin.pug')
-}
-
+app.use('/drivers', driverRouter)
 
 app.listen(8801, () => {
     console.log('Så kører lortet')
