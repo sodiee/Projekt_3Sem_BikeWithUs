@@ -9,7 +9,7 @@ import journeyController from '../Model/Journey.js';
 
 customerRouter.get('/', (req, res) => {
     let isCustomerLoggedIn = false
-    if (req.session.isLoggedIn) {
+    if (req.session.isCustomerLoggedIn) {
         isCustomerLoggedIn = true
         res.render('../GUI/views/testAfterCustomerLogin.pug', {knownUser: isCustomerLoggedIn})
     } else {
@@ -21,7 +21,7 @@ customerRouter.get('/', (req, res) => {
 customerRouter.post('/customerLogin', (req, res) => {
     const {username, password} = req.body;
     if (checkCustomerUser(username, password)) {
-        req.session.isLoggedIn = true;
+        req.session.isCustomerLoggedIn = true;
         res.redirect('/Calender');
     } else {
         res.send('Forkert brugernavn eller adgangskode');
@@ -36,7 +36,7 @@ customerRouter.get('/secret', (req, res) => {
     }
 })
 
-customerRouter.get('/logout', (req, res) => {
+customerRouter.get('/customerLogout', (req, res) => {
     req.session.destroy()
     res.redirect('/')
 })
