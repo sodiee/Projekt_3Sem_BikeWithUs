@@ -3,7 +3,9 @@ import DBFunctions from '../../Storage/DBFunctions.js';
 
 function Journey(startDate, customer, price) {
     this.startDate = startDate;
-    this.endDate = endDate;
+    const endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + 3);
+    this.endDate = endDate
     this.customer = customer;
     this.price = price;
 }

@@ -251,28 +251,31 @@ const getJourneysDB = async () => {
     return journeys;
 }
 
+const getJourneyDB = async (id) => {
+        const docRef = doc(db, 'Journeys', id);
+        const journeyQueryDoc = await getDoc(docRef);
+        let journey = journeyQueryDoc.data();
+        journey.docID = journeyQueryDoc.id;
+        return journey;    
+}
 
-const getJourneyDB = async (docID) => {
+const addJourneyDB = async (journey, customer) => {
     try {
-        const docRef = doc(db, 'Journeys', docID);
-        if (docRef.exists()) {
-            const journeyQueryDoc = await getDoc(docRef);
-            let journey = journeyQueryDoc.data();
-            journey.docID = journeyQueryDoc.id;
-            return journey;
-        } else {
-            throw new Error('Dokumentet eksisterer ikke.');
-        }
-    } catch (error) {
-        console.error('Fejl ved hentning af rejse i DBFunctions:', error);
-        throw new Error('Der opstod en fejl ved hentning af rejse i DBFunctions.');
-    }
-};
+        const journeyEnd = {
+            ...journey,
+            customer: customer,
+            endDate: journey.endDate
+        };
 
-const addJourneyDB = async (journey, customerId) => {
-    const docRef = await addDoc(JourneyCollection, journey, customerId);
-    journey.id = docRef.id;
-    return journey;
+        const docRef = await addDoc(JourneyCollection, journeyEnd);
+
+        journey.id = docRef.id;
+        
+        return journey;
+    } catch (error) {
+        console.error("Error adding journey to Firestore:", error);
+        throw error; 
+    }
 };
 
 const deleteJourneyDB = async (journeyID) => {
@@ -296,13 +299,19 @@ const editJourneyDB = async (docID, journeyData) => {
     }
 };
 
-const editStartDateDB = async (journey) => {
+const editStartDateDB = async (journey,newStartDate,newEndDate) => {
     await updateDoc(doc(db, 'Journeys', journey.id), {
-        startDate: journey.startDate, 
+        startDate: newStartDate,
+        endDate: newEndDate
     });
-};  
+}; 
+
+
+
+
+ 
 
 
 export default {getCustomerDB, getCustomerByUsernameAndPassword, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB,getAdminDB,
 getAdminsDB,deleteAdminDB,addAdminDB,editAdminDB,getAdminByUsernameAndPassword,getDriverDB,getDriversDB,deleteDriverDB,addDriverDB,editDriverDB,
-addJourneyDB, editJourneyDB, deleteJourneyDB, getJourneyDB, getJourneysDB, getCustomerJourneysDB}
+addJourneyDB, editJourneyDB, deleteJourneyDB, getJourneyDB, getJourneysDB, getCustomerJourneysDB, editStartDateDB}
