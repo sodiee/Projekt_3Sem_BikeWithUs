@@ -22,7 +22,7 @@ customerRouter.post('/customerLogin', (req, res) => {
     const {username, password} = req.body;
     if (checkCustomerUser(username, password)) {
         req.session.isCustomerLoggedIn = true;
-        res.redirect('/Calender');
+        res.redirect('/');
     } else {
         res.send('Forkert brugernavn eller adgangskode');
     }
