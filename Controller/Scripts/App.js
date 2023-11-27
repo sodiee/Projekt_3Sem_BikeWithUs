@@ -22,6 +22,7 @@ app.use('/admins', adminRouter)
 import driverRouter from '../Endpoints/drivers.js'
 app.use('/drivers', driverRouter)
 
+
 // Kør serveren
 app.listen(8801, () => {
     console.log('Så kører lortet')
