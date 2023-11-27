@@ -112,7 +112,7 @@ customerRouter.post('/Calender/Book', async (req, res) => {
 
 customerRouter.get('/Mypage/:id', async (req, res) => {
     // Check for login status using sessions or cookies
-    if (req.session.isLoggedIn) {
+    if (!req.session.isLoggedIn) {
         try {
             const customerId = req.params.id; 
             const customerJourneys = await journeyController.getCustomerJourneys(customerId);
@@ -130,11 +130,11 @@ customerRouter.get('/Mypage/:id', async (req, res) => {
 
 customerRouter.get('/bookAJourney', (req, res) => {
     const date = req.query.date || 'No date selected';
-    res.render('bookAJourney', { date });
+    res.render('/bookAJourney', { date });
 });
 
 customerRouter.get('/bookingCalendar', (req, res) => {
-    res.render('bookingCalendar');
+    res.render('../GUI/views/bookingCalendar');
 });
 
 export default customerRouter;
