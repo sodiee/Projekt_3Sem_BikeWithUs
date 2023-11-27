@@ -1,0 +1,14 @@
+extends includes/layout 
+
+block content
+    h1 Kalender
+    table
+        thead
+            tr
+                th Dag
+                th Gøremål
+        tbody
+            each task, i in tasks
+                tr
+                    td Dag #{i + 1}
+                    td #{task.description} 
