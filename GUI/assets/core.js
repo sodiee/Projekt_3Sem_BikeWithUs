@@ -30,6 +30,24 @@ async function editDriver(driverID) {
     }
   }
 
+  
+  async function addDriver(driver) {
+    const response = await fetch('/drivers', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(driver),
+    });
+
+    if (response.status === 201) {
+        window.location = '/drivers';
+    } else {
+        alert('Der skete en fejl.');
+    }
+}
+  
+
   //------------------ JOURNEYS -------------------
   async function deleteJourney(journeyID) {
     const response = await fetch(`/journeys/${journeyID}`,{
