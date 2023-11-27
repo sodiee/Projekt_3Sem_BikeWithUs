@@ -24,22 +24,4 @@ html(lang='en')
       div
         input(type='submit', value='Bekræft booking')
 
-
-
-script.
-  const durationSelect = document.getElementById('duration');
-  const endDateInput = document.getElementById('endDate');
-
-  function updateEndDate() {
-    const duration = parseInt(durationSelect.value);
-    const startDate = new Date('#{startDate}');
-    const endDate = new Date(startDate);
-
-    endDate.setDate(startDate.getDate() + duration);
-    
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    endDateInput.value = endDate.toLocaleDateString('en-US', options);
-  }
-
-  durationSelect.addEventListener('change', updateEndDate);
-  updateEndDate(); // Opdater ved indlæsning
+      input(type='hidden', name='endDate', id='endDate', value=endDate)
