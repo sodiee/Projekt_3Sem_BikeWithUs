@@ -12,14 +12,15 @@ import controllerAdmin from '../Model/Admin.js'
 
 adminRouter.get('/', (req, res) => {
     let isAdminLoggedIn = false
-    if (req.session.isAdminLoggedIn) {
+    let adminUser = null
+    if (req.session.isAdminLoggedIn && req.session.adminUser) {
         isAdminLoggedIn = true
+        adminUser = req.session.adminUser
         //adminUser = req.session.adminData
-        res.render('../GUI/views/adminMain.pug', {knownUser: isAdminLoggedIn, /*adminUser: adminData*/})
+        res.render('../GUI/views/adminMain.pug', {knownUser: isAdminLoggedIn, adminUser: adminUser})
     } else {
         res.redirect('/adminLogin')
     }
-    
 })
 
 adminRouter.post('/adminLogin', async (req, res) => {

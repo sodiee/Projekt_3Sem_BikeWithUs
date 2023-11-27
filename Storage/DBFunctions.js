@@ -164,6 +164,28 @@ const getAdminByUsernameAndPassword = async (adminUsername, adminPassword) => {
       }
   }
 
+  const getCustomerByUsernameAndPassword = async (customerUsername, customerPassword) => {
+    try {
+        const customersCollectionRef = collection(db, 'Customers');
+        const customerQuerySnapshot = await getDocs(query(customersCollectionRef, where('customerUsername', '==', customerUsername)));
+    
+        if (!customerQuerySnapshot.empty) {
+          const customerDoc = customerQuerySnapshot.docs[0];
+          const customerData = customerDoc.data();
+    
+          if (customerData.customerPassword === customerPassword) {
+            console.log(customerData)
+            return customerData; // Returner admin-data, hvis det matcher
+          }
+        }
+    
+        return null; // Ingen match fundet
+      } catch (error) {
+        console.error('Fejl under opslag i Firestore:', error);
+        throw error; // Kast fejlen igen for yderligere håndtering
+      }
+  }
+
 const deleteAdminDB = async (admin) => {
     const deletedAdmin = await deleteDoc(doc(db, 'Admins', admin.id));
     return admin;
@@ -281,6 +303,6 @@ const editStartDateDB = async (journey) => {
 };  
 
 
-export default {getCustomerDB, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB,getAdminDB,
+export default {getCustomerDB, getCustomerByUsernameAndPassword, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB,getAdminDB,
 getAdminsDB,deleteAdminDB,addAdminDB,editAdminDB,getAdminByUsernameAndPassword,getDriverDB,getDriversDB,deleteDriverDB,addDriverDB,editDriverDB,
 addJourneyDB, editJourneyDB, deleteJourneyDB, getJourneyDB, getJourneysDB, getCustomerJourneysDB}

@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: 'dayGridMonth',
       dateClick: function(info) {
-        window.location.href = '/bookAJourney?date=' + info.dateStr;
+        window.location.href = '/calendar/book?date=' + info.dateStr;
     }
     });
     calendar.render();

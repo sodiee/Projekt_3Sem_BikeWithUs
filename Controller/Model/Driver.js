@@ -29,6 +29,14 @@ async function getDrivers() {
     return await DBFunctions.getDriversDB();
 }
 
+//hent driver tasks
+/*
+app.get('/driverTasks', async (req, res) => {
+    const driverTasks = await getDriverTasks();
+    res.render('driverTasks', {tasks: driverTasks});
+});
+*/
+
 /*
 //add
 let driver = new Driver('Mikkel', 'Lindhøj');
