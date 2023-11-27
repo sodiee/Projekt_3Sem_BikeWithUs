@@ -1,5 +1,7 @@
 import { async } from "@firebase/util"
 
+// mathias lugter
+
 // ------------------ DRIVERS ------------------
 async function deleteDriver(driverID) {
     const response = await fetch(`/drivers/${driverID}`,{
@@ -30,7 +32,7 @@ async function editDriver(driverID) {
     }
   }
 
-  
+
   async function addDriver(driver) {
     const response = await fetch('/drivers', {
         method: 'POST',
