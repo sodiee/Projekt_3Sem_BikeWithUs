@@ -1,6 +1,6 @@
 import { async } from "@firebase/util"
 
-// mathias lugter hahahah
+// mathias lugter hahahah xD
 
 // ------------------ DRIVERS ------------------
 async function deleteDriver(driverID) {
