@@ -9,7 +9,7 @@ import journeyController from '../Model/Journey.js';
 
 customerRouter.get('/', (req, res) => {
     let isCustomerLoggedIn = false
-    if (req.session.isLoggedIn) {
+    if (req.session.isCustomerLoggedIn) {
         isCustomerLoggedIn = true
         res.render('../GUI/views/testAfterCustomerLogin.pug', {knownUser: isCustomerLoggedIn})
     } else {
@@ -21,7 +21,7 @@ customerRouter.get('/', (req, res) => {
 customerRouter.post('/customerLogin', (req, res) => {
     const {username, password} = req.body;
     if (checkCustomerUser(username, password)) {
-        req.session.isLoggedIn = true;
+        req.session.isCustomerLoggedIn = true;
         res.redirect('/Calender');
     } else {
         res.send('Forkert brugernavn eller adgangskode');
@@ -36,7 +36,7 @@ customerRouter.get('/secret', (req, res) => {
     }
 })
 
-customerRouter.get('/logout', (req, res) => {
+customerRouter.get('/customerLogout', (req, res) => {
     req.session.destroy()
     res.redirect('/')
 })
@@ -108,7 +108,7 @@ customerRouter.get('/Mypage/:id', async (req, res) => {
             const customerJourneys = await journeyController.getCustomerJourneys(customerId);
             const customer = await controller.getCustomer(customerId);
     
-            res.render('../GUI/views/CustomerPage', { journeys: customerJourneys, customer: customer });
+            res.render('../GUI/views/bookingConfirmed', { journeys: customerJourneys, customer: customer });
         } catch (error) {
             console.error('Fejl ved hentning af kundens side:', error);
             res.status(500).send('Der opstod en fejl ved hentning af kundens side.');
@@ -116,6 +116,15 @@ customerRouter.get('/Mypage/:id', async (req, res) => {
     } else {
         res.redirect('/customerLogin');
     }
+});
+
+customerRouter.get('/bookAJourney', (req, res) => {
+    const date = req.query.date || 'No date selected';
+    res.render('bookAJourney', { date });
+});
+
+customerRouter.get('/bookingCalendar', (req, res) => {
+    res.render('bookingCalendar');
 });
 
 export default customerRouter;
