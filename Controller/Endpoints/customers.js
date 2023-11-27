@@ -101,7 +101,7 @@ customerRouter.get('/Calendar/Book', async (req, res) => {
                 await controller.addJourney3Days({ startDate, endDate, customer, price });
                 res.redirect('/Mypage/:id');
             }
-            res.render('../GUI/views/bookAJourney', { date });
+            res.render('../GUI/views/bookAJourney', { startDate });
         } catch (error) {
             console.error('Fejl ved tilføjelse af Rejse:', error);
             res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
@@ -131,13 +131,5 @@ customerRouter.get('/Mypage/:id', async (req, res) => {
     }
 });
 
-customerRouter.get('/bookAJourney', (req, res) => {
-    const date = req.query.date || 'No date selected';
-    res.render('../GUI/views/bookAJourney', { date });
-});
-
-customerRouter.get('/bookingCalendar', (req, res) => {
-    res.render('../GUI/views/bookingCalendar');
-});
 
 export default customerRouter;
