@@ -17,7 +17,7 @@ adminRouter.get('/', (req, res) => {
         isAdminLoggedIn = true
         adminUser = req.session.adminUser
         //adminUser = req.session.adminData
-        res.render('../GUI/views/adminMain.pug', {knownUser: isAdminLoggedIn, adminUser: adminUser})
+        res.render('adminMain', {knownUser: isAdminLoggedIn, adminUser: adminUser})
     } else {
         res.redirect('/adminLogin')
     }
@@ -52,7 +52,7 @@ adminRouter.get('/secret', (req, res) => {
 */
 
 adminRouter.get('/adminLogin', (req, res) => {
-    res.render('../GUI/views/adminLogin.pug')
+    res.render('adminLogin')
 })
 
 adminRouter.get('/adminLogout', (req, res) => {
@@ -70,7 +70,7 @@ adminRouter.get('/Journeys', async (req, res) => {
     //const journeys = await controllerJourney.getJourneys();
         
     
-    res.render('../GUI/views/journeys', {journeys: journeys})
+    res.render('journeys', {journeys: journeys})
     } catch (error) {
         console.error('Fejl ved hentning af rejser', error);
         res.status(500).send('Der opstod en fejl ved hentning af rejser');
@@ -79,7 +79,7 @@ adminRouter.get('/Journeys', async (req, res) => {
 
 adminRouter.get('/oversigt', async (req, res) => {
     try {
-        res.render('../GUI/views/adminJSCalender')
+        res.render('adminJSCalender')
     } catch (err) {
         console.error('Fejl ved indlæsning af adminoversigt', err);
         res.status(500).send('Fejl ved indlæsning af adminoversigt');
@@ -103,7 +103,7 @@ adminRouter.get('/Customers', async (req, res) => {
         // Finder alle customers
         const customers = await controllerCustomer.getCustomers();
        if (req.session.isAdminLoggedIn) {
-        res.render('../GUI/views/customers', { knownUser: isAdminLoggedIn, customers: customers });
+        res.render('customers', { knownUser: isAdminLoggedIn, customers: customers });
     } else {
         res.redirect('/adminLogin')
     }
@@ -118,7 +118,7 @@ adminRouter.get('/Drivers', async (req, res) => {
         // Finder alle Drivers
         const drivers = await controllerDriver.getDrivers();
         if (req.session.isAdminLoggedIn) {    
-        res.render('../GUI/views/drivers', { drivers });
+        res.render('drivers', { drivers });
     } else {
         res.redirect('/adminLogin')
     }
@@ -133,7 +133,7 @@ adminRouter.get('/Admins', async (req, res) => {
         //Finder alle admins
         const admins = await controllerAdmin.getAdmins();
         if (req.session.isAdminLoggedIn) {    
-            res.render('../GUI/views/admins', {admins});
+            res.render('admins', {admins});
         } else {
             res.redirect('/adminLogin')
         }
@@ -166,7 +166,7 @@ adminRouter.get('/Driver/Edit/:id', async (req, res) => {
         const driverId = req.params.id;
         const driver = await controllerDriver.getDriver(driverId)
         if (req.session.isAdminLoggedIn) {    
-            res.render('../GUI/views/EditDriver', {driver});
+            res.render('/GUI/views/EditDriver', {driver});
         } else {
             res.redirect('/adminLogin')
         }
@@ -196,7 +196,7 @@ adminRouter.get('/Driver/Get/:id', async (req, res) => {
         const driver = await controllerDriver.getDriver(driverId)
 
         if (req.session.isAdminLoggedIn) {    
-            res.render('../GUI/views/DriverDetails', { driver });
+            res.render('/GUI/views/DriverDetails', { driver });
         } else {
             res.redirect('/adminLogin')
         }
@@ -215,7 +215,7 @@ adminRouter.get('/Customer/Get/:id', async (req, res) => {
         const customer = await controllerCustomer.getCustomer(customerId);
 
         if (req.session.isAdminLoggedIn) {    
-            res.render('../GUI/views/CustomerDetails', { customer: customer });
+            res.render('/GUI/views/CustomerDetails', { customer: customer });
         } else {
             res.redirect('/adminLogin')
         }
@@ -256,7 +256,7 @@ adminRouter.get('/Customer/Edit/:id', async (req, res) => {
         const customer = await controllerCustomer.getCustomer(customerId);
         
         if (req.session.isAdminLoggedIn) {    
-            res.render('../GUI/views/EditCustomer', { customer });
+            res.render('/GUI/views/EditCustomer', { customer });
         } else {
             res.redirect('/adminLogin')
         }
@@ -316,7 +316,7 @@ adminRouter.get('/Journey/Edit/:id', async (req, res) => {
         const journey = await controllerJourney.getJourney(journeyId);
         
         if (req.session.isAdminLoggedIn) {    
-            res.render('../GUI/views/EditJourney', { journey });
+            res.render('/GUI/views/EditJourney', { journey });
         } else {
             res.redirect('/adminLogin')
         }
@@ -337,7 +337,7 @@ adminRouter.get('/Get/:id', async (req, res) => {
         const admin = await controllerAdmin.getAdmin(adminId);
 
         if (req.session.isAdminLoggedIn) {    
-            res.render('../GUI/views/AdminDetails', { admin: admin });
+            res.render('/GUI/views/AdminDetails', { admin: admin });
         } else {
             res.redirect('/adminLogin')
         }
@@ -378,7 +378,7 @@ adminRouter.get('/Edit/:id', async (req, res) => {
         const admin = await controllerAdmin.getAdmin(adminId);
 
         if (req.session.isAdminLoggedIn) {    
-            res.render('../GUI/views/EditAdmin', { admin });
+            res.render('/GUI/views/EditAdmin', { admin });
         } else {
             res.redirect('/adminLogin')
         }

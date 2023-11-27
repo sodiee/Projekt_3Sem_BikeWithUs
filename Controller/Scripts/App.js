@@ -4,7 +4,6 @@ import session  from 'express-session';
 import pug from 'pug';
 
 const app = express();
-app.set('views', 'GUI/views');
 app.set('view engine', 'pug');
 
 // Middleware
