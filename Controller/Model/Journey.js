@@ -19,6 +19,12 @@ async function getJourneys() {
     return await DBFunctions.getJourneysDB();
 }
 
+async function getJourneysByMonth(month) {
+    let arr = getJourneys();
+
+    return filterByMonth(arr, month)
+}
+
 async function addJourney3Days(journey) {
     let j = {startDate: journey.startDate, endDate: journey.startDate + 3, customer: journey.customer, price: journey.price}
     return await DBFunctions.addJourneyDB(j);
@@ -48,7 +54,13 @@ async function editStartDate(journey) {
     return DBFunctions.editStartDateDB(j);
 }
 
-export default {getJourneys, addJourney3Days, addJourney4Days, editJourney, getJourney, deleteJourney, getCustomerJourneys,editStartDate}
+function filterByMonth(monthArray, targetMonth) {
+    return monthArray.filter(function (date) {
+        return date.getMonth() === targetMonth - 1;
+    });
+}
+
+export default {getJourneys, getJourneysByMonth, addJourney3Days, addJourney4Days, editJourney, getJourney, deleteJourney, getCustomerJourneys,editStartDate}
 
 
 

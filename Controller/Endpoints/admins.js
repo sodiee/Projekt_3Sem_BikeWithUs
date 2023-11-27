@@ -67,13 +67,34 @@ adminRouter.get('/adminLogout', (req, res) => {
 adminRouter.get('/Journeys', async (req, res) => {
     try{
     //finder alle journeys
-    const journeys = await controllerJourney.getJourneys();
+    //const journeys = await controllerJourney.getJourneys();
         
     
     res.render('../GUI/views/journeys', {journeys: journeys})
     } catch (error) {
         console.error('Fejl ved hentning af rejser', error);
         res.status(500).send('Der opstod en fejl ved hentning af rejser');
+    }
+})
+
+adminRouter.get('/oversigt', async (req, res) => {
+    try {
+        res.render('../GUI/views/adminJSCalender')
+    } catch (err) {
+        console.error('Fejl ved indlæsning af adminoversigt', err);
+        res.status(500).send('Fejl ved indlæsning af adminoversigt');
+    }
+});
+
+adminRouter.get('/api/oversigt/:month', async (month, req, res) => {
+    try {
+        let journeys = await controllerJourney.getJourneyByMonth(month);
+        console.log(journeys);
+        res.json(journeys);
+    } catch (err) {
+        console.log('Fejl ved hentning af journeys pr. måned')
+        ;
+        res.status(500).send('Fejl ved hentning af journeys pr. måned');
     }
 })
 
