@@ -9,23 +9,33 @@ import journeyController from '../Model/Journey.js';
 
 customerRouter.get('/', (req, res) => {
     let isCustomerLoggedIn = false
-    if (req.session.isCustomerLoggedIn) {
+    let customerUser = null
+    if (req.session.isCustomerLoggedIn && req.session.customerUser) {
         isCustomerLoggedIn = true
-        res.render('../GUI/views/testAfterCustomerLogin.pug', {knownUser: isCustomerLoggedIn})
+        customerUser = req.session.customerUser
+        res.render('../GUI/views/testAfterCustomerLogin.pug', {knownUser: isCustomerLoggedIn, customerUser: customerUser})
     } else {
         res.redirect('/customerLogin')
     }
     
 })
 
-customerRouter.post('/customerLogin', (req, res) => {
-    const {username, password} = req.body;
-    if (checkCustomerUser(username, password)) {
-        req.session.isCustomerLoggedIn = true;
-        res.redirect('/');
-    } else {
-        res.send('Forkert brugernavn eller adgangskode');
-    }
+customerRouter.post('/customerLogin', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        const customerData = await controller.checkCustomer(username, password);
+    
+        if (customerData) {
+          req.session.isCustomerLoggedIn = true;
+          req.session.customerUser = customerData;
+          res.redirect('/');
+        } else {
+          res.status(401).send('Forkert brugernavn eller adgangskode');
+        }
+      } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+      }
 });
 
 customerRouter.get('/secret', (req, res) => {
