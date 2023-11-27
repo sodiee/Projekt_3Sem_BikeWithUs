@@ -1,6 +1,3 @@
-import DBFunctions from '../../Storage/DBFunctions.js';
-//const DBFunctions = require('../../Storage/DBFunctions.js');
-
 let table = document.getElementById("tableBody");
 //måned
 let months = ['january',
