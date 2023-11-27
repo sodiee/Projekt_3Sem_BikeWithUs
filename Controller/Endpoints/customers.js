@@ -101,7 +101,7 @@ customerRouter.get('/Calendar/Book', async (req, res) => {
                 await controller.addJourney3Days({ startDate, endDate, customer, price });
                 res.redirect('/Mypage/:id');
             }
-            res.render('../GUI/views/bookAJourney', { date });
+            res.render('../GUI/views/bookAJourney', { startDate });
         } catch (error) {
             console.error('Fejl ved tilføjelse af Rejse:', error);
             res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
