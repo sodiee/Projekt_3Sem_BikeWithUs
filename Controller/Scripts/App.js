@@ -1,12 +1,16 @@
 import DBFunctions from '../../Storage/DBFunctions.js';
 import express from 'express'
 import session  from 'express-session';
-const app = express()
-app.set('view engine', 'pug')
+import pug from 'pug';
+
+const app = express();
+app.set('views', 'GUI/views');
+app.set('view engine', 'pug');
 
 // Middleware
 app.use(express.urlencoded({extended: true}))
-app.use(express.static('./GUI/views'))
+//app.use(express.static('./GUI/views'))
+//app.use(express.json);
 app.use(express.static('./GUI/assets'))
 app.use(session({
     secret: 'Test-Secret',

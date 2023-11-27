@@ -221,12 +221,12 @@ const getCustomerJourneysDB = async (id) => {
 };
 const getJourneysDB = async () => {
     let journeyQueryDocs = await getDocs(JourneyCollection);
-    let journey = journeyQueryDocs.docs.map(doc => {
+    let journeys = journeyQueryDocs.docs.map(doc => {
         let data = doc.data();
         data.docID = doc.id;
         return data;
     });
-    return journey;
+    return journeys;
 }
 
 

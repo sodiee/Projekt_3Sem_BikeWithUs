@@ -26,6 +26,12 @@ driverRouter.get('/Guests/Options', async (req, res) => {
     }
 });
 
+//hent driver tasks
+driverRouter.get('/driverTasks', async (req, res) => {
+    const driverTasks = await getDriverTasks();
+    res.render('driverTasks', {tasks: driverTasks});
+});
+
 
 
 
