@@ -124,7 +124,7 @@ customerRouter.get('/bookAJourney', (req, res) => {
 });
 
 customerRouter.get('/bookingCalendar', (req, res) => {
-    res.render('../GUI/views/bookingCalender');
+    res.render('../GUI/views/bookingCalendar');
 });
 
 export default customerRouter;
