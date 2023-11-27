@@ -7,17 +7,18 @@ const assert = chai.assert
 describe('Crud test på Journey', () => {
   let customer;
   let journey;
-  let startDate = new Date(1998, 8, 25)
-  let endDate = new Date(startDate)
-  endDate.setUTCDate(endDate.getUTCDate() + 3);
+  let name = "Cykeltur gennem klitterne";
+  let startDate = "2023-11-24"//new Date(1998, 8, 25)
+  let endDate = "2023-11-28"//new Date(startDate)
+  //endDate.setUTCDate(endDate.getUTCDate() + 3);
 
     beforeEach(async() => {
-      startDate = new Date(1998, 8, 25)
-      endDate = new Date(startDate)
-      endDate.setUTCDate(endDate.getUTCDate() + 3);
+      startDate = "2023-11-24" //new Date(1998, 8, 25)
+      endDate = "2023-11-28" //new Date(startDate)
+      //endDate.setUTCDate(endDate.getUTCDate() + 3);
 
      customer = { firstName: "Mewkel", lastName: "Lindhøøøøøj", birthday: "160795", city: "Frederiksbjerg" };
-     journey = {customer, startDate, endDate, price: 4300};
+     journey = {name, customer, startDate, endDate, price: 4300};
     
      journey = await DBFunctions.addJourneyDB(journey, customer);
 
@@ -34,9 +35,9 @@ describe('Crud test på Journey', () => {
 
     it('should edit a journeys start date', async () => {
       
-      let newDate = '2024,8,25';
-      const endDate = new Date(newDate)
-      endDate.setUTCDate(endDate.getUTCDate() + 3);
+      let newDate = '2023-12-05';
+      const endDate = "2023-12-09" //new Date(newDate)
+      //endDate.setUTCDate(endDate.getUTCDate() + 3);
 
       await DBFunctions.editStartDateDB(journey,newDate, endDate)
 
