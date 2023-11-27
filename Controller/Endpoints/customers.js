@@ -63,7 +63,9 @@ customerRouter.get('/Calender', async (req, res) => {
     // Check for login status using sessions or cookies
     if (req.session.isLoggedIn) {
         try {
-            res.render('../GUI/views/CalenderCustomer');
+            const selectedDate = req.query.date || 'No date selected';
+            req.session.selectedDate = selectedDate; // Gem datoen som startDate i sessionen
+            res.render('../GUI/views/bookingCalendar', { selectedDate });
         } catch (error) {
             console.error('Fejl ved hentning af rejser', error);
             res.status(500).send('Der opstod en fejl ved hentning af rejser');
@@ -78,17 +80,20 @@ customerRouter.post('/Calender/Book', async (req, res) => {
     // Check for login status using sessions or cookies
     if (req.session.isLoggedIn) {
         try {
-            const { startDate, endDate, customer, price } = req.body;
-
+            const { endDate, customer, price } = req.body;
+            const startDate = req.session.selectedDate; // Brug datoen gemt i sessionen som startDate
+            
             //dage mellem startdato og slutdato
             const durationInDays = Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24)); //antallet af milisekunder på en dag
 
-            if (durationInDays === 4) {
+            if (durationInDays === 4 && new Date(startDate) < new Date(endDate)) {
                 await controller.addJourney4Days({ startDate, endDate, customer, price });
-            } else if (durationInDays === 3) {
+                res.redirect('/Mypage/:id');
+            } else if (durationInDays === 3 && new Date(startDate) < new Date(endDate)) {
                 await controller.addJourney3Days({ startDate, endDate, customer, price });
+                res.redirect('/Mypage/:id');
             }
-            res.redirect('/Mypage/:id');
+            res.render('../GUI/views/bookingCalender');
         } catch (error) {
             console.error('Fejl ved tilføjelse af Rejse:', error);
             res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
@@ -102,7 +107,7 @@ customerRouter.post('/Calender/Book', async (req, res) => {
 
 customerRouter.get('/Mypage/:id', async (req, res) => {
     // Check for login status using sessions or cookies
-    if (!req.session.isLoggedIn) {
+    if (req.session.isLoggedIn) {
         try {
             const customerId = req.params.id; 
             const customerJourneys = await journeyController.getCustomerJourneys(customerId);
@@ -120,11 +125,11 @@ customerRouter.get('/Mypage/:id', async (req, res) => {
 
 customerRouter.get('/bookAJourney', (req, res) => {
     const date = req.query.date || 'No date selected';
-    res.render('/bookAJourney', { date });
+    res.render('../GUI/views/bookingCalender', { date });
 });
 
 customerRouter.get('/bookingCalendar', (req, res) => {
-    res.render('../GUI/views/bookingCalender');
+    res.render('../GUI/views/bookingCalendar');
 });
 
 export default customerRouter;
