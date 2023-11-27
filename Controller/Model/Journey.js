@@ -9,7 +9,7 @@ function Journey(startDate, customer, price) {
 }
 
 async function getCustomerJourneys(customerId) {
-        const journeys = await DBFunctions.getCustomerTripsDB(customerId);
+        const journeys = await DBFunctions.getCustomerJourneysDB(customerId);
         return journeys;
 }
 

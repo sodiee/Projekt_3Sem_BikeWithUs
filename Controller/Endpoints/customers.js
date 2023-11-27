@@ -1,99 +1,130 @@
 import express from 'express';
 const customerRouter = express.Router();
 import controller from '../Model/Customer.js';
+import journeyController from '../Model/Journey.js';
 
 //-------------------------------
 // customer-ENDPOINTS for LOGIN |
 //-------------------------------
 
 customerRouter.get('/', (req, res) => {
-    let isLoggedIn = false
-    if (req.session.isLoggedIn) {
-        isLoggedIn = true
-        res.render('../GUI/views/customers.pug', {knownUser: isLoggedIn})
+    let isCustomerLoggedIn = false
+    if (req.session.isCustomerLoggedIn) {
+        isCustomerLoggedIn = true
+        res.render('../GUI/views/testAfterCustomerLogin.pug', {knownUser: isCustomerLoggedIn})
     } else {
         res.redirect('/customerLogin')
     }
     
 })
 
-customerRouter.post('/login', (req, res) => {
-    const {username, password} = req.body
-    if (checkUser(username, password)) {
-        req.session.isLoggedIn = true
-        res.redirect('/')
+customerRouter.post('/customerLogin', (req, res) => {
+    const {username, password} = req.body;
+    if (checkCustomerUser(username, password)) {
+        req.session.isCustomerLoggedIn = true;
+        res.redirect('/Calender');
     } else {
-        res.send('Forkert brugernavn eller adgangskode')
+        res.send('Forkert brugernavn eller adgangskode');
     }
-})
+});
 
 customerRouter.get('/secret', (req, res) => {
     if (req.session.isLoggedIn) {
-        res.render('customers', {knownUser: req.session.isLoggedIn})
+        res.render('customers', {knownUser: req.session.isCustomerLoggedIn})
     } else {
         res.redirect('/customerLogin')
     }
 })
 
-customerRouter.get('/logout', (req, res) => {
+customerRouter.get('/customerLogout', (req, res) => {
     req.session.destroy()
     res.redirect('/')
 })
 
+customerRouter.get('/customerLogin', (req, res) => {
+    res.render('../GUI/views/customerLogin.pug')
+})
+
 // TODO
 // Simulator af databaseopkald
-function checkUser(user, password) {
+function checkCustomerUser(customerUsername, customerPassword) {
     let returnValue = false
-    if (user == 'Maksym' && password == '123') {
+    if (customerUsername == 'Maksym' && customerPassword == '123') {
         returnValue = true
     }
     return returnValue
 }
 
 
-// -------------------------------
-// customer-ENDPOINTS for booking |
-// -------------------------------
-
-customerRouter.post('/Journey/Book/4day', async (req, res) => {
-    try {
-        const { startDate, endDate, customer, price } = req.body;
-        await controller.addJourney4Days({ startDate, endDate, customer, price });
-        
-        res.redirect('/Journeys/Overview'); // Redirect til en oversigtsside eller anden relevant side
-    } catch (error) {
-        console.error('Fejl ved tilføjelse af Rejse:', error);
-        res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
-    }
-});
-
-customerRouter.post('/Journey/Book/3day', async (req, res) => {
-    try {
-        const { startDate, endDate, customer, price } = req.body;
-        await controller.addJourney3Days({ startDate, endDate, customer, price });
-        
-        res.redirect('/Journeys/Overview'); // Redirect til en oversigtsside eller anden relevant side
-    } catch (error) {
-        console.error('Fejl ved tilføjelse af Rejse:', error);
-        res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
-    }
-});
-
-customerRouter.get('/Journey/Mypage/:id', async (req, res) => {
-    
+// ------------------------------------------
+// customer-ENDPOINTS for booking / Calender |
+// ------------------------------------------
+customerRouter.get('/Calender', async (req, res) => {
+    // Check for login status using sessions or cookies
+    if (req.session.isLoggedIn) {
         try {
-            const customerId = req.params.customerId;
-            const customerJourneys = await controller.getCustomerJourneys(customerId);
+            res.render('../GUI/views/CalenderCustomer');
+        } catch (error) {
+            console.error('Fejl ved hentning af rejser', error);
+            res.status(500).send('Der opstod en fejl ved hentning af rejser');
+        }
+    } else {
+        res.redirect('/customerLogin');
+    }
+});
+
+
+customerRouter.post('/Calender/Book', async (req, res) => {
+    // Check for login status using sessions or cookies
+    if (req.session.isLoggedIn) {
+        try {
+            const { startDate, endDate, customer, price } = req.body;
+
+            //dage mellem startdato og slutdato
+            const durationInDays = Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24)); //antallet af milisekunder på en dag
+
+            if (durationInDays === 4) {
+                await controller.addJourney4Days({ startDate, endDate, customer, price });
+            } else if (durationInDays === 3) {
+                await controller.addJourney3Days({ startDate, endDate, customer, price });
+            }
+            res.redirect('/Mypage/:id');
+        } catch (error) {
+            console.error('Fejl ved tilføjelse af Rejse:', error);
+            res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
+        }
+    } else {
+        res.redirect('/customerLogin');
+    }
+});
+
+
+
+customerRouter.get('/Mypage/:id', async (req, res) => {
+    // Check for login status using sessions or cookies
+    if (req.session.isLoggedIn) {
+        try {
+            const customerId = req.params.id; 
+            const customerJourneys = await journeyController.getCustomerJourneys(customerId);
             const customer = await controller.getCustomer(customerId);
     
-            res.render('../GUI/views/CustomerPage', { trips: customerJourneys, customer: customer });
+            res.render('../GUI/views/bookingConfirmed', { journeys: customerJourneys, customer: customer });
         } catch (error) {
             console.error('Fejl ved hentning af kundens side:', error);
             res.status(500).send('Der opstod en fejl ved hentning af kundens side.');
         }
+    } else {
+        res.redirect('/customerLogin');
+    }
 });
-    
-     
 
+customerRouter.get('/bookAJourney', (req, res) => {
+    const date = req.query.date || 'No date selected';
+    res.render('bookAJourney', { date });
+});
+
+customerRouter.get('/bookingCalendar', (req, res) => {
+    res.render('bookingCalendar');
+});
 
 export default customerRouter;

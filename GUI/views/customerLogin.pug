@@ -10,11 +10,11 @@ html
     body 
         main 
             h2 Customer login
-            form(action='/login', method='post')
+            form(action='/customerLogin', method='POST')
                 label(for='username') Brugernavn
-                input(type='text', id='username', name='username', required)
-
+                input(type='text', id='customerUsername', name='username', required)
+                br
                 label(for='password') Adgangskode
-                input(type='password', id='password', name='password', required)
-
+                input(type='password', id='customerPassword', name='password', required)
+                br
                 button(type='submit', name='action', value='login') Login Customer
