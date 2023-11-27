@@ -108,7 +108,7 @@ customerRouter.get('/Mypage/:id', async (req, res) => {
             const customerJourneys = await journeyController.getCustomerJourneys(customerId);
             const customer = await controller.getCustomer(customerId);
     
-            res.render('../GUI/views/CustomerPage', { journeys: customerJourneys, customer: customer });
+            res.render('../GUI/views/bookingConfirmed', { journeys: customerJourneys, customer: customer });
         } catch (error) {
             console.error('Fejl ved hentning af kundens side:', error);
             res.status(500).send('Der opstod en fejl ved hentning af kundens side.');
