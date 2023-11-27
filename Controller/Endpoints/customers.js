@@ -131,13 +131,5 @@ customerRouter.get('/Mypage/:id', async (req, res) => {
     }
 });
 
-customerRouter.get('/bookAJourney', (req, res) => {
-    const date = req.query.date || 'No date selected';
-    res.render('../GUI/views/bookAJourney', { date });
-});
-
-customerRouter.get('/bookingCalendar', (req, res) => {
-    res.render('../GUI/views/bookingCalendar');
-});
 
 export default customerRouter;
