@@ -69,13 +69,11 @@ function checkCustomerUser(customerUsername, customerPassword) {
 // ------------------------------------------
 // customer-ENDPOINTS for booking / Calender |
 // ------------------------------------------
-customerRouter.get('/Calender', async (req, res) => {
+customerRouter.get('/Calendar', async (req, res) => {
     // Check for login status using sessions or cookies
-    if (req.session.isLoggedIn) {
+    if (!req.session.isLoggedIn) {
         try {
-            const selectedDate = req.query.date || 'No date selected';
-            req.session.selectedDate = selectedDate; // Gem datoen som startDate i sessionen
-            res.render('../GUI/views/bookingCalendar', { selectedDate });
+            res.render('../GUI/views/bookingCalendar');
         } catch (error) {
             console.error('Fejl ved hentning af rejser', error);
             res.status(500).send('Der opstod en fejl ved hentning af rejser');
@@ -86,12 +84,12 @@ customerRouter.get('/Calender', async (req, res) => {
 });
 
 
-customerRouter.post('/Calender/Book', async (req, res) => {
+customerRouter.get('/Calendar/Book', async (req, res) => {
     // Check for login status using sessions or cookies
-    if (req.session.isLoggedIn) {
+    if (!req.session.isLoggedIn) {
         try {
             const { endDate, customer, price } = req.body;
-            const startDate = req.session.selectedDate; // Brug datoen gemt i sessionen som startDate
+            const startDate = req.query.date || 'No date selected'; // Brug datoen gemt i sessionen som startDate
             
             //dage mellem startdato og slutdato
             const durationInDays = Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24)); //antallet af milisekunder på en dag
@@ -103,7 +101,7 @@ customerRouter.post('/Calender/Book', async (req, res) => {
                 await controller.addJourney3Days({ startDate, endDate, customer, price });
                 res.redirect('/Mypage/:id');
             }
-            res.render('../GUI/views/bookingCalender');
+            res.render('../GUI/views/bookAJourney', { date });
         } catch (error) {
             console.error('Fejl ved tilføjelse af Rejse:', error);
             res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
