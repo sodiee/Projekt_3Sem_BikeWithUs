@@ -3,7 +3,9 @@ import DBFunctions from '../../Storage/DBFunctions.js';
 
 function Journey(startDate, customer, price) {
     this.startDate = startDate;
-    this.endDate = endDate;
+    const endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + 3);
+    this.endDate = endDate
     this.customer = customer;
     this.price = price;
 }
@@ -15,6 +17,12 @@ async function getCustomerJourneys(customerId) {
 
 async function getJourneys() {
     return await DBFunctions.getJourneysDB();
+}
+
+async function getJourneysByMonth(month) {
+    let arr = getJourneys();
+
+    return filterByMonth(arr, month)
 }
 
 async function addJourney3Days(journey) {
@@ -46,7 +54,13 @@ async function editStartDate(journey) {
     return DBFunctions.editStartDateDB(j);
 }
 
-export default {getJourneys, addJourney3Days, addJourney4Days, editJourney, getJourney, deleteJourney, getCustomerJourneys,editStartDate}
+function filterByMonth(monthArray, targetMonth) {
+    return monthArray.filter(function (date) {
+        return date.getMonth() === targetMonth - 1;
+    });
+}
+
+export default {getJourneys, getJourneysByMonth, addJourney3Days, addJourney4Days, editJourney, getJourney, deleteJourney, getCustomerJourneys,editStartDate}
 
 
 

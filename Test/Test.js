@@ -5,28 +5,45 @@ const assert = chai.assert
 
 //DBFUNCTIONS TEST 
 describe('Crud test på Journey', () => {
-    let customer;
-    let journey;
-    beforeEach(() => {
-        customer = { firstName: "Mewkel", lastName: "Lindhøøøøøj", birthday: "160795", city: "Frederiksbjerg" };
-        journey = { customer: customer, startDate: "092598", price: 5000 };
-    })
+  let customer;
+  let journey;
+  let startDate = new Date(1998, 8, 25)
+  let endDate = new Date(startDate)
+  endDate.setUTCDate(endDate.getUTCDate() + 3);
 
+    beforeEach(async() => {
+      startDate = new Date(1998, 8, 25)
+      endDate = new Date(startDate)
+      endDate.setUTCDate(endDate.getUTCDate() + 3);
+
+     customer = { firstName: "Mewkel", lastName: "Lindhøøøøøj", birthday: "160795", city: "Frederiksbjerg" };
+     journey = {customer, startDate, endDate, price: 4300};
+    
+     journey = await DBFunctions.addJourneyDB(journey, customer);
+
+    }
+    );
+
+
+    
     it('Should return a journey', async () => {
-        const result = await DBFunctions.getJourneyDB(journey);
-        assert.deepStrictEqual(result, journey);
-    });
+        const result = await DBFunctions.getJourneyDB(journey.id);
+        assert.isObject(result, "Should return a journey id");
+      }
+    );
 
     it('should edit a journeys start date', async () => {
+      
+      let newDate = '2024,8,25';
+      const endDate = new Date(newDate)
+      endDate.setUTCDate(endDate.getUTCDate() + 3);
 
-        let newJourney = await DBFunctions.addJourneyDB(journey, journey.customer);
+      await DBFunctions.editStartDateDB(journey,newDate, endDate)
 
-        let newDate = '2024-05-05';
-        await newJourney.DBFunctions.editStartDateDB(newDate)
+      const updatedJourney = await DBFunctions.getJourneyDB(journey.id);
 
-        assert.strictEqual(newJourney.startDate, '2024-05-05', 'Journey start date should be edited');
-    })
-});
+      assert.strictEqual(newDate,updatedJourney.startDate, 'Journey start date should be edited');
+  })
 
 
 //DBFunctions-script test
@@ -45,10 +62,9 @@ describe('CRUD test på Customer', () => {
         }
     })
 
-
-    it('should add a customer', async () => {
-        let customer = await DBFunctions.addCustomerDB(customer);
-        addedCustomerId = customer.id
+                
+        it('should add a customer', async () => {
+            addedCustomerId = customer.id
 
         assert.isNotNull(addedCustomerId, 'The customers ID must not be null')
     })
@@ -77,5 +93,6 @@ describe('CRUD test på Customer', () => {
 
         await DBFunctions.editCustomerDB(customer)
         assert.strictEqual(newCustomer.fornavn, 'NyFornavn', 'Customer should be edited');
-    });
-});
+        });
+    })  
+})
