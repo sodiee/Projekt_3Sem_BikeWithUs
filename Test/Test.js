@@ -1,9 +1,9 @@
 import DBFunctions from '../Storage/DBFunctions.js';
 import chai from 'chai'
 const assert = chai.assert
+//https://www.chaijs.com/api/assert/
 
 //DBFUNCTIONS TEST 
-
 describe('Crud test på Journey', () => {
   let customer;
   let journey;
@@ -51,42 +51,42 @@ describe('CRUD test på Customer', () => {
     let customer
     let addedCustomerId;
 
-        beforeEach(() => {
-            customer = { firstName: "Mewkel", lastName: "Lindhøøøøøj", birthday: "160795", city: "Frederiksbjerg" };
-        })
-    
-        // An after each to delete the object from the databse after each test
-        afterEach(async () => {
-            if (addedCustomerId) {
+    beforeEach(() => {
+        customer = { firstName: "Mewkel", lastName: "Lindhøøøøøj", birthday: "160795", city: "Frederiksbjerg" };
+    })
+
+    // An after each to delete the object from the databse after each test
+    afterEach(async () => {
+        if (addedCustomerId) {
             await DBFunctions.deleteCustomerDB(customer);
-            }
-        })
+        }
+    })
 
                 
         it('should add a customer', async () => {
             addedCustomerId = customer.id
 
-            assert.isNotNull(addedCustomerId, 'The customers ID must not be null')
-        })
+        assert.isNotNull(addedCustomerId, 'The customers ID must not be null')
+    })
 
 
-        it('should delete a customer', async () => {
+    it('should delete a customer', async () => {
         let customerToDelete = await DBFunctions.addCustomerDB(customer);
         customerToDelete = DBFunctions.deleteCustomerDB(customerToDelete)
 
 
         assert.isUndefined(customerToDelete.id, 'Customer should be removed')
-        })
+    })
 
 
-        it('should return a customer', async () => {
+    it('should return a customer', async () => {
         customer = await DBFunctions.addCustomerDB(customer);
         let customerG = await DBFunctions.getCustomerDB(customer.id);
 
         assert.notStrictEqual(customerG, null, 'Customer should exist');
-        })
+    })
 
-        it('should edit a customer', async () => {
+    it('should edit a customer', async () => {
         let newCustomer = await DBFunctions.addCustomerDB(customer);
         newCustomer.fornavn = 'NyFornavn';
 
