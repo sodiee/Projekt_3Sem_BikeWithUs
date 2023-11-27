@@ -1,4 +1,4 @@
-//import DBFunctions from '../../Storage/DBFunctions.js';
+import DBFunctions from '../../Storage/DBFunctions.js';
 //const DBFunctions = require('../../Storage/DBFunctions.js');
 
 let table = document.getElementById("tableBody");
@@ -15,12 +15,15 @@ let months = ['january',
     'october',
     'november',
     'december',]
-//let monthData = [[], [],[], [],[], [],[], [],[], [],[], [],]
-const localDate = new Date();
+/*//nyt
+let getMonths = DBFunctions.getJourneys();
+//nyt
+let monthData = [[filterByMonth(getMonths, 1)], [filterByMonth(getMonths, 2)],[filterByMonth(getMonths, 3)], [filterByMonth(getMonths, 4)],[filterByMonth(getMonths, 5)], [filterByMonth(getMonths, 6)],[filterByMonth(getMonths, 7)], [filterByMonth(getMonths, 8)],[filterByMonth(getMonths, 9)], [filterByMonth(getMonths, 10)],[filterByMonth(getMonths, 11)], [filterByMonth(getMonths, 12)],]
+*/const localDate = new Date();
 let currentMonth = months[localDate.getMonth()];
 let selectedMonth = currentMonth;
 
-//afhentningsfunktion
+//afhentningsfunktion - er dette virkelig nødvendigt?
 //- array med alle journeys for hver måned ?
 //- indsættelse af faktiske journeys
 //- tilvalg skal hentes ind
@@ -86,26 +89,55 @@ function updateMonth() {
 
 
 //tilføj events
+//nyt
 function addEvent(startDate, endDate, eventName/*skal ændres til selve journey*/, kunde) {
     
     for (let i = startDate; i <= endDate; i++) {
         let tdElementRejse = document.getElementById(i + ': Rejse');
-        let tdElementKunde = document.getElementById(i + ': Kunde')
+        let tdElementKunde = document.getElementById(i + ': Kunde');
+        let tdElementTilvalg = document.getElementById(i + ': Tilvalg');
 
         if (tdElementRejse) {
             // Opret et p-element for eventet og tilføj det til cellen
             let pElementRejse = document.createElement('p');
-            pElementRejse.textContent = eventName + ' - ';
+            //nyt
+            pElementRejse.textContent =eventName //journey.Name // + ' - ';
             tdElementRejse.appendChild(pElementRejse);
-        }
+        } 
+        //nyt
+        /*else {
+            console.log('Fejl med at finde tdelementrejse')
+        }*/
 
         if (tdElementKunde) {
             let pElementKunde = document.createElement('p');
-            pElementKunde.textContent = kunde; //journey.customer
+            //nyt
+            pElementKunde.textContent = kunde//journey.customer;//kunde; //journey.customer
             tdElementKunde.appendChild(pElementKunde);
-        }
+        } 
+        //nyt
+        /*else {
+            console.log('Fejl med at finde tdelementkunde')
+        }*/
+
+        //nyt
+        if (tdElementTilvalg) {
+            let pElementTilvalg = document.createElement('p');
+            pElementTilvalg.textContent = //journey.tilvalg;
+            tdElementTilvalg.appendChild(pElementTilvalg);
+        }/* else {
+            console.log('Fejl med at finde tdElementTilvalg')
+        }*/
     }
 }
+
+//nyt
+/*
+function filterByMonth(monthArray, targetMonth) {
+    return monthArray.filter(function (date) {
+        return date.getMonth() === targetMonth - 1;
+    });
+}*/
 
 addEvent(4, 4, "Mikkels fødselsdag", 'Mikkel + ' + 0);
 
