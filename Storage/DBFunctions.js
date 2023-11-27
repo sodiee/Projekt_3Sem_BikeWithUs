@@ -205,29 +205,32 @@ const getJourneysDB = async () => {
     return journey;
 }
 
+const getJourneyDB = async (id) => {
+        const docRef = doc(db, 'Journeys', id);
+        const journeyQueryDoc = await getDoc(docRef);
+        let journey = journeyQueryDoc.data();
+        journey.docID = journeyQueryDoc.id;
+        return journey;    
+}
 
-const getJourneyDB = async (docID) => {
+const addJourneyDB = async (journey, customer) => {
     try {
-        const docRef = doc(db, 'Journeys', docID);
-        if (docRef.exists()) {
-            const journeyQueryDoc = await getDoc(docRef);
-            let journey = journeyQueryDoc.data();
-            journey.docID = journeyQueryDoc.id;
-            return journey;
-        } else {
-            throw new Error('Dokumentet eksisterer ikke.');
-        }
+        const journeyEnd = {
+            ...journey,
+            customer: customer,
+            endDate: journey.endDate
+        };
+
+        const docRef = await addDoc(JourneyCollection, journeyEnd);
+
+        journey.id = docRef.id;
+        
+        return journey;
     } catch (error) {
-        console.error('Fejl ved hentning af rejse i DBFunctions:', error);
-        throw new Error('Der opstod en fejl ved hentning af rejse i DBFunctions.');
+        console.error("Error adding journey to Firestore:", error);
+        throw error; 
     }
 };
-const addJourneyDB = async (journey, customerId) => {
-    const docRef = await addDoc(JourneyCollection, journey, customerId);
-    journey.id = docRef.id;
-    return journey;
-};
-
 
 const deleteJourneyDB = async (journeyID) => {
     try {
@@ -250,93 +253,19 @@ const editJourneyDB = async (docID, journeyData) => {
     }
 };
 
-const runJourneyTests = async () => {
-    
-    const customerId = 'gCpdvCjNnQfJby3cQf9d'
-    const customerId2 = 'bFjjlEWC5soHOcTV0pGQ'
-
-    try {
-        console.log('Testing getCustomerJourneysDB...');
-        const customerJourneys = await getCustomerJourneysDB(customerId2);
-        console.log('Customer journeys:', customerJourneys);
-
-        /* 
-        console.log('Testing getJourneysDB...');
-        const allJourneys = await getJourneysDB();
-        console.log('All journeys:', allJourneys);
-
-        console.log('Testing addJourney4DaysDB...');
-        const addedJourney4Days = await addJourney4DaysDB(customerId2);
-        console.log('Added journey:', addedJourney4Days);
-
-        console.log('Testing addJourney3DaysDB...');
-        const addedJourney3Days = await addJourney3DaysDB(customerId2);
-        console.log('Added journey:', addedJourney3Days);
-        */
-        //console.log('Testing GetJourneyDB');
-        //const getJourneyDBtest = await getJourneyDB(customerId)
-        //console.log('Testing deleteJourneyDB...');
-
-        
-
-        
-        // ... (fortsæt med at tilføje tests for dine andre metoder)
-        
-    } catch (error) {
-        console.error('Error during journey tests:', error);
-    }
-};
-
-// Kald funktionen for at køre dine tests
-runJourneyTests();
-
-const runJourneyTests2 = async () => {
-    
-    const customerId = 'gCpdvCjNnQfJby3cQf9d'
-    const customerId2 = 'bFjjlEWC5soHOcTV0pGQ'
-
-    try {
-        console.log('Testing getCustomerJourneysDB...');
-        const customerJourneys = await getCustomerJourneysDB(customerId2);
-        console.log('Customer journeys:', customerJourneys);
-
-        /* 
-        console.log('Testing getJourneysDB...');
-        const allJourneys = await getJourneysDB();
-        console.log('All journeys:', allJourneys);
-
-        console.log('Testing addJourney4DaysDB...');
-        const addedJourney4Days = await addJourney4DaysDB(customerId2);
-        console.log('Added journey:', addedJourney4Days);
-
-        console.log('Testing addJourney3DaysDB...');
-        const addedJourney3Days = await addJourney3DaysDB(customerId2);
-        console.log('Added journey:', addedJourney3Days);
-        */
-        //console.log('Testing GetJourneyDB');
-        //const getJourneyDBtest = await getJourneyDB(customerId)
-        //console.log('Testing deleteJourneyDB...');
-
-        
-
-        
-        // ... (fortsæt med at tilføje tests for dine andre metoder)
-        
-    } catch (error) {
-        console.error('Error during journey tests:', error);
-    }
-};
-
-// Kald funktionen for at køre dine tests
-runJourneyTests();
-
-const editStartDateDB = async (journey) => {
+const editStartDateDB = async (journey,newStartDate,newEndDate) => {
     await updateDoc(doc(db, 'Journeys', journey.id), {
-        startDate: journey.startDate, 
+        startDate: newStartDate,
+        endDate: newEndDate
     });
-};  
+}; 
+
+
+
+
+ 
 
 
 export default {getCustomerDB, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB,getAdminDB,
 getAdminsDB,deleteAdminDB,addAdminDB,editAdminDB,getDriverDB,getDriversDB,deleteDriverDB,addDriverDB,editDriverDB,
-addJourneyDB, editJourneyDB, deleteJourneyDB, getJourneyDB, getJourneysDB, getCustomerJourneysDB}
+addJourneyDB, editJourneyDB, deleteJourneyDB, getJourneyDB, getJourneysDB, getCustomerJourneysDB, editStartDateDB}
