@@ -13,7 +13,7 @@ customerRouter.get('/', (req, res) => {
     if (req.session.isCustomerLoggedIn && req.session.customerUser) {
         isCustomerLoggedIn = true
         customerUser = req.session.customerUser
-        res.render('../GUI/views/testAfterCustomerLogin.pug', {knownUser: isCustomerLoggedIn, customerUser: customerUser})
+        res.render('testAfterCustomerLogin', {knownUser: isCustomerLoggedIn, customerUser: customerUser})
     } else {
         res.redirect('/customerLogin')
     }
@@ -52,7 +52,7 @@ customerRouter.get('/customerLogout', (req, res) => {
 })
 
 customerRouter.get('/customerLogin', (req, res) => {
-    res.render('../GUI/views/customerLogin.pug')
+    res.render('customerLogin')
 })
 
 // TODO
@@ -73,7 +73,7 @@ customerRouter.get('/Calendar', async (req, res) => {
     // Check for login status using sessions or cookies
     if (!req.session.isLoggedIn) {
         try {
-            res.render('../GUI/views/bookingCalendar');
+            res.render('bookingCalendar');
         } catch (error) {
             console.error('Fejl ved hentning af rejser', error);
             res.status(500).send('Der opstod en fejl ved hentning af rejser');
@@ -101,7 +101,7 @@ customerRouter.get('/Calendar/Book', async (req, res) => {
                 await controller.addJourney3Days({ startDate, endDate, customer, price });
                 res.redirect('/Mypage/:id');
             }
-            res.render('../GUI/views/bookAJourney', { startDate });
+            res.render('bookAJourney', { startDate });
         } catch (error) {
             console.error('Fejl ved tilføjelse af Rejse:', error);
             res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
@@ -121,7 +121,7 @@ customerRouter.get('/Mypage/:id', async (req, res) => {
             const customerJourneys = await journeyController.getCustomerJourneys(customerId);
             const customer = await controller.getCustomer(customerId);
     
-            res.render('../GUI/views/bookingConfirmed', { journeys: customerJourneys, customer: customer });
+            res.render('bookingConfirmed', { journeys: customerJourneys, customer: customer });
         } catch (error) {
             console.error('Fejl ved hentning af kundens side:', error);
             res.status(500).send('Der opstod en fejl ved hentning af kundens side.');
