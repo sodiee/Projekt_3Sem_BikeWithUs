@@ -115,7 +115,7 @@ customerRouter.get('/Calendar/Book', async (req, res) => {
 
 customerRouter.get('/Mypage/:id', async (req, res) => {
     // Check for login status using sessions or cookies
-    if (req.session.isLoggedIn) {
+    if (!req.session.isLoggedIn) {
         try {
             const customerId = req.params.id; 
             const customerJourneys = await journeyController.getCustomerJourneys(customerId);
