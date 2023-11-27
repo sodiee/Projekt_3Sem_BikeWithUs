@@ -30,7 +30,7 @@ async function editDriver(driverID) {
     }
   }
 
-  //------------------ JOURNEYS ------------------
+  //------------------ JOURNEYS -------------------
   async function deleteJourney(journeyID) {
     const response = await fetch(`/journeys/${journeyID}`,{
       method: 'DELETE'
