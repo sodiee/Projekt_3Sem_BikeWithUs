@@ -5,7 +5,6 @@ import pug from 'pug';
 
 const app = express();
 app.set('view engine', 'pug');
-
 // Middleware
 app.use(express.urlencoded({extended: true}))
 //app.use(express.static('./GUI/views'))
