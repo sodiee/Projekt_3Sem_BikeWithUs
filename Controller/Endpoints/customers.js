@@ -96,10 +96,10 @@ customerRouter.get('/Calendar/Book', async (req, res) => {
 
             if (durationInDays === 4 && new Date(startDate) < new Date(endDate)) {
                 await controller.addJourney4Days({ startDate, endDate, customer, price });
-                res.redirect('/Mypage/:id');
+                //res.redirect(`/Calendar/confirmation?startDate=${startDate}&endDate=${endDate}&price=${price}`);
             } else if (durationInDays === 3 && new Date(startDate) < new Date(endDate)) {
                 await controller.addJourney3Days({ startDate, endDate, customer, price });
-                res.redirect('/Mypage/:id');
+                //res.redirect(`/Calendar/confirmation?startDate=${startDate}&endDate=${endDate}&price=${price}`);
             }
             res.render('bookAJourney', { startDate });
         } catch (error) {
@@ -110,6 +110,20 @@ customerRouter.get('/Calendar/Book', async (req, res) => {
         res.redirect('/customerLogin');
     }
 });
+
+
+customerRouter.get('/Calendar/confirmation', async (req, res) => {
+        try {
+            // Hent oplysninger fra query params
+            const { startDate, endDate, price } = req.query;
+            // Render confirmation-siden og send nødvendige oplysninger med
+            res.render('../GUI/views/bookingConfirmed', { startDate, endDate, price });
+        } catch (error) {
+            console.error('Fejl ved håndtering af bekræftelsessiden:', error);
+            res.status(500).send('Der opstod en fejl ved håndtering af bekræftelsessiden.');
+        }
+    });
+
 
 
 
