@@ -24,7 +24,7 @@ describe('Crud test på Journey', () => {
     }
     );
 
-
+    
     
     it('Should return a journey', async () => {
         const result = await DBFunctions.getJourneyDB(journey.id);
