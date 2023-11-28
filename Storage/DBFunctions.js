@@ -210,16 +210,7 @@ const editAdminDB = async (admin) => {
 // DB functions for journey\\
 // ------------------------\\
 
-let journeyM;
-let name = "Cykeltur gennem havet";
-let customer = {firstName: "Mewkel", lastName: "Lindhøøøøøj", birthday: "160795", city: "Frederiksbjerg" };
-let price = 5000;
-let startDate = "2023-11-26"
-let endDate = "2023-11-30"//new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000);
   
-   
-journeyM = {name,startDate, endDate, customer, price };
-    
   
 
 const getCustomerJourneysDB = async (id) => {

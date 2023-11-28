@@ -30,12 +30,12 @@ async function getJourneysByMonth(month) {
 }
 
 async function addJourney3Days(journey) {
-    let j = {name: journey.name, startDate: journey.startDate, endDate: journey.startDate + 3, customer: journey.customer, price: journey.price}
+    let j = {name: journey.name, startDate: journey.startDate, endDate: journey.startDate + 3, customer: journey.customer, price: journey.price, antalPersoner: journey.antalPersoner}
     return await DBFunctions.addJourneyDB(j);
 }
 
 async function addJourney4Days(journey) {
-    let j = {name: journey.name, startDate: journey.startDate, endDate: journey.startDate + 4, customer: journey.customer, price: journey.price}
+    let j = {name: journey.name, startDate: journey.startDate, endDate: journey.startDate + 4, customer: journey.customer, price: journey.price, antalPersoner: journey.antalPersoner}
     return await DBFunctions.addJourneyDB(j);
 }
 

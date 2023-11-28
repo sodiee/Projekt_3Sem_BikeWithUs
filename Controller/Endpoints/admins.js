@@ -101,6 +101,14 @@ adminRouter.get('/api/oversigt/:month', async (req, res) => {
     }
 })
 
+adminRouter.get('/oversigt/redigerRejse', async (req, res) => {
+    try {
+        res.render('adminOversigtRedigerRejse');
+    } catch (error) {
+        
+    }
+});
+
 adminRouter.get('/Customers', async (req, res) => {
     try {
         // Finder alle customers

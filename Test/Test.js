@@ -10,6 +10,7 @@ describe('Crud test på Journey', () => {
   let name = "Cykeltur gennem klitterne";
   let startDate = "2023-11-24"//new Date(1998, 8, 25)
   let endDate = "2023-11-28"//new Date(startDate)
+  let antalPersoner = 4;
   //endDate.setUTCDate(endDate.getUTCDate() + 3);
 
     beforeEach(async() => {
@@ -17,8 +18,8 @@ describe('Crud test på Journey', () => {
       endDate = "2023-11-28" //new Date(startDate)
       //endDate.setUTCDate(endDate.getUTCDate() + 3);
 
-     customer = { firstName: "Mewkel", lastName: "Lindhøøøøøj", birthday: "160795", city: "Frederiksbjerg", journeys: [] };
-     journey = {name, customer, startDate, endDate, price: 4300};
+     customer = { firstName: "Mewkel", lastName: "Lindhøøøøøj", birthday: "160795", city: "Frederiksbjerg", journeys: []};
+     journey = {name, customer, startDate, endDate, price: 4300,  antalPersoner: antalPersoner};
     
      journey = await DBFunctions.addJourneyDB(journey, customer);
 
@@ -53,7 +54,7 @@ describe('Crud test på Journey', () => {
   
     const updatedJourney = await DBFunctions.getJourneyDB(journey.id);
   
-    assert.include(updatedJourney.tilvalg, tilvalg, 'Tilvalg should be added to the journey');
+    assert.include(updatedJourney.tilvalg[0], tilvalg, 'Tilvalg should be added to the journey');
   });
 
 

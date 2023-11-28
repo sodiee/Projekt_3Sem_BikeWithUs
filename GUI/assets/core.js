@@ -94,11 +94,14 @@ async function getJourneys(rbValue) {
         for (const journey of journeys) {
             let startDate = new Date(journey.startDate)
             let endDate = new Date(journey.endDate);
+            let totalPersoner;
 
             for (let i = startDate.getDate(); i <= endDate.getDate(); i++) {
                 let tdElementRejse = document.getElementById(i + ': Rejse');
                 let tdElementKunde = document.getElementById(i + ': Kunde');
                 let tdElementTilvalg = document.getElementById(i + ': Tilvalg');
+                let tdElementAfhentes = document.getElementById(i + ': Afhentes');
+                let tdElementAntalPersoner = document.getElementById(i + ': Antal Personer');
 
                 //rejse
                 if (tdElementRejse) {
@@ -127,16 +130,42 @@ async function getJourneys(rbValue) {
                 //tilvalg
                 if (tdElementTilvalg) {
                     let pElementTilvalg = document.createElement('p');
-                    if (journey.tilvalg !== '' && undefined) {
-                    pElementTilvalg.textContent = idx + ': ' + journey.tilvalg;
+                    if (journey.tilvalg.length != 0) {
+                        for (let j = 0; j < journey.tilvalg.length; j++) {
+                            pElementTilvalg.textContent = idx + ': ' + journey.tilvalg[j].name;
+                        }
                     } else {
-                        pElementTilvalg.textContent = idx + ': Ingen tilvalg' 
+                        pElementTilvalg.textContent = idx + ': Ingen tilvalg'
                     }
                     tdElementTilvalg.appendChild(pElementTilvalg);
                 } else {
                     console.log('Fejl med at finde tdElementTilvalg')
                 }
+                
+                if (tdElementAfhentes) {
+                    let pElementAfhentes = document.createElement('p');
+                    if (i == endDate.getDate()) {
+                        pElementAfhentes.textContent = idx + ': Skal hentes denne dag'
+                    }
+                    tdElementAfhentes.appendChild(pElementAfhentes);
+                }
+
+                if (tdElementAntalPersoner) {
+                    let pElementAntalPersoner = document.createElement('p');
+                    pElementAntalPersoner.textContent = idx + ': ' + journey.antalPersoner;
+                    totalPersoner += journey.antalPersoner;
+
+                    tdElementAntalPersoner.appendChild(pElementAntalPersoner);
+                }
             }
+            /*
+            let trExtra = document.createElement('tr');
+            let tdTotalPersoner = document.createElement('td');
+            let pTotalPersoner = document.createElement('p');
+            pTotalPersoner = totalPersoner;
+            tdTotalPersoner.appendChild(pTotalPersoner); 
+            table.appendChild(trExtra);
+            */
             idx++;
         }
     } catch (error) {
@@ -182,6 +211,11 @@ if (window.location.pathname == '/admins/oversigt/') {
     }
     let selectedMonth = months[res - 1];
 
+    //Redigerings-button
+    let redigeringsBtn = document.getElementById('btnRedigering');
+    redigeringsBtnOnclick();
+    
+
     //TBody
     let table = document.getElementById("tableBody");
 
@@ -192,6 +226,8 @@ if (window.location.pathname == '/admins/oversigt/') {
         let tdElementRejse = document.createElement('td');
         let tdElementKunde = document.createElement('td');
         let tdElementTilvalg = document.createElement('td');
+        let tdElementAfhentes = document.createElement('td');
+        let tdElementAntalKunder = document.createElement('td');
 
 
         //Tilfører værdier til elementer
@@ -203,12 +239,18 @@ if (window.location.pathname == '/admins/oversigt/') {
         tdElementKunde.textContent = '-'
         tdElementTilvalg.id = i + ': Tilvalg';
         tdElementTilvalg.textContent = '-';
+        tdElementAfhentes.id = i + ': Afhentes'
+        tdElementAfhentes.textContent = '-'
+        tdElementAntalKunder.id = i + ': Antal Personer';
+        tdElementAntalKunder.textContent = '-';
 
         //appender elementer til tabel
         trElement.appendChild(tdElementDato);
         trElement.appendChild(tdElementRejse);
         trElement.appendChild(tdElementKunde);
         trElement.appendChild(tdElementTilvalg);
+        trElement.appendChild(tdElementAfhentes);
+        trElement.appendChild(tdElementAntalKunder);
         table.appendChild(trElement);
     }
 
@@ -220,13 +262,20 @@ if (window.location.pathname == '/admins/oversigt/') {
 
 function clear() {
     for (let i = 1; i <= 31; i++) {
-    let pElementRejse = document.getElementById(i + ': Rejse');
-    let pElementKunde = document.getElementById(i + ': Kunde');
-    let pElementTilvalg = document.getElementById(i + ': Tilvalg');
+        let pElementRejse = document.getElementById(i + ': Rejse');
+        let pElementKunde = document.getElementById(i + ': Kunde');
+        let pElementTilvalg = document.getElementById(i + ': Tilvalg');
 
-    pElementRejse.textContent = '-'
-    pElementKunde.textContent = '-'
-    pElementTilvalg.textContent = '-'
+        pElementRejse.textContent = '-'
+        pElementKunde.textContent = '-'
+        pElementTilvalg.textContent = '-'
+    }
+}
+
+function redigeringsBtnOnclick() {
+    let redigeringsBtn = document.getElementById('btnRedigering');
+    redigeringsBtn.onclick = () => {
+        
     }
 }
 
@@ -254,7 +303,7 @@ function updateMonth() {
     }
 
     clear();
-    
+
     for (let i = 1; i <= calculateDays(selectedMonthNumber); i++) {
         let tdElementDato = document.getElementById(i);
         tdElementDato.textContent = i + '. ' + months[selectedMonthNumber - 1];
@@ -267,8 +316,8 @@ function updateMonth() {
     }
     if (calculateDays(selectedMonthNumber) == 28) {
         for (let i = 29; i <= 31; i++) {
-        let tdElementDato = document.getElementById(i);
-        tdElementDato.textContent = '-'
+            let tdElementDato = document.getElementById(i);
+            tdElementDato.textContent = '-'
         }
     }
 
