@@ -46,6 +46,18 @@ describe('Crud test på Journey', () => {
       assert.strictEqual(newDate,updatedJourney.startDate, 'Journey start date should be edited');
   })
 
+  it('should add a tilvalg to a journey', async () => {
+    const tilvalg = { name: 'Test Tilvalg', price: 100 };
+  
+    await DBFunctions.addTilvalgToJourneyDB(journey, tilvalg);
+  
+    const updatedJourney = await DBFunctions.getJourneyDB(journey.id);
+  
+    assert.include(updatedJourney.tilvalg, tilvalg, 'Tilvalg should be added to the journey');
+  });
+
+
+
 
 //DBFunctions-script test
 describe('CRUD test på Customer', () => {
