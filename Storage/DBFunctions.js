@@ -255,10 +255,13 @@ const getJourneysDB = async () => {
 const getJourneyDB = async (id) => {
         const docRef = doc(db, 'Journeys', id);
         const journeyQueryDoc = await getDoc(docRef);
-        let journey = journeyQueryDoc.data();
-        journey.docID = journeyQueryDoc.id;
-        return journey;    
-}
+        if(journeyQueryDoc.exists()) {
+        const journey = journeyQueryDoc.data();
+        return{ id: journeyQueryDoc.id, ...journey}
+    }else{
+        return null;
+    }
+};
 
 const addJourneyDB = async (journey, customer) => {
         const journeyEnd = {
@@ -305,8 +308,11 @@ const editStartDateDB = async (journey,newStartDate,newEndDate) => {
 }; 
 
 const addTilvalgToJourneyDB = async (journey, tilvalg) => {
-        await updateDoc(doc(db, 'Journeys', journey.id), {
-            tilvalg: firebaseConfig.firestore.tilvalg.arrayUnion(tilvalg)
+    journey.tilvalg = [];
+    journey.tilvalg.push(tilvalg);
+
+    await updateDoc(doc(db, 'Journeys', journey.id), {
+          tilvalg: journey.tilvalg
         });
 }
 

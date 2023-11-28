@@ -1,4 +1,3 @@
-import { async } from '@firebase/util';
 import DBFunctions from '../Storage/DBFunctions.js';
 import chai from 'chai'
 const assert = chai.assert
@@ -18,7 +17,7 @@ describe('Crud test på Journey', () => {
       endDate = "2023-11-28" //new Date(startDate)
       //endDate.setUTCDate(endDate.getUTCDate() + 3);
 
-     customer = { firstName: "Mewkel", lastName: "Lindhøøøøøj", birthday: "160795", city: "Frederiksbjerg" };
+     customer = { firstName: "Mewkel", lastName: "Lindhøøøøøj", birthday: "160795", city: "Frederiksbjerg", journeys: [] };
      journey = {name, customer, startDate, endDate, price: 4300};
     
      journey = await DBFunctions.addJourneyDB(journey, customer);
