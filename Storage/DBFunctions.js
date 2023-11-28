@@ -306,7 +306,7 @@ const editStartDateDB = async (journey,newStartDate,newEndDate) => {
 
 const addTilvalgToJourneyDB = async (journey, tilvalg) => {
         await updateDoc(doc(db, 'Journeys', journey.id), {
-            tilvalg: tilvalg
+            tilvalg: firebaseConfig.firestore.tilvalg.arrayUnion(tilvalg)
         });
 }
 
