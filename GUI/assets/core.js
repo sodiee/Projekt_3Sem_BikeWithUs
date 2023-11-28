@@ -76,6 +76,8 @@ async function editJourney(journeyID) {
     }
 }
 
+//DOM adminCalender.js Dynamic functions
+
 async function getJourneys(rbValue) {
     try {
         let url = `/admins/api/oversigt/` + rbValue;
@@ -125,8 +127,11 @@ async function getJourneys(rbValue) {
                 //tilvalg
                 if (tdElementTilvalg) {
                     let pElementTilvalg = document.createElement('p');
-                    //pElementTilvalg = '';
-                    pElementTilvalg.textContent = idx + ': ' + "Dårlig seng :D"//journey.tilvalg;
+                    if (journey.tilvalg !== '' && undefined) {
+                    pElementTilvalg.textContent = idx + ': ' + journey.tilvalg;
+                    } else {
+                        pElementTilvalg.textContent = idx + ': Ingen tilvalg' 
+                    }
                     tdElementTilvalg.appendChild(pElementTilvalg);
                 } else {
                     console.log('Fejl med at finde tdElementTilvalg')
@@ -138,6 +143,9 @@ async function getJourneys(rbValue) {
         console.error('Error fetch journeys', error);
     }
 };
+
+let months = ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December']
+
 
 if (window.location.pathname == '/admins/oversigt/') {
     //RBs
@@ -206,10 +214,9 @@ if (window.location.pathname == '/admins/oversigt/') {
 
     rbsOnclick();
     getJourneys(res);
+    updateMonth();
 }
 
-//DOM Dynamic functions
-let months = ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December']
 
 function clear() {
     for (let i = 1; i <= 31; i++) {
@@ -245,11 +252,26 @@ function updateMonth() {
             break;
         }
     }
+
     clear();
+    
     for (let i = 1; i <= calculateDays(selectedMonthNumber); i++) {
         let tdElementDato = document.getElementById(i);
         tdElementDato.textContent = i + '. ' + months[selectedMonthNumber - 1];
     }
+
+    //fjerner overflødige datoer
+    if (calculateDays(selectedMonthNumber) == 30) {
+        let tdElementDato = document.getElementById(31);
+        tdElementDato.textContent = '-'
+    }
+    if (calculateDays(selectedMonthNumber) == 28) {
+        for (let i = 29; i <= 31; i++) {
+        let tdElementDato = document.getElementById(i);
+        tdElementDato.textContent = '-'
+        }
+    }
+
     getJourneys(months[selectedMonthNumber - 1]);
 }
 

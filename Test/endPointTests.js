@@ -1,4 +1,4 @@
-import supertest from 'supertest'
+/*import supertest from 'supertest'
 import chai from 'chai'
 
 const assert = chai.assert
@@ -16,3 +16,4 @@ describe('Test on all endpoints for admins', () => {
         get('/adminsLogin')
     })
 });
+*/

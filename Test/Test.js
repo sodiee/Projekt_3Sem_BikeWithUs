@@ -1,3 +1,4 @@
+import { async } from '@firebase/util';
 import DBFunctions from '../Storage/DBFunctions.js';
 import chai from 'chai'
 const assert = chai.assert
@@ -45,6 +46,16 @@ describe('Crud test på Journey', () => {
 
       assert.strictEqual(newDate,updatedJourney.startDate, 'Journey start date should be edited');
   })
+
+    it('should add a tilvalg to journey'), async () => {
+        let tilvalg = 'Bagagetransport';
+
+        await DBFunctions.addTilvalgToJourneyDB(journey, tilvalg);
+
+        const journeyMedTilvalg = await DBFunctions.getJourneyDB(journey.id);
+    
+        assert.strictEqual(tilvalg, journeyMedTilvalg.tilvalg, 'journey.tilvalg is added');
+    }
 
 
 //DBFunctions-script test
