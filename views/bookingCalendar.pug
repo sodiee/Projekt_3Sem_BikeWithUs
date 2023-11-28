@@ -5,4 +5,11 @@ html(lang='en')
         script(src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js')
         script(src="/js/bookingCalendar.js" defer)
     body
+        if customerUser
+            p #{customerUser.firstName}
+            p #{customerUser.lastName}
+            p #{customerUser.birthdate}
+            p #{customerUser.city}
+            
         #calendar
+        
