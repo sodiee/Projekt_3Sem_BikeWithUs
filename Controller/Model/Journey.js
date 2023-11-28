@@ -10,6 +10,7 @@ function Journey(name, startDate, customer, price,antalPersoner) {
     this.customer = customer;
     this.price = price;
     this.antalPersoner = antalPersoner;
+    this.tilvalg = [];
 }
 
 async function getCustomerJourneys(customerId) {
@@ -69,6 +70,10 @@ function filterByMonth(monthArray, targetMonth) {
         }
     }
     return res;
+}
+
+function addTilvalg(tilvalg) {
+    this.tilvalg.push(tilvalg);
 }
 
 export default {getJourneys, getJourneysByMonth, addJourney3Days, addJourney4Days, editJourney, getJourney, deleteJourney, getCustomerJourneys,editStartDate}
