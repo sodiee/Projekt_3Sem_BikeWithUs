@@ -36,7 +36,7 @@ describe('Crud test på Journey', () => {
 
     it('should edit a journeys start date', async () => {
       
-      let newDate = '2023-12-05';
+      let newDate = '2023-12-06';
       const endDate = "2023-12-09" //new Date(newDate)
       //endDate.setUTCDate(endDate.getUTCDate() + 3);
 

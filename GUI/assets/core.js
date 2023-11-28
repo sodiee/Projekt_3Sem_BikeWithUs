@@ -77,7 +77,7 @@ async function editJourney(journeyID) {
 }
 
 //DOM adminCalender.js Dynamic functions
-
+//oversigt side
 async function getJourneys(rbValue) {
     try {
         let url = `/admins/api/oversigt/` + rbValue;
@@ -141,7 +141,7 @@ async function getJourneys(rbValue) {
                 } else {
                     console.log('Fejl med at finde tdElementTilvalg')
                 }
-                
+
                 if (tdElementAfhentes) {
                     let pElementAfhentes = document.createElement('p');
                     if (i == endDate.getDate()) {
@@ -211,11 +211,6 @@ if (window.location.pathname == '/admins/oversigt/') {
     }
     let selectedMonth = months[res - 1];
 
-    //Redigerings-button
-    let redigeringsBtn = document.getElementById('btnRedigering');
-    redigeringsBtnOnclick();
-    
-
     //TBody
     let table = document.getElementById("tableBody");
 
@@ -259,7 +254,6 @@ if (window.location.pathname == '/admins/oversigt/') {
     updateMonth();
 }
 
-
 function clear() {
     for (let i = 1; i <= 31; i++) {
         let pElementRejse = document.getElementById(i + ': Rejse');
@@ -269,13 +263,6 @@ function clear() {
         pElementRejse.textContent = '-'
         pElementKunde.textContent = '-'
         pElementTilvalg.textContent = '-'
-    }
-}
-
-function redigeringsBtnOnclick() {
-    let redigeringsBtn = document.getElementById('btnRedigering');
-    redigeringsBtn.onclick = () => {
-        
     }
 }
 
@@ -333,3 +320,65 @@ function calculateDays(month) {
         return 30;
     }
 }
+
+//rediger side
+async function redigerSide() {
+    if (window.location.pathname == '/admins/oversigt/redigerRejse') {
+        let url = '/admins/api/getJourneys/';
+        const res = await fetch(url);
+        const journeys = await res.json();
+
+        let dropDown = document.getElementById('journeysDropDown');
+        dropDown.onchange = () => {
+            updateTxtFields(journeys);
+        }
+        /*
+        dropDown.onclick = () => {
+            console.log(dropDown.value);
+            console.log('selectedindex: ' + dropDown.options[dropDown.selectedIndex].value);
+        }*/
+
+    }
+}
+
+//dynamisk opdaterer tekstfelter med info
+function updateTxtFields(journeys) {
+    let dropDown = document.getElementById('journeysDropDown');
+    let txtName = document.getElementById('customerName')
+    let txtID = document.getElementById('journeyId')
+    let txtStartDate = document.getElementById('journeyStartDate');
+
+    if (dropDown) {
+        let obj = dropDown.options[dropDown.selectedIndex].value;
+        let actualJourney;
+        for (const journey of journeys) {
+            if (obj === journey.docID) {
+                actualJourney = journey;
+            }
+        }
+        txtName.value = actualJourney.customer.firstName + ' ' + actualJourney.customer.lastName;
+        txtID.value = actualJourney.docID;
+        txtStartDate.value = actualJourney.startDate;
+    }
+}
+
+async function redigeringsBtnOnclick() {
+    let btn = document.getElementById('btnRedigering');
+    btn.onclick = () => {
+        editJourney(journey);
+    }
+}
+
+async function editJourney(journey) {
+    const response = await fetch(`/admins/oversigt/redigerRejse/${journey}`,{
+        method: 'put'
+      });
+      if (response.status == 204) {
+        alert('Rejsen er nu redigeret');
+        window.location = "/admins/oversigt"
+      } else {
+        alert("Der skete en fejl i forsøget på at redigere denne rejse.")
+      }
+}
+
+redigerSide();
