@@ -86,15 +86,18 @@ adminRouter.get('/oversigt', async (req, res) => {
     }
 });
 
-adminRouter.get('/api/oversigt/:month', async (month, req, res) => {
+adminRouter.get('/api/oversigt/:month', async (req, res) => {
+ 
     try {
-        let journeys = await controllerJourney.getJourneyByMonth(month);
-        console.log(journeys);
+     
+        let journeys = await controllerJourney.getJourneysByMonth(req.params.month);
+      
         res.json(journeys);
+       
     } catch (err) {
         console.log('Fejl ved hentning af journeys pr. måned')
         ;
-        res.status(500).send('Fejl ved hentning af journeys pr. måned');
+        //res.status(500).send('Fejl ved hentning af journeys pr. måned');
     }
 })
 

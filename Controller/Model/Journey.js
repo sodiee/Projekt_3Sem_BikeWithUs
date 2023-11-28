@@ -1,9 +1,10 @@
 import DBFunctions from '../../Storage/DBFunctions.js';
 
 
-function Journey(startDate, customer, price,antalPersoner) {
+function Journey(name, startDate, customer, price,antalPersoner) {
+    this.name = name;
     this.startDate = startDate;
-    const endDate = new Date(startDate);
+    let endDate = new Date(startDate);
     endDate.setDate(endDate.getDate() + 3);
     this.endDate = endDate
     this.customer = customer;
@@ -21,23 +22,24 @@ async function getJourneys() {
 }
 
 async function getJourneysByMonth(month) {
-    let arr = getJourneys();
+    let arr = await getJourneys();
 
-    return filterByMonth(arr, month)
+    arr = filterByMonth(arr, month)
+    return arr;
 }
 
 async function addJourney3Days(journey) {
-    let j = {startDate: journey.startDate, endDate: journey.startDate + 3, customer: journey.customer, price: journey.price}
+    let j = {name: journey.name, startDate: journey.startDate, endDate: journey.startDate + 3, customer: journey.customer, price: journey.price}
     return await DBFunctions.addJourneyDB(j);
 }
 
 async function addJourney4Days(journey) {
-    let j = {startDate: journey.startDate, endDate: journey.startDate + 4, customer: journey.customer, price: journey.price}
+    let j = {name: journey.name, startDate: journey.startDate, endDate: journey.startDate + 4, customer: journey.customer, price: journey.price}
     return await DBFunctions.addJourneyDB(j);
 }
 
 function editJourney(journey) {
-    let j = {startDate: journey.startDate, endDate: journey.endDate, customer: journey.customer, price: journey.price}
+    let j = {name: journey.name, startDate: journey.startDate, endDate: journey.endDate, customer: journey.customer, price: journey.price}
     return DBFunctions.editJourneyDB(j);
 }
 
@@ -46,19 +48,27 @@ function getJourney(journey) {
 }
 
 async function deleteJourney(journey) {
-    let j = {startDate: journey.startDate, endDate: journey.endDate, customer: journey.customer, price: journey.price}
+    let j = {name: journey.name, startDate: journey.startDate, endDate: journey.endDate, customer: journey.customer, price: journey.price}
     DBFunctions.deleteJourneyDB(j);
 }
 
 async function editStartDate(journey) {
-    let j = {startDate: journey.startDate, endDate: journey.endDate}
+    let j = {name: journey.name, startDate: journey.startDate, endDate: journey.endDate}
     return DBFunctions.editStartDateDB(j);
 }
 
 function filterByMonth(monthArray, targetMonth) {
-    return monthArray.filter(function (date) {
-        return date.getMonth() === targetMonth - 1;
-    });
+    let res = [];
+   
+    for (let i = 0; i < monthArray.length; i++) {
+        
+        let date = new Date(monthArray[i].startDate); 
+       
+        if (date.getMonth() + 1 == targetMonth) {
+            res.push(monthArray[i]);
+        }
+    }
+    return res;
 }
 
 export default {getJourneys, getJourneysByMonth, addJourney3Days, addJourney4Days, editJourney, getJourney, deleteJourney, getCustomerJourneys,editStartDate}

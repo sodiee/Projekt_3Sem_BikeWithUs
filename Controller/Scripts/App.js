@@ -27,5 +27,5 @@ app.use('/drivers', driverRouter)
 
 // Kør serveren
 app.listen(8801, () => {
-    console.log('Så kører lortet')
+    console.log('Kører på port 8801')
 })
