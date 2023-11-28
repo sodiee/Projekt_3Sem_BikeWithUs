@@ -73,7 +73,7 @@ function filterByMonth(monthArray, targetMonth) {
 }
 
 function addTilvalg(tilvalg) {
-    this.tilvalg.push(tilvalg);
+    DBFunctions.addTilvalgToJourneyDB(tilvalg);
 }
 
 export default {getJourneys, getJourneysByMonth, addJourney3Days, addJourney4Days, editJourney, getJourney, deleteJourney, getCustomerJourneys,editStartDate}

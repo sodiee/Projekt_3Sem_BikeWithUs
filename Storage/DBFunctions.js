@@ -261,11 +261,11 @@ const getJourneyDB = async (id) => {
 }
 
 const addJourneyDB = async (journey, customer) => {
-    try {
         const journeyEnd = {
             ...journey,
             customer: customer,
-            endDate: journey.endDate
+            endDate: journey.endDate,
+            tilvalg: []
         };
 
         const docRef = await addDoc(JourneyCollection, journeyEnd);
@@ -273,11 +273,8 @@ const addJourneyDB = async (journey, customer) => {
         journey.id = docRef.id;
         
         return journey;
-    } catch (error) {
-        console.error("Error adding journey to Firestore:", error);
-        throw error; 
-    }
-};
+    
+    };
 
 const deleteJourneyDB = async (journeyID) => {
     try {
@@ -307,12 +304,15 @@ const editStartDateDB = async (journey,newStartDate,newEndDate) => {
     });
 }; 
 
-
-
+const addTilvalgToJourneyDB = async (journey, tilvalg) => {
+        await updateDoc(doc(db, 'Journeys', journey.id), {
+            tilvalg: tilvalg
+        });
+}
 
  
 
 
 export default {getCustomerDB, getCustomerByUsernameAndPassword, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB,getAdminDB,
 getAdminsDB,deleteAdminDB,addAdminDB,editAdminDB,getAdminByUsernameAndPassword,getDriverDB,getDriversDB,deleteDriverDB,addDriverDB,editDriverDB,
-addJourneyDB, editJourneyDB, deleteJourneyDB, getJourneyDB, getJourneysDB, getCustomerJourneysDB, editStartDateDB}
+addJourneyDB, editJourneyDB, deleteJourneyDB, getJourneyDB, getJourneysDB, getCustomerJourneysDB, editStartDateDB,addTilvalgToJourneyDB}
