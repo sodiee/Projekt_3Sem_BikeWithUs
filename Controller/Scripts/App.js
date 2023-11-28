@@ -5,7 +5,6 @@ import pug from 'pug';
 
 const app = express();
 app.set('view engine', 'pug');
-
 // Middleware
 app.use(express.urlencoded({extended: true}))
 //app.use(express.static('./GUI/views'))
@@ -28,6 +27,5 @@ app.use('/drivers', driverRouter)
 
 // Kør serveren
 app.listen(8801, () => {
-    console.log('Så kører lortet')
+    console.log('Kører på port 8801')
 })
-

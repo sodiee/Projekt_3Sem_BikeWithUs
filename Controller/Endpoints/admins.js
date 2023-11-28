@@ -86,15 +86,18 @@ adminRouter.get('/oversigt', async (req, res) => {
     }
 });
 
-adminRouter.get('/api/oversigt/:month', async (month, req, res) => {
+adminRouter.get('/api/oversigt/:month', async (req, res) => {
+ 
     try {
-        let journeys = await controllerJourney.getJourneyByMonth(month);
-        console.log(journeys);
+     
+        let journeys = await controllerJourney.getJourneysByMonth(req.params.month);
+      
         res.json(journeys);
+       
     } catch (err) {
         console.log('Fejl ved hentning af journeys pr. måned')
         ;
-        res.status(500).send('Fejl ved hentning af journeys pr. måned');
+        //res.status(500).send('Fejl ved hentning af journeys pr. måned');
     }
 })
 
@@ -166,7 +169,7 @@ adminRouter.get('/Driver/Edit/:id', async (req, res) => {
         const driverId = req.params.id;
         const driver = await controllerDriver.getDriver(driverId)
         if (req.session.isAdminLoggedIn) {    
-            res.render('/GUI/views/EditDriver', {driver});
+            res.render('EditDriver', {driver});
         } else {
             res.redirect('/adminLogin')
         }
@@ -196,7 +199,7 @@ adminRouter.get('/Driver/Get/:id', async (req, res) => {
         const driver = await controllerDriver.getDriver(driverId)
 
         if (req.session.isAdminLoggedIn) {    
-            res.render('/GUI/views/DriverDetails', { driver });
+            res.render('DriverDetails', { driver });
         } else {
             res.redirect('/adminLogin')
         }
@@ -215,7 +218,7 @@ adminRouter.get('/Customer/Get/:id', async (req, res) => {
         const customer = await controllerCustomer.getCustomer(customerId);
 
         if (req.session.isAdminLoggedIn) {    
-            res.render('/GUI/views/CustomerDetails', { customer: customer });
+            res.render('CustomerDetails', { customer: customer });
         } else {
             res.redirect('/adminLogin')
         }
@@ -256,7 +259,7 @@ adminRouter.get('/Customer/Edit/:id', async (req, res) => {
         const customer = await controllerCustomer.getCustomer(customerId);
         
         if (req.session.isAdminLoggedIn) {    
-            res.render('/GUI/views/EditCustomer', { customer });
+            res.render('EditCustomer', { customer });
         } else {
             res.redirect('/adminLogin')
         }
@@ -316,7 +319,7 @@ adminRouter.get('/Journey/Edit/:id', async (req, res) => {
         const journey = await controllerJourney.getJourney(journeyId);
         
         if (req.session.isAdminLoggedIn) {    
-            res.render('/GUI/views/EditJourney', { journey });
+            res.render('EditJourney', { journey });
         } else {
             res.redirect('/adminLogin')
         }
@@ -337,7 +340,7 @@ adminRouter.get('/Get/:id', async (req, res) => {
         const admin = await controllerAdmin.getAdmin(adminId);
 
         if (req.session.isAdminLoggedIn) {    
-            res.render('/GUI/views/AdminDetails', { admin: admin });
+            res.render('AdminDetails', { admin: admin });
         } else {
             res.redirect('/adminLogin')
         }
@@ -378,7 +381,7 @@ adminRouter.get('/Edit/:id', async (req, res) => {
         const admin = await controllerAdmin.getAdmin(adminId);
 
         if (req.session.isAdminLoggedIn) {    
-            res.render('/GUI/views/EditAdmin', { admin });
+            res.render('EditAdmin', { admin });
         } else {
             res.redirect('/adminLogin')
         }

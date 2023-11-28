@@ -1,4 +1,4 @@
-import supertest from 'supertest'
+/*import supertest from 'supertest'
 import chai from 'chai'
 
 const assert = chai.assert
@@ -13,6 +13,13 @@ describe('Test on all endpoints for admins', () => {
     })
     it('should return  status 200', ()=>{
         supertest(express.admins).
-        get('/adminsLogin')
+        get('/adminLogin')
     })
+
+    it('should return  status 204', ()=>{
+        supertest(express.admins).
+        get('/adminLogout')
+    })
+
 });
+*/

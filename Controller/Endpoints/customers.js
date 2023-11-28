@@ -6,10 +6,9 @@ import journeyController from '../Model/Journey.js';
 //-------------------------------
 // customer-ENDPOINTS for LOGIN |
 //-------------------------------
-
+let isCustomerLoggedIn = false
+let customerUser = null
 customerRouter.get('/', (req, res) => {
-    let isCustomerLoggedIn = false
-    let customerUser = null
     if (req.session.isCustomerLoggedIn && req.session.customerUser) {
         isCustomerLoggedIn = true
         customerUser = req.session.customerUser
@@ -39,7 +38,7 @@ customerRouter.post('/customerLogin', async (req, res) => {
 });
 
 customerRouter.get('/secret', (req, res) => {
-    if (req.session.isLoggedIn) {
+    if (req.session.isCustomerLoggedIn) {
         res.render('customers', {knownUser: req.session.isCustomerLoggedIn})
     } else {
         res.redirect('/customerLogin')
@@ -71,9 +70,9 @@ function checkCustomerUser(customerUsername, customerPassword) {
 // ------------------------------------------
 customerRouter.get('/Calendar', async (req, res) => {
     // Check for login status using sessions or cookies
-    if (!req.session.isLoggedIn) {
+    if (req.session.isCustomerLoggedIn) {
         try {
-            res.render('bookingCalendar');
+            res.render('bookingCalendar', {customerUser: customerUser});
         } catch (error) {
             console.error('Fejl ved hentning af rejser', error);
             res.status(500).send('Der opstod en fejl ved hentning af rejser');
@@ -86,7 +85,7 @@ customerRouter.get('/Calendar', async (req, res) => {
 
 customerRouter.get('/Calendar/Book', async (req, res) => {
     // Check for login status using sessions or cookies
-    if (!req.session.isLoggedIn) {
+    if (req.session.isCustomerLoggedIn) {
         try {
             const { endDate, customer, price } = req.body;
             const startDate = req.query.date || 'No date selected'; // Brug datoen gemt i sessionen som startDate
@@ -129,7 +128,7 @@ customerRouter.get('/Calendar/confirmation', async (req, res) => {
 
 customerRouter.get('/Mypage/:id', async (req, res) => {
     // Check for login status using sessions or cookies
-    if (!req.session.isLoggedIn) {
+    if (!req.session.isCustomerLoggedIn) {
         try {
             const customerId = req.params.id; 
             const customerJourneys = await journeyController.getCustomerJourneys(customerId);
@@ -144,6 +143,5 @@ customerRouter.get('/Mypage/:id', async (req, res) => {
         res.redirect('/customerLogin');
     }
 });
-
 
 export default customerRouter;
