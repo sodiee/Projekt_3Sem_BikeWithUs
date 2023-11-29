@@ -1,8 +1,8 @@
-extends includes/layoutCustomer
-block content  
-    
+doctype html
+html(lang='en')
+  head
     meta(charset='utf-8')
-  
+  body
     h1= 'Startdato: ' + startDate
 
     // TODO: should be startDate + chosen journey length
@@ -11,10 +11,10 @@ block content
     form(action='/Calendar/Book', method='post')
       div
         label(for='journey') Vælg tur:
-        select(name='journey', id='journey')
+        select(name='journeyId', id='journeyId')
           //for each jouney in database
           each journey in journeys
-            option(value=JSON.stringify(journey)) #{journey.name}
+            option(value=(journey.id)) #{journey.name}
 
       div
         //Price of chosen journey * participants TODO

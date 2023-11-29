@@ -96,10 +96,11 @@ customerRouter.post('/Calendar/Book', async (req, res) => {
     // Check for logi/Calendar/Bookn status using sessions or cookies
     if (req.session.isCustomerLoggedIn) {
         try {
-            const selectedJourney = req.body.journey;
+            const selectedJourneyId = req.body.journeyId;
+            const selectedJourney = await journeyController.getJourney(selectedJourneyId);
             const {price, participants } = req.body;
             const startDate = req.query.date || 'No date selected'; // Brug datoen gemt i sessionen som startDate
-            
+
             const booking = {customerUser, selectedJourney, participants, startDate}
             await bookingController.addBooking(booking);
 
