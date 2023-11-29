@@ -1,12 +1,12 @@
-function booking(customer, journey,antalPersoner, startdate) {
+function booking(customer, journey,nrOfPersons, startdate) {
   this.customer = customer;
   this.journey = journey;
   this.startdate = startdate;
-  this.endDate = this.startdate + journey.antalDage;
+  this.endDate = this.startdate + journey.nrOfDays;
   this.tilvalg = [];
-  this.antalPersoner = antalPersoner;
+  this.nrOfPersons = nrOfPersons;
   this.bookingDate = new Date();
-  this.bookingPrice = journey.price * antalPersoner;
+  this.bookingPrice = journey.price * nrOfPersons;
 }
 /* 
 booking.prototype.calculatePrice = function () {
@@ -25,7 +25,7 @@ function addTilvalg(tilvalg) {
 }
 
 async function editStartDate(booking) {
-    let j = {name: booking.name, startDate: booking.startDate, endDate: startDate + booking.antalDage}
+    let j = {name: booking.name, startDate: booking.startDate, endDate: startDate + booking.nrOfDays}
     return DBFunctions.editStartDateDB(j);
 }
 
