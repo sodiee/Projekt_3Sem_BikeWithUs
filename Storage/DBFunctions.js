@@ -34,6 +34,7 @@ const CustomersCollection = collection(db, 'Customers');
 const DriversCollection = collection(db, 'Drivers');
 const AdminsCollection = collection(db, 'Admins');
 const JourneyCollection = collection(db, 'Journeys');
+const BookingCollection = collection(db, 'Bookings');
 
 // ------------------------
 // DB functions for customer
@@ -210,18 +211,6 @@ const editAdminDB = async (admin) => {
 // DB functions for journey\\
 // ------------------------\\
 
-let journeyM;
-let name = "Cykeltur gennem havet";
-let customer = {firstName: "Mewkel", lastName: "Lindhøøøøøj", birthday: "160795", city: "Frederiksbjerg" };
-let price = 5000;
-let startDate = "2023-11-26"
-let endDate = "2023-11-30"//new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000);
-  
-   
-journeyM = {name,startDate, endDate, customer, price };
-    
-  
-
 const getCustomerJourneysDB = async (id) => {
     try {
         // Hent alle rejsedokumenter fra databasen
@@ -263,21 +252,11 @@ const getJourneyDB = async (id) => {
     }
 };
 
-const addJourneyDB = async (journey, customer) => {
-        const journeyEnd = {
-            ...journey,
-            customer: customer,
-            endDate: journey.endDate,
-            tilvalg: []
-        };
-
-        const docRef = await addDoc(JourneyCollection, journeyEnd);
-
-        journey.id = docRef.id;
-        
-        return journey;
-    
-    };
+const addJourneyDB = async (journey) => {
+    const docRef = await addDoc(JourneyCollection, journey);
+    journey.id = docRef.id;
+    return journey;
+}
 
 const deleteJourneyDB = async (journeyID) => {
     try {
@@ -299,26 +278,68 @@ const editJourneyDB = async (docID, journeyData) => {
         throw new Error('There was an error updating the journey.');
     }
 };
+ 
 
-const editStartDateDB = async (journey,newStartDate,newEndDate) => {
-    await updateDoc(doc(db, 'Journeys', journey.id), {
+// DB functions for booking
+const getBookingsDB = async () => {
+    let bookingQueryDocs = await getDocs(BookingCollection);
+    let bookings = bookingQueryDocs.docs.map(doc => {
+        let data = doc.data();
+        data.docID = doc.id;
+        return data;
+    });
+    return bookings;
+}
+
+const getBookingDB = async (id) => {
+    const docRef = doc(db, 'Bookings', id);
+    const bookingQueryDoc = await getDoc(docRef);
+    let booking = bookingQueryDoc.data();
+    booking.docID = bookingQueryDoc.id;
+    return booking;
+}
+
+const addBookingDB = async (booking) => {
+    const docRef = await addDoc(BookingCollection, booking);
+    booking.id = docRef.id;
+    return booking;
+}
+
+const deleteBookingDB = async (booking) => {
+    const deletedBooking = await deleteDoc(doc(db, 'Bookings', booking.id));
+    return booking;
+}
+
+const addTilvalgToBookingDB = async (booking, tilvalg) => {
+    booking.tilvalg = [];
+    booking.tilvalg.push(tilvalg);
+
+    await updateDoc(doc(db, 'Bookings', booking.id), {
+          tilvalg: booking.tilvalg
+        });
+}
+
+const editBooking = async (booking) => {
+    await updateDoc(doc(db, 'Bookings', booking.id), {
+        startDate: booking.startDate, 
+        endDate: booking.endDate, 
+        customer: booking.customer, 
+        price: booking.price,
+        tilvalg: booking.tilvalg
+    });
+};
+
+const editStartDateDB = async (booking,newStartDate,newEndDate) => {
+    await updateDoc(doc(db, 'Bookings', booking.id), {
         startDate: newStartDate,
         endDate: newEndDate
     });
-}; 
-
-const addTilvalgToJourneyDB = async (journey, tilvalg) => {
-    journey.tilvalg = [];
-    journey.tilvalg.push(tilvalg);
-
-    await updateDoc(doc(db, 'Journeys', journey.id), {
-          tilvalg: journey.tilvalg
-        });
-}
+};
 
  
 
 
 export default {getCustomerDB, getCustomerByUsernameAndPassword, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB,getAdminDB,
 getAdminsDB,deleteAdminDB,addAdminDB,editAdminDB,getAdminByUsernameAndPassword,getDriverDB,getDriversDB,deleteDriverDB,addDriverDB,editDriverDB,
-addJourneyDB, editJourneyDB, deleteJourneyDB, getJourneyDB, getJourneysDB, getCustomerJourneysDB, editStartDateDB,addTilvalgToJourneyDB}
+addJourneyDB, editJourneyDB, deleteJourneyDB, getJourneyDB, getJourneysDB, getCustomerJourneysDB, editStartDateDB,addTilvalgToBookingDB,editBooking,
+getBookingDB,getBookingsDB,addBookingDB,deleteBookingDB}
