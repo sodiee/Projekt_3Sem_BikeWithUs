@@ -1,11 +1,6 @@
 extends includes/layoutCustomer
 
 block content 
-  h2 Your Journeys
-  ul
-    each journey in journeys
-      li #{journey.startDate} - Price: #{journey.price}
-
   h2 Your Information
   p
     | Name: #{customer.firstName}
@@ -15,3 +10,10 @@ block content
     | Address: #{customer.birthday}
     br 
     | City: #{customer.city}
+    
+  // h2 Your Journeys
+  // ul
+  //  each journey in journeys
+  //    li #{journey.startDate} - Price: #{journey.price}
+
+

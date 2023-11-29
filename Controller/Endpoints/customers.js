@@ -126,15 +126,15 @@ customerRouter.get('/Calendar/confirmation', async (req, res) => {
 
 
 
-customerRouter.get('/Mypage/:id', async (req, res) => {
+customerRouter.get('/bookingConfirmed', async (req, res) => {
     // Check for login status using sessions or cookies
     if (req.session.isCustomerLoggedIn) {
         try {
-            const customerId = req.params.id; 
-            const customerJourneys = await journeyController.getCustomerJourneys(customerId);
-            const customer = await controller.getCustomer(customerId);
+            // const customerId = req.params.id; 
+            // const customerJourneys = await journeyController.getCustomerJourneys(customerId);
+            // const customer = await controller.getCustomer(customerId);
     
-            res.render('bookingConfirmed', { journeys: customerJourneys, customer: customer });
+            res.render('bookingConfirmed', { customer: customerUser });
         } catch (error) {
             console.error('Fejl ved hentning af kundens side:', error);
             res.status(500).send('Der opstod en fejl ved hentning af kundens side.');
@@ -146,15 +146,15 @@ customerRouter.get('/Mypage/:id', async (req, res) => {
 
 // CustomerPage
 
-customerRouter.get('/CustomerPage/:id', async (req, res) => {
+customerRouter.get('/CustomerPage', async (req, res) => {
     // Check for login status using sessions or cookies
-    if (!req.session.isLoggedIn) {
+    if (req.session.isLoggedIn) {
         try {
-            const customerId = req.params.id; 
-            const customerJourneys = await journeyController.getCustomerJourneys(customerId);
-            const customer = await controller.getCustomer(customerId);
+            //const customerId = req.params.id; 
+            //const customerJourneys = await journeyController.getCustomerJourneys(customerId);
+            //const customer = await controller.getCustomer(customerId);
     
-            res.render('CustomerPage', { journeys: customerJourneys, customer: customer });
+            res.render('CustomerPage', { customer: customerUser });
         } catch (error) {
             console.error('Fejl ved hentning af kundens side:', error);
             res.status(500).send('Der opstod en fejl ved hentning af kundens side.');
