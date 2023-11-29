@@ -1,1 +1,7 @@
 extends includes/layoutCustomer
+
+block content 
+    h2 Your Journeys
+    ul
+        each journey in journeys
+            li #{journey.startDate} - Price: #{journey.price}
