@@ -96,15 +96,6 @@ adminRouter.get('/oversigt/redigerRejse', async (req, res) => {
     }
 });
 
-adminRouter.put('/oversigt/redigerRejse/:journey', async (req, res) => {
-    try {
-        let journey = req.params.journey;
-        controllerJourney.editJourney(journey);
-    } catch (error) {
-        console.log(error)
-    }
-})
-
 //APIsektion start
 
 adminRouter.get('/api/oversigt/:month', async (req, res) => {
@@ -128,6 +119,17 @@ adminRouter.get('/api/getJourneys/', async (req, res) => {
 
     } catch (error) {
         console.log(error);
+    }
+})
+
+adminRouter.put('/api/oversigt/redigerRejse/:journey', async (req, res) => {
+    try {
+        let journey = req.params.journey;
+        console.log(journey);
+        res.status(204);
+        //controllerJourney.editStartDate(journey);
+    } catch (error) {
+        console.log(error)
     }
 })
 
