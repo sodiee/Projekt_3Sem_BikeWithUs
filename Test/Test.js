@@ -114,6 +114,7 @@ describe('CRUD test på Customer', () => {
         assert.strictEqual(newCustomer.fornavn, 'NyFornavn', 'Customer should be edited');
     });
 });
+});
 
 
 // FETCH TEST
