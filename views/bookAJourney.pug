@@ -8,13 +8,13 @@ html(lang='en')
     // TODO: should be startDate + chosen journey length
     //h2= 'Slutdato: ' + endDate
 
-    form(action='/Calendar/confirmation', method='post')
+    form(action='/Calendar/Book', method='post')
       div
         label(for='journey') Vælg tur:
         select(name='journey', id='journey')
           //for each jouney in database
           each journey in journeys
-            option(value=(journey)) #{journey.name}
+            option(value=JSON.stringify(journey)) #{journey.name}
 
       div
         //Price of chosen journey * participants TODO

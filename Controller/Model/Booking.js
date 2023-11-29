@@ -1,4 +1,6 @@
-function booking(customer, journey,nrOfPersons, startdate) {
+import DBFunctions from "../../Storage/DBFunctions.js";
+
+function booking(customer, journey, nrOfPersons, startdate) {
   this.customer = customer;
   this.journey = journey;
   this.startdate = startdate;

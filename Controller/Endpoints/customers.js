@@ -2,6 +2,7 @@ import express from 'express';
 const customerRouter = express.Router();
 import controller from '../Model/Customer.js';
 import journeyController from '../Model/Journey.js';
+import bookingController from '../Model/Booking.js';
 import DBFunctions from '../../Storage/DBFunctions.js';
 
 //-------------------------------
@@ -79,9 +80,9 @@ customerRouter.get('/Calendar/Book', async (req, res) => {
     // Check for login status using sessions or cookies
     if (req.session.isCustomerLoggedIn) {
         try {
-            const journeys = journeyController.getJourneys;
+            const journeys = await journeyController.getJourneys();
             const startDate = req.query.date || 'No date selected'; // Brug datoen gemt i sessionen som startDate
-            res.render('bookAJourney', { startDate, journeys : journeys });
+            res.render('bookAJourney', { startDate, journeys });
         } catch (error) {
             console.error('Fejl ved tilføjelse af Rejse:', error);
             res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
@@ -92,19 +93,23 @@ customerRouter.get('/Calendar/Book', async (req, res) => {
 });
 
 customerRouter.post('/Calendar/Book', async (req, res) => {
-    // Check for login status using sessions or cookies
+    // Check for logi/Calendar/Bookn status using sessions or cookies
     if (req.session.isCustomerLoggedIn) {
         try {
             const selectedJourney = req.body.journey;
             const {price, participants } = req.body;
             const startDate = req.query.date || 'No date selected'; // Brug datoen gemt i sessionen som startDate
             
+            const booking = {customerUser, selectedJourney, participants, startDate}
+            await bookingController.addBooking(booking);
+
+            res.redirect('/Calendar');
         } catch (error) {
             console.error('Fejl ved tilføjelse af booking:', error);
             res.status(500).send('Der opstod en fejl ved tilføjelse af booking.');
         }
     } else {
-        res.redirect('/bookingConfirmed');
+        res.redirect('/customerLogin');
     }
 });
 
