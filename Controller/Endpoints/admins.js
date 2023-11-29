@@ -116,8 +116,8 @@ adminRouter.get('/oversigt', async (req, res) => {
 
 adminRouter.get('/oversigt/redigerRejse', async (req, res) => {
     try {
-        let journeys = await controllerJourney.getJourneys();
-        res.render('adminOversigtRedigerRejse', { journeys: journeys });
+        let bookings = await controllerBooking.getBookings();
+        res.render('adminOversigtRedigerRejse', { bookings: bookings });
     } catch (error) {
         console.log(error)
     }
@@ -127,12 +127,8 @@ adminRouter.get('/oversigt/redigerRejse', async (req, res) => {
 
 adminRouter.get('/api/oversigt/:month', async (req, res) => {
     try {
-        console.log('1')
         let bookings = await controllerBooking.getBookingsByMonth(req.params.month);
-console.log(bookings);
-        console.log('11')
         res.json(bookings);
-console.log('12')
     } catch (err) {
         console.log('Fejl ved hentning af bookings pr. måned');
         //res.status(500).send('Fejl ved hentning af journeys pr. måned');
@@ -142,7 +138,7 @@ console.log('12')
 adminRouter.get('/api/getBookings/', async (req, res) => {
     try {
         let bookings = await controllerBooking.getBookings();
-
+        console.log(bookings)
         res.json(bookings);
 
     } catch (error) {
