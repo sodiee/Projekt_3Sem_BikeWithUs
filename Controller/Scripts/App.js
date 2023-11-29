@@ -5,11 +5,14 @@ import pug from 'pug';
 
 const app = express();
 app.set('view engine', 'pug');
+
 // Middleware
-app.use(express.urlencoded({extended: true}))
-//app.use(express.static('./GUI/views'))
+
 //app.use(express.json);
+app.use(express.urlencoded({extended: true}))
+app.use(express.static('/views'))
 app.use(express.static('./GUI/assets'))
+
 app.use(session({
     secret: 'Test-Secret',
     saveUninitialized: true,
