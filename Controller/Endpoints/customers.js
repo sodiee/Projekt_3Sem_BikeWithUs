@@ -2,6 +2,7 @@ import express from 'express';
 const customerRouter = express.Router();
 import controller from '../Model/Customer.js';
 import journeyController from '../Model/Journey.js';
+import DBFunctions from '../../Storage/DBFunctions.js';
 
 //-------------------------------
 // customer-ENDPOINTS for LOGIN |
@@ -77,47 +78,38 @@ customerRouter.get('/Calendar', async (req, res) => {
 customerRouter.get('/Calendar/Book', async (req, res) => {
     // Check for login status using sessions or cookies
     if (req.session.isCustomerLoggedIn) {
-                try {
-                  const { customer, price, participants, duration, tilvalg } = req.body;
-                  const startDate = req.query.date || 'No date selected';
-              
-                  // Konverter duration fra streng til heltal
-                  const durationInDays = parseInt(duration, 10);
-              
-                  // Beregn slutdato baseret på startdato og valgt varighed
-                  const endDate = new Date(startDate);
-                  endDate.setDate(endDate.getDate() + durationInDays - 1); // Træk 1, da det inkluderer startdagen
-              
-                  // Opret et Journey-objekt med de nye oplysninger
-                  const journeyData = {
-                    startDate,
-                    endDate,
-                    customer,
-                    price,
-                    antalPersoner: participants,
-                    tilvalg: [tilvalg]  // Gem tilvalget som et array, da der kan være flere tilvalg
-                  };
-              
-                  // Brug den rigtige metode baseret på valgt varighed
-                  if (durationInDays === 4 && new Date(startDate) < endDate) {
-                    await controller.addJourney4Days(journeyData);
-                  } else if (durationInDays === 3 && new Date(startDate) < endDate) {
-                    await controller.addJourney3Days(journeyData);
-                  }
-                  res.render('bookAJourney', { startDate });
-
-                } catch (error) {
-                  console.error('Fejl ved tilføjelse af Rejse:', error);
-                  res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
-                }
-          }
-     else {
+        try {
+            const journeys = journeyController.getJourneys;
+            const startDate = req.query.date || 'No date selected'; // Brug datoen gemt i sessionen som startDate
+            res.render('bookAJourney', { startDate, journeys : journeys });
+        } catch (error) {
+            console.error('Fejl ved tilføjelse af Rejse:', error);
+            res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
+        }
+    } else {
         res.redirect('/customerLogin');
     }
 });
 
+customerRouter.post('/Calendar/Book', async (req, res) => {
+    // Check for login status using sessions or cookies
+    if (req.session.isCustomerLoggedIn) {
+        try {
+            const selectedJourney = req.body.journey;
+            const {price, participants } = req.body;
+            const startDate = req.query.date || 'No date selected'; // Brug datoen gemt i sessionen som startDate
+            
+        } catch (error) {
+            console.error('Fejl ved tilføjelse af booking:', error);
+            res.status(500).send('Der opstod en fejl ved tilføjelse af booking.');
+        }
+    } else {
+        res.redirect('/bookingConfirmed');
+    }
+});
 
-customerRouter.post('/Calendar/confirmation', async (req, res) => {
+
+customerRouter.get('/Calendar/confirmation', async (req, res) => {
         try {
             // Hent oplysninger fra query params
             const { startDate, endDate, price } = req.body;

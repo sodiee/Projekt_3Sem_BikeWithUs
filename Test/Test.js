@@ -21,7 +21,7 @@ describe('Crud test på Booking', () => {
       endDate = "2023-11-28" //new Date(startDate)
       //endDate.setUTCDate(endDate.getUTCDate() + 3);
 
-     journey = { name: "Håber det virker", nrOfDays: 4, price: 4300}
+     journey = { name: "Håber det virker", nrOfDays: 4, price: 4300, "Det bliver en god tur"}
      customer = { firstName: "Mewkel", lastName: "Lindhøøøøøj", birthday: "160795", city: "Frederiksbjerg", bookings: [] };
      booking = {customer,journey, nrOfPersons: 2, startDate: startDate}
     
