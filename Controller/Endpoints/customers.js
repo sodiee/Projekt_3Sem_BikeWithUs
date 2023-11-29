@@ -2,6 +2,7 @@ import express from 'express';
 const customerRouter = express.Router();
 import controller from '../Model/Customer.js';
 import journeyController from '../Model/Journey.js';
+import DBFunctions from '../../Storage/DBFunctions.js';
 
 //-------------------------------
 // customer-ENDPOINTS for LOGIN |
@@ -87,26 +88,32 @@ customerRouter.get('/Calendar/Book', async (req, res) => {
     // Check for login status using sessions or cookies
     if (req.session.isCustomerLoggedIn) {
         try {
-            const { endDate, customer, price } = req.body;
+            const journeys = journeyController.getJourneys;
             const startDate = req.query.date || 'No date selected'; // Brug datoen gemt i sessionen som startDate
-            
-            //dage mellem startdato og slutdato
-            const durationInDays = Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24)); //antallet af milisekunder på en dag
-
-            if (durationInDays === 4 && new Date(startDate) < new Date(endDate)) {
-                await controller.addJourney4Days({ startDate, endDate, customer, price });
-                //res.redirect(`/Calendar/confirmation?startDate=${startDate}&endDate=${endDate}&price=${price}`);
-            } else if (durationInDays === 3 && new Date(startDate) < new Date(endDate)) {
-                await controller.addJourney3Days({ startDate, endDate, customer, price });
-                //res.redirect(`/Calendar/confirmation?startDate=${startDate}&endDate=${endDate}&price=${price}`);
-            }
-            res.render('bookAJourney', { startDate });
+            res.render('bookAJourney', { startDate, journeys : journeys });
         } catch (error) {
             console.error('Fejl ved tilføjelse af Rejse:', error);
             res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
         }
     } else {
         res.redirect('/customerLogin');
+    }
+});
+
+customerRouter.post('/Calendar/Book', async (req, res) => {
+    // Check for login status using sessions or cookies
+    if (req.session.isCustomerLoggedIn) {
+        try {
+            const selectedJourney = req.body.journey;
+            const {price, participants } = req.body;
+            const startDate = req.query.date || 'No date selected'; // Brug datoen gemt i sessionen som startDate
+            
+        } catch (error) {
+            console.error('Fejl ved tilføjelse af booking:', error);
+            res.status(500).send('Der opstod en fejl ved tilføjelse af booking.');
+        }
+    } else {
+        res.redirect('/bookingConfirmed');
     }
 });
 
