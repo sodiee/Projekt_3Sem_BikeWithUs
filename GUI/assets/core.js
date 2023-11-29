@@ -78,22 +78,22 @@ async function editJourney(journeyID) {
 
 //DOM adminCalender.js Dynamic functions
 //oversigt side
-async function getJourneys(rbValue) {
+async function getBookings(rbValue) {
     try {
         let url = `/admins/api/oversigt/` + rbValue;
         const res = await fetch(url);
-        const journeys = await res.json();
+        const bookings = await res.json();
 
         //RBs
 
         //THead
 
         //TBody
-        //tildeler p elementer til td'erne fra journey.
+        //tildeler p elementer til td'erne fra booking.
         let idx = 1;
-        for (const journey of journeys) {
-            let startDate = new Date(journey.startDate)
-            let endDate = new Date(journey.endDate);
+        for (const booking of bookings) {
+            let startDate = new Date(booking.startDate)
+            let endDate = new Date(booking.endDate);
             let totalPersoner;
 
             for (let i = startDate.getDate(); i <= endDate.getDate(); i++) {
@@ -110,7 +110,7 @@ async function getJourneys(rbValue) {
                     pElementRejse.id = 'pERejse';
                     //pElementRejse.textContent = '';
                     //nyt
-                    pElementRejse.textContent = idx + ': ' + journey.name + '\n -' //journey.Name // + ' - ';
+                    pElementRejse.textContent = idx + ': ' + booking.name + '\n -' //booking.Name // + ' - ';
                     tdElementRejse.appendChild(pElementRejse);
                 } else {
                     console.log('Fejl med at finde tdelementrejse')
@@ -121,7 +121,7 @@ async function getJourneys(rbValue) {
                     let pElementKunde = document.createElement('p');
                     //pElementKunde = '';
                     //nyt
-                    pElementKunde.textContent = idx + ': ' + journey.customer.firstName + ' ' + journey.customer.lastName + ' - ';//kunde; //journey.customer
+                    pElementKunde.textContent = idx + ': ' + booking.customer.firstName + ' ' + booking.customer.lastName + ' - ';//kunde; //booking.customer
                     tdElementKunde.appendChild(pElementKunde);
                 } else {
                     console.log('Fejl med at finde tdelementkunde')
@@ -130,9 +130,10 @@ async function getJourneys(rbValue) {
                 //tilvalg
                 if (tdElementTilvalg) {
                     let pElementTilvalg = document.createElement('p');
-                    if (journey.tilvalg.length != 0) {
-                        for (let j = 0; j < journey.tilvalg.length; j++) {
-                            pElementTilvalg.textContent = idx + ': ' + journey.tilvalg[j].name;
+                    //tilvalg virker ik
+                    if (booking.tilvalg.length != 0) {
+                        for (let j = 0; j < booking.tilvalg.length; j++) {
+                            pElementTilvalg.textContent = idx + ': ' + booking.tilvalg[j].name;
                         }
                     } else {
                         pElementTilvalg.textContent = idx + ': Ingen tilvalg'
@@ -152,8 +153,8 @@ async function getJourneys(rbValue) {
 
                 if (tdElementAntalPersoner) {
                     let pElementAntalPersoner = document.createElement('p');
-                    pElementAntalPersoner.textContent = idx + ': ' + journey.antalPersoner;
-                    totalPersoner += journey.antalPersoner;
+                    pElementAntalPersoner.textContent = idx + ': ' + booking.antalPersoner;
+                    totalPersoner += booking.antalPersoner;
 
                     tdElementAntalPersoner.appendChild(pElementAntalPersoner);
                 }
@@ -169,7 +170,7 @@ async function getJourneys(rbValue) {
             idx++;
         }
     } catch (error) {
-        console.error('Error fetch journeys', error);
+        console.error('Error fetch bookings', error);
     }
 };
 
@@ -250,7 +251,7 @@ if (window.location.pathname == '/admins/oversigt/') {
     }
 
     rbsOnclick();
-    getJourneys(res);
+    getBookings(res);
     updateMonth();
 }
 
@@ -277,7 +278,7 @@ function rbsOnclick() {
         rb.onclick = () => {
             updateMonth();
             clear();
-            getJourneys(rb.value);
+            getBookings(rb.value);
         };
     }
 }
@@ -312,7 +313,7 @@ function updateMonth() {
         }
     }
 
-    getJourneys(months[selectedMonthNumber - 1]);
+    getBookings(months[selectedMonthNumber - 1]);
 }
 
 function calculateDays(month) {
@@ -328,13 +329,13 @@ function calculateDays(month) {
 //rediger side
 async function redigerSide() {
     if (window.location.pathname == '/admins/oversigt/redigerRejse') {
-        let url = '/admins/api/getJourneys/';
+        let url = '/admins/api/getBookings/';
         const res = await fetch(url);
-        const journeys = await res.json();
+        const bookings = await res.json();
 
-        let dropDown = document.getElementById('journeysDropDown');
+        let dropDown = document.getElementById('bookingsDropDown');
         dropDown.onchange = () => {
-            updateTxtFields(journeys);
+            updateTxtFields(bookings);
         }
         /*
         dropDown.onclick = () => {
@@ -346,36 +347,36 @@ async function redigerSide() {
 }
 
 //dynamisk opdaterer tekstfelter med info
-function updateTxtFields(journeys) {
-    let dropDown = document.getElementById('journeysDropDown');
+function updateTxtFields(bookings) {
+    let dropDown = document.getElementById('bookingssDropDown');
     let txtName = document.getElementById('customerName')
-    let txtID = document.getElementById('journeyId')
-    let txtStartDate = document.getElementById('journeyStartDate');
+    let txtID = document.getElementById('bookingId')
+    let txtStartDate = document.getElementById('bookingStartDate');
 
     if (dropDown) {
         let obj = dropDown.options[dropDown.selectedIndex].value;
-        let actualJourney;
-        for (const journey of journeys) {
-            if (obj === journey.docID) {
-                actualJourney = journey;
+        let actualBooking;
+        for (const booking of bookings) {
+            if (obj === booking.docID) {
+                actualBooking = booking;
             }
         }
-        txtName.value = actualJourney.customer.firstName + ' ' + actualJourney.customer.lastName;
-        txtID.value = actualJourney.docID;
-        txtStartDate.value = actualJourney.startDate;
+        txtName.value = actualBooking.customer.firstName + ' ' + actualBooking.customer.lastName;
+        txtID.value = actualBooking.docID;
+        txtStartDate.value = actualBooking.startDate;
     }
 }
 
 async function redigeringsBtnOnclick() {
     let btn = document.getElementById('redigerBtn');
     btn.onclick = () => {
-        let dropDown = document.getElementById('journeysDropDown');
-        let selectedJourneyID = dropDown.options[dropDown.selectedIndex].value;
-        editJourney(selectedJourneyID);
+        let dropDown = document.getElementById('bookingsDropDown');
+        let selectedBookingID = dropDown.options[dropDown.selectedIndex].value;
+        editBooking(selectedBookingID);
     }
 }
 
-async function editJourney(journey) {
+async function editBooking(booking) {
     const response = await fetch(`/api/admins/oversigt/redigerRejse/${journey}`,{
         method: 'put'
       });

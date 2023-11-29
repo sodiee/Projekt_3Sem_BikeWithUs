@@ -114,7 +114,7 @@ customerRouter.post('/Calendar/Book', async (req, res) => {
 });
 
 
-customerRouter.get('/Calendar/confirmation', async (req, res) => {
+customerRouter.post('/Calendar/confirmation', async (req, res) => {
         try {
             // Hent oplysninger fra query params
             const { startDate, endDate, price } = req.body;

@@ -282,12 +282,14 @@ const editJourneyDB = async (docID, journeyData) => {
 
 // DB functions for booking
 const getBookingsDB = async () => {
+    console.log('4')
     let bookingQueryDocs = await getDocs(BookingCollection);
     let bookings = bookingQueryDocs.docs.map(doc => {
         let data = doc.data();
         data.docID = doc.id;
         return data;
     });
+    console.log('5');
     return bookings;
 }
 

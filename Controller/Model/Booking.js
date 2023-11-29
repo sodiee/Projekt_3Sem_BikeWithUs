@@ -1,6 +1,6 @@
-import DBFunctions from "../../Storage/DBFunctions.js";
+import DBFunctions from '../../Storage/DBFunctions.js';
 
-function booking(customer, journey, nrOfPersons, startdate) {
+function Booking(customer, journey,nrOfPersons, startdate) {
   this.customer = customer;
   this.journey = journey;
   this.startdate = startdate;
@@ -36,6 +36,7 @@ async function getBooking(booking) {
 }
 
 async function getBookings() {
+    console.log('3')
     return await DBFunctions.getBookingsDB();
 }
 
@@ -51,4 +52,30 @@ async function editBooking(booking) {
     return await DBFunctions.editBookingDB(booking);
 }
 
-export default {getBooking, getBookings, addBooking, deleteBooking, editBooking, addTilvalg, editStartDate}
+async function getBookingsByMonth(month) {
+    console.log('2')
+    let arr = await getBookings();
+    console.log('6')
+    arr = filterByMonth(arr, month)
+    console.log('10')
+    return arr;
+}
+
+function filterByMonth(monthArray, targetMonth) {
+    console.log('7')
+    let res = [];
+    console.log('8')
+    for (let i = 0; i < monthArray.length; i++) {
+        
+        let date = new Date(monthArray[i].startdate); 
+       
+        if (date.getMonth() + 1 == targetMonth) {
+            console.log(monthArray[i])
+            res.push(monthArray[i]);
+        }
+    }
+    console.log('9')
+    return res;
+}
+
+export default {getBooking, getBookings, addBooking, deleteBooking, editBooking, addTilvalg, editStartDate, getBookingsByMonth}

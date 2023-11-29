@@ -3,19 +3,21 @@ extends includes/layout
 block content
     script(src="/core.js" defer)
     form(id='redigerForm' action=`/admins/oversigt/` method='PUT')
-        select(name='journeys', id='journeysDropDown')
+        select(name='bookings', id='bookingsDropDown')
           <option disabled selected value> -- select an option -- </option>
-          each journey in journeys
-            option(value=journey.docID) Rejse navn: #{journey.name}
+          each booking in bookings
+            option(value=booking.docID) Rejse navn: #{booking.name}
         br
 
         label(for='customerName') Tilhørende kunde: 
         input(type='text', id='customerName', name='name', readonly)
         br
-        label(for='journeyId') RejseId: 
-        input(type='text', id='journeyId', name='id', readonly)
+        label(for='bookingId') RejseId: 
+        input(type='text', id='bookingId', name='id', readonly)
         br
-        label(for='journeyStartDate') Startdato: 
-        input(type='text', id='journeyStartDate', name='startDate', required)
+        label(for='bookingStartDate') Startdato: 
+        input(type='text', id='bookingStartDate', name='startDate', required)
         br
         button(type='submit', name='action', id='redigerBtn') Rediger rejse
+
+        //-.name skal måske stadig være journey
