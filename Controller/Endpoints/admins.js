@@ -157,7 +157,7 @@ adminRouter.get('/Drivers', async (req, res) => {
         if (req.session.isAdminLoggedIn) {
             res.render('drivers', { drivers });
         } else {
-            res.redirect('/adminLogin')
+            res.redirect('/admins/adminLogin')
         }
     } catch (error) {
         console.error('Fejl ved hentning af drivers:', error);
@@ -165,14 +165,14 @@ adminRouter.get('/Drivers', async (req, res) => {
     }
 });
 
-adminRouter.get('/Admins', async (req, res) => {
+adminRouter.get('/overview', async (req, res) => {
     try {
         //Finder alle admins
         const admins = await controllerAdmin.getAdmins();
-        if (req.session.isAdminLoggedIn) {
-            res.render('admins', { admins });
+        if (req.session.isAdminLoggedIn && req.session.adminUser) {
+            res.render('admins', { admins: admins});
         } else {
-            res.redirect('/adminLogin')
+            res.redirect('/admins/adminLogin')
         }
     } catch (error) {
         console.error('Fejl ved hentning af admins', error);
