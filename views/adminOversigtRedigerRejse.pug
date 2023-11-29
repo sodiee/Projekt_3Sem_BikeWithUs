@@ -1,11 +1,21 @@
 extends includes/layout 
 
 block content
-    form(action='/customerLogin', method='POST')
-                label(for='') Rejse: 
-                input(type='text', id='customerUsername', name='username', required)
-                br
-                label(for='password') Adgangskode
-                input(type='password', id='customerPassword', name='password', required)
-                br
-                button(type='submit', name='action', value='login') Login Customer
+    script(src="/core.js" defer)
+    form(id='redigerForm' action='' method='POST')
+        select(name='duration', id='journeysDropDown')
+          <option disabled selected value> -- select an option -- </option>
+          each journey in journeys
+            option(value=journey.docID) Rejse navn: #{journey.name}
+        br
+
+        label(for='customerName') Tilhørende kunde: 
+        input(type='text', id='customerName', name='name', readonly)
+        br
+        label(for='journeyId') RejseId: 
+        input(type='text', id='journeyId', name='id', readonly)
+        br
+        label(for='journeyStartDate') Startdato: 
+        input(type='text', id='journeyStartDate', name='startDate', required)
+        br
+        button(type='submit', name='action', id='redigerBtn' value='') Rediger rejse
