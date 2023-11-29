@@ -128,7 +128,7 @@ customerRouter.get('/Calendar/confirmation', async (req, res) => {
 
 customerRouter.get('/Mypage/:id', async (req, res) => {
     // Check for login status using sessions or cookies
-    if (!req.session.isCustomerLoggedIn) {
+    if (req.session.isCustomerLoggedIn) {
         try {
             const customerId = req.params.id; 
             const customerJourneys = await journeyController.getCustomerJourneys(customerId);
@@ -143,5 +143,26 @@ customerRouter.get('/Mypage/:id', async (req, res) => {
         res.redirect('/customerLogin');
     }
 });
+
+// CustomerPage
+
+customerRouter.get('/CustomerPage/:id', async (req, res) => {
+    // Check for login status using sessions or cookies
+    if (!req.session.isLoggedIn) {
+        try {
+            const customerId = req.params.id; 
+            const customerJourneys = await journeyController.getCustomerJourneys(customerId);
+            const customer = await controller.getCustomer(customerId);
+    
+            res.render('CustomerPage', { journeys: customerJourneys, customer: customer });
+        } catch (error) {
+            console.error('Fejl ved hentning af kundens side:', error);
+            res.status(500).send('Der opstod en fejl ved hentning af kundens side.');
+        }
+    } else {
+        res.redirect('/customerLogin');
+    }
+});
+
 
 export default customerRouter;
