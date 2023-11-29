@@ -367,4 +367,36 @@ adminRouter.get('/Edit/:id', async (req, res) => {
     }
 });
 
+// Edit, add, delete admin
+
+adminRouter.put('/:adminID', async (req, res) => {
+    try {
+        const admin = await controller.editAdmin(req.params.adminID, req.body);
+        res.json(admin);
+    } catch (error) {
+        console.error('Fejl ved redigering af Admin: ', error);
+        res.status(500).send('Der opstod en fejl ved redigering af admin.');
+    }
+});
+
+adminRouter.post('/', async (req, res) => {
+    try {
+        const admin = await controller.addAdmin(req.body);
+        res.json(admin);
+    } catch (error) {
+        console.error('Fejl ved tilføjelse af Admin: ', error);
+        res.status(500).send('Der opstod en fejl ved tilføjelse af admin.');
+    }
+});
+
+adminRouter.delete('/:adminID', async (req, res) => {
+    try {
+        const admin = await controller.deleteAdmin(req.params.adminID);
+        res.json(admin);
+    } catch (error) {
+        console.error('Fejl ved sletning af Admin: ', error);
+        res.status(500).send('Der opstod en fejl ved sletning af admin.');
+    }
+});
+
 export default adminRouter;

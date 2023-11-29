@@ -26,11 +26,26 @@ driverRouter.get('/Guests/Options', async (req, res) => {
     }
 });
 
+driverRouter.delete('/:driverID', async (req, res) => {
+    try {
+        const driver = await controller.deleteDriver(req.params.driverID);
+        res.json({ driver });
+    } catch (error) {
+        console.error('Fejl ved sletning af chauffør:', error);
+        res.status(500).send('Der opstod en fejl ved sletning af chauffør.');
+    }
+});
 
 
-
-
-
+driverRouter.edit('/:driverID', async (req, res) => {
+    try {
+        const driver = await controller.editDriver(req.params.driverID);
+        res.json({ driver });
+    } catch (error) {
+        console.error('Fejl ved redigering af chauffør:', error);
+        res.status(500).send('Der opstod en fejl ved redigering af chauffør.');
+    }
+});
 
 
 export default driverRouter;

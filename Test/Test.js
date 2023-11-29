@@ -3,6 +3,7 @@ import chai from 'chai'
 const assert = chai.assert
 //https://www.chaijs.com/api/assert/
 
+
 //DBFUNCTIONS TEST 
 describe('Crud test på Journey', () => {
     let customer;
@@ -77,5 +78,19 @@ describe('CRUD test på Customer', () => {
 
         await DBFunctions.editCustomerDB(customer)
         assert.strictEqual(newCustomer.fornavn, 'NyFornavn', 'Customer should be edited');
+    });
+});
+
+
+// FETCH TEST
+
+//--delete driver--
+import { deleteDriver } from '../GUI/assets/core.js'; // fetch function path
+
+describe('it should delete a driver', () => {
+    it('should delete a driver', async () => {
+        const driverID = '33h3J1C0yvUhtiEUrmcd'; // driver ID
+        const response = await deleteDriver(driverID);
+        assert.strictEqual(response.status, 200, 'Driver should be deleted');
     });
 });
