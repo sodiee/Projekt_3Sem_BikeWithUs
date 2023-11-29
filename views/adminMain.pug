@@ -1,9 +1,10 @@
-extend includes/layout 
+extend  includes/layout 
 
 block content 
-    div 
-        h1 Overblik
-        p Forsiden 
-        p Hej! Du er logget ind
-        p #{adminUser.firstName}
-        p #{adminUser.lastName}
+    h1 Overblik
+    p Forsiden 
+    p Hej! Du er logget ind
+    p #{adminUser.firstName}
+    p #{adminUser.lastName}
+    
+    a(href='/admins/adminLogout') Logout 

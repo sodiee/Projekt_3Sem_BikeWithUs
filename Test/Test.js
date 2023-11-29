@@ -1,16 +1,19 @@
+
+import Booking from '../Controller/Model/booking.js';
 import DBFunctions from '../Storage/DBFunctions.js';
 import chai from 'chai'
 const assert = chai.assert
 //https://www.chaijs.com/api/assert/
 
 //DBFUNCTIONS TEST 
-describe('Crud test på Journey', () => {
+describe('Crud test på Booking', () => {
   let customer;
+  let booking;
   let journey;
   let name = "Cykeltur gennem klitterne";
   let startDate = "2023-11-24"//new Date(1998, 8, 25)
   let endDate = "2023-11-28"//new Date(startDate)
-  let antalPersoner = 4;
+  let nrOfDays = 4;
   //endDate.setUTCDate(endDate.getUTCDate() + 3);
 
     beforeEach(async() => {
@@ -18,43 +21,44 @@ describe('Crud test på Journey', () => {
       endDate = "2023-11-28" //new Date(startDate)
       //endDate.setUTCDate(endDate.getUTCDate() + 3);
 
-     customer = { firstName: "Mewkel", lastName: "Lindhøøøøøj", birthday: "160795", city: "Frederiksbjerg", journeys: []};
-     journey = {name, customer, startDate, endDate, price: 4300,  antalPersoner: antalPersoner};
+     journey = { name: "Håber det virker", nrOfDays: 4, price: 4300}
+     customer = { firstName: "Mewkel", lastName: "Lindhøøøøøj", birthday: "160795", city: "Frederiksbjerg", bookings: [] };
+     booking = {customer,journey, nrOfPersons: 2, startDate: startDate}
     
-     journey = await DBFunctions.addJourneyDB(journey, customer);
+     booking = await DBFunctions.addBookingDB(booking, customer);
 
     }
     );
 
     
     
-    it('Should return a journey', async () => {
-        const result = await DBFunctions.getJourneyDB(journey.id);
-        assert.isObject(result, "Should return a journey id");
+    it('Should return a booking', async () => {
+        const result = await DBFunctions.getBookingDB(booking.id);
+        assert.isObject(result, "Should return a booking id");
       }
     );
 
-    it('should edit a journeys start date', async () => {
+    it('should edit a bookings start date', async () => {
       
       let newDate = '2023-12-06';
       const endDate = "2023-12-09" //new Date(newDate)
       //endDate.setUTCDate(endDate.getUTCDate() + 3);
 
-      await DBFunctions.editStartDateDB(journey,newDate, endDate)
+      await DBFunctions.editStartDateDB(booking,newDate, endDate)
 
-      const updatedJourney = await DBFunctions.getJourneyDB(journey.id);
+      const updatedBooking = await DBFunctions.getBookingDB(booking.id);
 
-      assert.strictEqual(newDate,updatedJourney.startDate, 'Journey start date should be edited');
+      assert.strictEqual(newDate,updatedBooking.startDate, 'Booking start date should be edited');
   })
 
-  it('should add a tilvalg to a journey', async () => {
+  it('should add a tilvalg to a booking', async () => {
     const tilvalg = { name: 'Test Tilvalg', price: 100 };
   
-    await DBFunctions.addTilvalgToJourneyDB(journey, tilvalg);
+    await DBFunctions.addTilvalgToBookingDB(booking, tilvalg);
   
-    const updatedJourney = await DBFunctions.getJourneyDB(journey.id);
+    const updatedBooking = await DBFunctions.getBookingDB(booking.id);
   
-    assert.include(updatedJourney.tilvalg[0], tilvalg, 'Tilvalg should be added to the journey');
+    assert.include(updatedBooking.tilvalg[0], tilvalg, 'Tilvalg should be added to the booking');
   });
 
 
