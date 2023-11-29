@@ -1,7 +1,7 @@
 import DBFunctions from '../../Storage/DBFunctions.js';
 
 
-function Journey(name, startDate, customer, price) {
+function Journey(name, startDate, customer, price,antalPersoner) {
     this.name = name;
     this.startDate = startDate;
     let endDate = new Date(startDate);
@@ -9,6 +9,8 @@ function Journey(name, startDate, customer, price) {
     this.endDate = endDate
     this.customer = customer;
     this.price = price;
+    this.antalPersoner = antalPersoner;
+    this.tilvalg = [];
 }
 
 async function getCustomerJourneys(customerId) {
@@ -28,17 +30,17 @@ async function getJourneysByMonth(month) {
 }
 
 async function addJourney3Days(journey) {
-    let j = {name: journey.name, startDate: journey.startDate, endDate: journey.startDate + 3, customer: journey.customer, price: journey.price}
+    let j = {name: journey.name, startDate: journey.startDate, endDate: journey.startDate + 3, customer: journey.customer, price: journey.price, antalPersoner: journey.antalPersoner}
     return await DBFunctions.addJourneyDB(j);
 }
 
 async function addJourney4Days(journey) {
-    let j = {name: journey.name, startDate: journey.startDate, endDate: journey.startDate + 4, customer: journey.customer, price: journey.price}
+    let j = {name: journey.name, startDate: journey.startDate, endDate: journey.startDate + 4, customer: journey.customer, price: journey.price, antalPersoner: journey.antalPersoner}
     return await DBFunctions.addJourneyDB(j);
 }
 
 function editJourney(journey) {
-    let j = {name: journey.name, startDate: journey.startDate, endDate: journey.endDate, customer: journey.customer, price: journey.price}
+    let j = {name: journey.name, startDate: journey.startDate, endDate: journey.endDate, customer: journey.customer, price: journey.price, antalPersoner: journey.antalPersoner}
     return DBFunctions.editJourneyDB(j);
 }
 
@@ -68,6 +70,10 @@ function filterByMonth(monthArray, targetMonth) {
         }
     }
     return res;
+}
+
+function addTilvalg(tilvalg) {
+    DBFunctions.addTilvalgToJourneyDB(tilvalg);
 }
 
 export default {getJourneys, getJourneysByMonth, addJourney3Days, addJourney4Days, editJourney, getJourney, deleteJourney, getCustomerJourneys,editStartDate}

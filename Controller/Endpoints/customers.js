@@ -6,10 +6,9 @@ import journeyController from '../Model/Journey.js';
 //-------------------------------
 // customer-ENDPOINTS for LOGIN |
 //-------------------------------
-
+let isCustomerLoggedIn = false
+let customerUser = null
 customerRouter.get('/', (req, res) => {
-    let isCustomerLoggedIn = false
-    let customerUser = null
     if (req.session.isCustomerLoggedIn && req.session.customerUser) {
         isCustomerLoggedIn = true
         customerUser = req.session.customerUser
@@ -39,7 +38,7 @@ customerRouter.post('/customerLogin', async (req, res) => {
 });
 
 customerRouter.get('/secret', (req, res) => {
-    if (req.session.isLoggedIn) {
+    if (req.session.isCustomerLoggedIn) {
         res.render('customers', {knownUser: req.session.isCustomerLoggedIn})
     } else {
         res.redirect('/customerLogin')
@@ -71,9 +70,9 @@ function checkCustomerUser(customerUsername, customerPassword) {
 // ------------------------------------------
 customerRouter.get('/Calendar', async (req, res) => {
     // Check for login status using sessions or cookies
-    if (!req.session.isLoggedIn) {
+    if (req.session.isCustomerLoggedIn) {
         try {
-            res.render('bookingCalendar');
+            res.render('bookingCalendar', {customerUser: customerUser});
         } catch (error) {
             console.error('Fejl ved hentning af rejser', error);
             res.status(500).send('Der opstod en fejl ved hentning af rejser');
@@ -86,7 +85,7 @@ customerRouter.get('/Calendar', async (req, res) => {
 
 customerRouter.get('/Calendar/Book', async (req, res) => {
     // Check for login status using sessions or cookies
-    if (!req.session.isLoggedIn) {
+    if (req.session.isCustomerLoggedIn) {
         try {
             const { endDate, customer, price } = req.body;
             const startDate = req.query.date || 'No date selected'; // Brug datoen gemt i sessionen som startDate
@@ -96,10 +95,10 @@ customerRouter.get('/Calendar/Book', async (req, res) => {
 
             if (durationInDays === 4 && new Date(startDate) < new Date(endDate)) {
                 await controller.addJourney4Days({ startDate, endDate, customer, price });
-                res.redirect('/Mypage/:id');
+                //res.redirect(`/Calendar/confirmation?startDate=${startDate}&endDate=${endDate}&price=${price}`);
             } else if (durationInDays === 3 && new Date(startDate) < new Date(endDate)) {
                 await controller.addJourney3Days({ startDate, endDate, customer, price });
-                res.redirect('/Mypage/:id');
+                //res.redirect(`/Calendar/confirmation?startDate=${startDate}&endDate=${endDate}&price=${price}`);
             }
             res.render('bookAJourney', { startDate });
         } catch (error) {
@@ -112,10 +111,24 @@ customerRouter.get('/Calendar/Book', async (req, res) => {
 });
 
 
+customerRouter.get('/Calendar/confirmation', async (req, res) => {
+        try {
+            // Hent oplysninger fra query params
+            const { startDate, endDate, price } = req.query;
+            // Render confirmation-siden og send nødvendige oplysninger med
+            res.render('../GUI/views/bookingConfirmed', { startDate, endDate, price });
+        } catch (error) {
+            console.error('Fejl ved håndtering af bekræftelsessiden:', error);
+            res.status(500).send('Der opstod en fejl ved håndtering af bekræftelsessiden.');
+        }
+    });
+
+
+
 
 customerRouter.get('/Mypage/:id', async (req, res) => {
     // Check for login status using sessions or cookies
-    if (!req.session.isLoggedIn) {
+    if (req.session.isCustomerLoggedIn) {
         try {
             const customerId = req.params.id; 
             const customerJourneys = await journeyController.getCustomerJourneys(customerId);

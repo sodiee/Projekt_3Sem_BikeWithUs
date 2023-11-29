@@ -10,6 +10,7 @@ describe('Crud test på Journey', () => {
   let name = "Cykeltur gennem klitterne";
   let startDate = "2023-11-24"//new Date(1998, 8, 25)
   let endDate = "2023-11-28"//new Date(startDate)
+  let antalPersoner = 4;
   //endDate.setUTCDate(endDate.getUTCDate() + 3);
 
     beforeEach(async() => {
@@ -17,15 +18,15 @@ describe('Crud test på Journey', () => {
       endDate = "2023-11-28" //new Date(startDate)
       //endDate.setUTCDate(endDate.getUTCDate() + 3);
 
-     customer = { firstName: "Mewkel", lastName: "Lindhøøøøøj", birthday: "160795", city: "Frederiksbjerg" };
-     journey = {name, customer, startDate, endDate, price: 4300};
+     customer = { firstName: "Mewkel", lastName: "Lindhøøøøøj", birthday: "160795", city: "Frederiksbjerg", journeys: []};
+     journey = {name, customer, startDate, endDate, price: 4300,  antalPersoner: antalPersoner};
     
      journey = await DBFunctions.addJourneyDB(journey, customer);
 
     }
     );
 
-
+    
     
     it('Should return a journey', async () => {
         const result = await DBFunctions.getJourneyDB(journey.id);
@@ -35,7 +36,7 @@ describe('Crud test på Journey', () => {
 
     it('should edit a journeys start date', async () => {
       
-      let newDate = '2023-12-05';
+      let newDate = '2023-12-06';
       const endDate = "2023-12-09" //new Date(newDate)
       //endDate.setUTCDate(endDate.getUTCDate() + 3);
 
@@ -45,6 +46,18 @@ describe('Crud test på Journey', () => {
 
       assert.strictEqual(newDate,updatedJourney.startDate, 'Journey start date should be edited');
   })
+
+  it('should add a tilvalg to a journey', async () => {
+    const tilvalg = { name: 'Test Tilvalg', price: 100 };
+  
+    await DBFunctions.addTilvalgToJourneyDB(journey, tilvalg);
+  
+    const updatedJourney = await DBFunctions.getJourneyDB(journey.id);
+  
+    assert.include(updatedJourney.tilvalg[0], tilvalg, 'Tilvalg should be added to the journey');
+  });
+
+
 
 
 //DBFunctions-script test

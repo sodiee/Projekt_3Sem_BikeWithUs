@@ -210,16 +210,7 @@ const editAdminDB = async (admin) => {
 // DB functions for journey\\
 // ------------------------\\
 
-let journeyM;
-let name = "Cykeltur gennem havet";
-let customer = {firstName: "Mewkel", lastName: "Lindhøøøøøj", birthday: "160795", city: "Frederiksbjerg" };
-let price = 5000;
-let startDate = "2023-11-26"
-let endDate = "2023-11-30"//new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000);
   
-   
-journeyM = {name,startDate, endDate, customer, price };
-    
   
 
 const getCustomerJourneysDB = async (id) => {
@@ -255,17 +246,20 @@ const getJourneysDB = async () => {
 const getJourneyDB = async (id) => {
         const docRef = doc(db, 'Journeys', id);
         const journeyQueryDoc = await getDoc(docRef);
-        let journey = journeyQueryDoc.data();
-        journey.docID = journeyQueryDoc.id;
-        return journey;    
-}
+        if(journeyQueryDoc.exists()) {
+        const journey = journeyQueryDoc.data();
+        return{ id: journeyQueryDoc.id, ...journey}
+    }else{
+        return null;
+    }
+};
 
 const addJourneyDB = async (journey, customer) => {
-    try {
         const journeyEnd = {
             ...journey,
             customer: customer,
-            endDate: journey.endDate
+            endDate: journey.endDate,
+            tilvalg: []
         };
 
         const docRef = await addDoc(JourneyCollection, journeyEnd);
@@ -273,11 +267,8 @@ const addJourneyDB = async (journey, customer) => {
         journey.id = docRef.id;
         
         return journey;
-    } catch (error) {
-        console.error("Error adding journey to Firestore:", error);
-        throw error; 
-    }
-};
+    
+    };
 
 const deleteJourneyDB = async (journeyID) => {
     try {
@@ -307,12 +298,18 @@ const editStartDateDB = async (journey,newStartDate,newEndDate) => {
     });
 }; 
 
+const addTilvalgToJourneyDB = async (journey, tilvalg) => {
+    journey.tilvalg = [];
+    journey.tilvalg.push(tilvalg);
 
-
+    await updateDoc(doc(db, 'Journeys', journey.id), {
+          tilvalg: journey.tilvalg
+        });
+}
 
  
 
 
 export default {getCustomerDB, getCustomerByUsernameAndPassword, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB,getAdminDB,
 getAdminsDB,deleteAdminDB,addAdminDB,editAdminDB,getAdminByUsernameAndPassword,getDriverDB,getDriversDB,deleteDriverDB,addDriverDB,editDriverDB,
-addJourneyDB, editJourneyDB, deleteJourneyDB, getJourneyDB, getJourneysDB, getCustomerJourneysDB, editStartDateDB}
+addJourneyDB, editJourneyDB, deleteJourneyDB, getJourneyDB, getJourneysDB, getCustomerJourneysDB, editStartDateDB,addTilvalgToJourneyDB}

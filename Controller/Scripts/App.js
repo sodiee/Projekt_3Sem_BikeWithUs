@@ -29,4 +29,3 @@ app.use('/drivers', driverRouter)
 app.listen(8801, () => {
     console.log('Kører på port 8801')
 })
-
