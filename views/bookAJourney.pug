@@ -6,7 +6,7 @@ html(lang='en')
     h1= 'Startdato: ' + startDate
     h2= 'Slutdato: ' + endDate
 
-    form(action='/Calendar/Book', method='post')
+    form(action='/Calendar/confirmation', method='post')
       div
         label(for='duration') Vælg varighed:
         select(name='duration', id='duration')
@@ -22,6 +22,12 @@ html(lang='en')
         input(type='number', name='participants', id='participants', min='1', max='10', value='1')
 
       div
-        input(type='submit', value='Bekræft booking')
+        input(type='submit', value='Bekræft booking', id='confirmBookingBtn')
 
-      input(type='hidden', name='endDate', id='endDate', value=endDate)
+        input(type='hidden', name='endDate', id='endDate', value=endDate)
+
+      script.
+        document.getElementById('confirmBookingBtn').addEventListener('click', function(event) {
+        event.preventDefault(); // Forhindre standardformularindsendels
+        document.querySelector('form').submit()})
+    

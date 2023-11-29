@@ -13,6 +13,7 @@ describe('Crud test på Booking', () => {
   let name = "Cykeltur gennem klitterne";
   let startDate = "2023-11-24"//new Date(1998, 8, 25)
   let endDate = "2023-11-28"//new Date(startDate)
+  let antalPersoner = 4;
   //endDate.setUTCDate(endDate.getUTCDate() + 3);
 
     beforeEach(async() => {
@@ -39,7 +40,7 @@ describe('Crud test på Booking', () => {
 
     it('should edit a bookings start date', async () => {
       
-      let newDate = '2023-12-05';
+      let newDate = '2023-12-06';
       const endDate = "2023-12-09" //new Date(newDate)
       //endDate.setUTCDate(endDate.getUTCDate() + 3);
 
