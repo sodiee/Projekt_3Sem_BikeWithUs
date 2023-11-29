@@ -2,7 +2,10 @@ extends includes/layout
 
 block content 
     h1 Driver profile
-    p Navn: #{driver.firstName} #{driver.lastName}
+    ul 
+        for each driver in drivers
+            li #{driver.firstName}
+    
 
     // idéer til andet info:
     //p Email: #{driver.email}

@@ -176,15 +176,11 @@ adminRouter.get('/Customers', async (req, res) => {
     }
 });
 
-adminRouter.get('/Drivers', async (req, res) => {
+adminRouter.get('/admins/drivers', async (req, res) => {
     try {
-        // Finder alle Drivers
+        // Finder alle drivers
         const drivers = await controllerDriver.getDrivers();
-        if (req.session.isAdminLoggedIn) {
-            res.render('drivers', { drivers });
-        } else {
-            res.redirect('/admins/adminLogin')
-        }
+        res.render('drivers', { drivers });
     } catch (error) {
         console.error('Fejl ved hentning af drivers:', error);
         res.status(500).send('Der opstod en fejl ved hentning af drivers.');
