@@ -1,10 +1,11 @@
 import DBFunctions from '../../Storage/DBFunctions.js';
 
 
-function Journey(name,nrOfDays, price) {
+function Journey(name,nrOfDays, price, description) {
     this.name = name;
     this.nrOfDays = nrOfDays;
     this.price = price;
+    this.description = description;
 }
 
 async function getCustomerJourneys(customerId) {
@@ -17,12 +18,12 @@ async function getJourneys() {
 }
 
 async function addJourney(journey) {
-    let j = {name: journey.name, nrOfDays: journey.nrOfDays, price: journey.price}
+    let j = {name: journey.name, nrOfDays: journey.nrOfDays, price: journey.price, description: journey.description}
     return await DBFunctions.addJourneyDB(j);
 }
 
 function editJourney(journey) {
-    let j = {name: journey.name, nrOfDays: journey.nrOfDays, price: journey.price}
+    let j = {name: journey.name, nrOfDays: journey.nrOfDays, price: journey.price, description: journey.description}
     return DBFunctions.editJourneyDB(j);
 }
 
@@ -31,7 +32,7 @@ function getJourney(journey) {
 }
 
 async function deleteJourney(journey) {
-    let j = {name: journey.name, nrOfDays: journey.nrOfDays, price: journey.price}
+    let j = {name: journey.name, nrOfDays: journey.nrOfDays, price: journey.price, description: journey.description}
     DBFunctions.deleteJourneyDB(j);
 }
 
