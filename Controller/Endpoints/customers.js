@@ -86,37 +86,52 @@ customerRouter.get('/Calendar', async (req, res) => {
 customerRouter.get('/Calendar/Book', async (req, res) => {
     // Check for login status using sessions or cookies
     if (req.session.isCustomerLoggedIn) {
-        try {
-            const { endDate, customer, price } = req.body;
-            const startDate = req.query.date || 'No date selected'; // Brug datoen gemt i sessionen som startDate
-            
-            //dage mellem startdato og slutdato
-            const durationInDays = Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24)); //antallet af milisekunder på en dag
+                try {
+                  const { customer, price, participants, duration, tilvalg } = req.body;
+                  const startDate = req.query.date || 'No date selected';
+              
+                  // Konverter duration fra streng til heltal
+                  const durationInDays = parseInt(duration, 10);
+              
+                  // Beregn slutdato baseret på startdato og valgt varighed
+                  const endDate = new Date(startDate);
+                  endDate.setDate(endDate.getDate() + durationInDays - 1); // Træk 1, da det inkluderer startdagen
+              
+                  // Opret et Journey-objekt med de nye oplysninger
+                  const journeyData = {
+                    startDate,
+                    endDate,
+                    customer,
+                    price,
+                    antalPersoner: participants,
+                    tilvalg: [tilvalg]  // Gem tilvalget som et array, da der kan være flere tilvalg
+                  };
+              
+                  // Brug den rigtige metode baseret på valgt varighed
+                  if (durationInDays === 4 && new Date(startDate) < endDate) {
+                    await controller.addJourney4Days(journeyData);
+                  } else if (durationInDays === 3 && new Date(startDate) < endDate) {
+                    await controller.addJourney3Days(journeyData);
+                  }
+                  res.render('bookAJourney', { startDate });
 
-            if (durationInDays === 4 && new Date(startDate) < new Date(endDate)) {
-                await controller.addJourney4Days({ startDate, endDate, customer, price });
-                //res.redirect(`/Calendar/confirmation?startDate=${startDate}&endDate=${endDate}&price=${price}`);
-            } else if (durationInDays === 3 && new Date(startDate) < new Date(endDate)) {
-                await controller.addJourney3Days({ startDate, endDate, customer, price });
-                //res.redirect(`/Calendar/confirmation?startDate=${startDate}&endDate=${endDate}&price=${price}`);
-            }
-            res.render('bookAJourney', { startDate });
-        } catch (error) {
-            console.error('Fejl ved tilføjelse af Rejse:', error);
-            res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
-        }
-    } else {
+                } catch (error) {
+                  console.error('Fejl ved tilføjelse af Rejse:', error);
+                  res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
+                }
+          }
+     else {
         res.redirect('/customerLogin');
     }
 });
 
 
-customerRouter.get('/Calendar/confirmation', async (req, res) => {
+customerRouter.post('/Calendar/confirmation', async (req, res) => {
         try {
             // Hent oplysninger fra query params
-            const { startDate, endDate, price } = req.query;
+            const { startDate, endDate, price } = req.body;
             // Render confirmation-siden og send nødvendige oplysninger med
-            res.render('../GUI/views/bookingConfirmed', { startDate, endDate, price });
+            res.render('/Users/lucasholm/Documents/GitHub/Projekt/views/bookingConfirmed.pug', { startDate, endDate, price });
         } catch (error) {
             console.error('Fejl ved håndtering af bekræftelsessiden:', error);
             res.status(500).send('Der opstod en fejl ved håndtering af bekræftelsessiden.');
