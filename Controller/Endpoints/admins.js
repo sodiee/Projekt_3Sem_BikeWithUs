@@ -5,25 +5,52 @@ import controllerJourney from '../Model/Journey.js';
 import controllerDriver from '../Model/Driver.js';
 import controllerCustomer from '../Model/Customer.js';
 import controllerAdmin from '../Model/Admin.js'
+import controllerBooking from '../Model/Booking.js';
 import e from 'express';
 
 //----------------------------
 // admin-ENDPOINTS for LOGIN |
 //----------------------------
 
-adminRouter.get('/', (req, res) => {
-    let isAdminLoggedIn = false
-    let adminUser = null
-    if (req.session.isAdminLoggedIn && req.session.adminUser) {
-        isAdminLoggedIn = true
-        adminUser = req.session.adminUser
-        //adminUser = req.session.adminData
-        res.render('adminMain', { knownUser: isAdminLoggedIn, adminUser: adminUser })
-    } else {
-        res.redirect('/admins/adminLogin')
-    }
-})
+// Middleware til at kræve log ind for beskyttede ruter
+adminRouter.use((req, res, next) => {
+    res.locals.isAdminLoggedIn = req.session.isAdminLoggedIn || false;
+    res.locals.adminUser = req.session.adminUser || null;
+    next();
+});
 
+// Middleware til at kræve log ind for beskyttede ruter
+function requireAdminLogin(req, res, next) {
+    if (!req.session.isAdminLoggedIn) {
+        // Omdiriger kun, hvis brugeren ikke er logget ind
+        res.redirect('/admins/adminLogin');
+    } else {
+        next();
+    }
+}
+
+// Anvend middleware på alle beskyttede ruter, undtagen login-ruten
+adminRouter.use((req, res, next) => {
+    if (req.path !== '/adminLogin') {
+        requireAdminLogin(req, res, next);
+    } else {
+        next();
+    }
+});
+
+// Rute til /admins/
+adminRouter.get('/', (req, res) => {
+    let isAdminLoggedIn = res.locals.isAdminLoggedIn;
+    let adminUser = res.locals.adminUser;
+
+    if (isAdminLoggedIn && adminUser) {
+        res.render('adminMain', { knownUser: isAdminLoggedIn, adminUser: adminUser });
+    } else {
+        res.redirect('/admins/adminLogin');
+    }
+});
+
+// Rute til /admins/adminLogin
 adminRouter.post('/adminLogin', async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -100,28 +127,30 @@ adminRouter.get('/oversigt/redigerRejse', async (req, res) => {
 
 adminRouter.get('/api/oversigt/:month', async (req, res) => {
     try {
-
-        let journeys = await controllerJourney.getJourneysByMonth(req.params.month);
-
-        res.json(journeys);
-
+        console.log('1')
+        let bookings = await controllerBooking.getBookingsByMonth(req.params.month);
+console.log(bookings);
+        console.log('11')
+        res.json(bookings);
+console.log('12')
     } catch (err) {
-        console.log('Fejl ved hentning af journeys pr. måned');
+        console.log('Fejl ved hentning af bookings pr. måned');
         //res.status(500).send('Fejl ved hentning af journeys pr. måned');
     }
 });
 
-adminRouter.get('/api/getJourneys/', async (req, res) => {
+adminRouter.get('/api/getBookings/', async (req, res) => {
     try {
-        let journeys = await controllerJourney.getJourneys();
+        let bookings = await controllerBooking.getBookings();
 
-        res.json(journeys);
+        res.json(bookings);
 
     } catch (error) {
         console.log(error);
     }
 })
 
+//ikke færdig
 adminRouter.put('/api/oversigt/redigerRejse/:journey', async (req, res) => {
     try {
         let journey = req.params.journey;
@@ -157,7 +186,7 @@ adminRouter.get('/Drivers', async (req, res) => {
         if (req.session.isAdminLoggedIn) {
             res.render('drivers', { drivers });
         } else {
-            res.redirect('/adminLogin')
+            res.redirect('/admins/adminLogin')
         }
     } catch (error) {
         console.error('Fejl ved hentning af drivers:', error);
@@ -165,15 +194,12 @@ adminRouter.get('/Drivers', async (req, res) => {
     }
 });
 
-adminRouter.get('/Admins', async (req, res) => {
+// Rute til /admins/overview
+adminRouter.get('/overview', async (req, res) => {
     try {
-        //Finder alle admins
+        // Finder alle admins
         const admins = await controllerAdmin.getAdmins();
-        if (req.session.isAdminLoggedIn) {
-            res.render('admins', { admins });
-        } else {
-            res.redirect('/adminLogin')
-        }
+        res.render('admins', { admins: admins });
     } catch (error) {
         console.error('Fejl ved hentning af admins', error);
         res.status(500).send('Der opstod en fejl ved hentning af admins');

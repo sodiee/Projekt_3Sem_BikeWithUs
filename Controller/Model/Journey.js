@@ -17,13 +17,6 @@ async function getJourneys() {
     return await DBFunctions.getJourneysDB();
 }
 
-async function getJourneysByMonth(month) {
-    let arr = await getJourneys();
-
-    arr = filterByMonth(arr, month)
-    return arr;
-}
-
 async function addJourney(journey) {
     let j = {name: journey.name, nrOfDays: journey.nrOfDays, price: journey.price, description: journey.description}
     return await DBFunctions.addJourneyDB(j);
@@ -43,6 +36,12 @@ async function deleteJourney(journey) {
     DBFunctions.deleteJourneyDB(j);
 }
 
+async function getJourneysByMonth(month) {
+    let arr = await getJourneys();
+
+    arr = filterByMonth(arr, month)
+    return arr;
+}
 
 function filterByMonth(monthArray, targetMonth) {
     let res = [];
