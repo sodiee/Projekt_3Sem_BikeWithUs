@@ -1,9 +1,6 @@
 extends includes/layout
 
 block content 
-    h1 Kære #{customer.name}, din reservation er hermed gennemført  
+    h1 Kære #{customer.firstName} din reservation er hermed gennemført
     
-    h2 Kommende rejser 
-    ul
-        each journey in journeys 
-            li #{journey.startDate} - #{journey.endDate}  
+    a(href='/CustomerPage/:id') Oversigt  
