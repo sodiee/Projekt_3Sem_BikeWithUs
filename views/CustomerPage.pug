@@ -1,8 +1,6 @@
-  h2 Your Journeys
-    ul
-      each journey in journeys
-        li #{journey.startDate} - Price: #{journey.price}
+extends includes/layoutCustomer
 
+block content 
   h2 Your Information
   p
     | Name: #{customer.firstName}
@@ -12,3 +10,10 @@
     | Address: #{customer.birthday}
     br 
     | City: #{customer.city}
+    
+  // h2 Your Journeys
+  // ul
+  //  each journey in journeys
+  //    li #{journey.startDate} - Price: #{journey.price}
+
+

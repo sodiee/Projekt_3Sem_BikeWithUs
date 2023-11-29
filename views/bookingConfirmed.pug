@@ -1,5 +1,7 @@
-extends includes/layout
+extends includes/layoutCustomer
 
 block content 
-    h1 Kære #{customer.firstName}, din reservation er hermed gennemført  
+    h1 Kære #{customer.firstName} din reservation er hermed gennemført
     
+    a(href='/customerPage')
+        button(type='button' id='kundeOversigt') Kunde oversigt  

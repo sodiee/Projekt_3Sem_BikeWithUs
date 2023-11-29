@@ -256,13 +256,17 @@ if (window.location.pathname == '/admins/oversigt/') {
 
 function clear() {
     for (let i = 1; i <= 31; i++) {
-        let pElementRejse = document.getElementById(i + ': Rejse');
-        let pElementKunde = document.getElementById(i + ': Kunde');
-        let pElementTilvalg = document.getElementById(i + ': Tilvalg');
+        let tdElementRejse = document.getElementById(i + ': Rejse');
+        let tdElementKunde = document.getElementById(i + ': Kunde');
+        let tdElementTilvalg = document.getElementById(i + ': Tilvalg');
+        let tdElementAfhentes = document.getElementById(i + ': Afhentes');
+        let tdElementAntalKunder = document.getElementById(i + ': Antal Personer');
 
-        pElementRejse.textContent = '-'
-        pElementKunde.textContent = '-'
-        pElementTilvalg.textContent = '-'
+        tdElementRejse.textContent = '-'
+        tdElementKunde.textContent = '-'
+        tdElementTilvalg.textContent = '-'
+        tdElementAfhentes.textContent = '-'
+        tdElementAntalKunder.textContent = '-';
     }
 }
 
@@ -363,14 +367,16 @@ function updateTxtFields(journeys) {
 }
 
 async function redigeringsBtnOnclick() {
-    let btn = document.getElementById('btnRedigering');
+    let btn = document.getElementById('redigerBtn');
     btn.onclick = () => {
-        editJourney(journey);
+        let dropDown = document.getElementById('journeysDropDown');
+        let selectedJourneyID = dropDown.options[dropDown.selectedIndex].value;
+        editJourney(selectedJourneyID);
     }
 }
 
 async function editJourney(journey) {
-    const response = await fetch(`/admins/oversigt/redigerRejse/${journey}`,{
+    const response = await fetch(`/api/admins/oversigt/redigerRejse/${journey}`,{
         method: 'put'
       });
       if (response.status == 204) {
