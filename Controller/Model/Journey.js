@@ -1,16 +1,10 @@
 import DBFunctions from '../../Storage/DBFunctions.js';
 
 
-function Journey(name, startDate, customer, price,antalPersoner) {
+function Journey(name,nrOfDays, price) {
     this.name = name;
-    this.startDate = startDate;
-    let endDate = new Date(startDate);
-    endDate.setDate(endDate.getDate() + 3);
-    this.endDate = endDate
-    this.customer = customer;
+    this.nrOfDays = nrOfDays;
     this.price = price;
-    this.antalPersoner = antalPersoner;
-    this.tilvalg = [];
 }
 
 async function getCustomerJourneys(customerId) {
@@ -29,18 +23,13 @@ async function getJourneysByMonth(month) {
     return arr;
 }
 
-async function addJourney3Days(journey) {
-    let j = {name: journey.name, startDate: journey.startDate, endDate: journey.startDate + 3, customer: journey.customer, price: journey.price, antalPersoner: journey.antalPersoner}
-    return await DBFunctions.addJourneyDB(j);
-}
-
-async function addJourney4Days(journey) {
-    let j = {name: journey.name, startDate: journey.startDate, endDate: journey.startDate + 4, customer: journey.customer, price: journey.price, antalPersoner: journey.antalPersoner}
+async function addJourney(journey) {
+    let j = {name: journey.name, nrOfDays: journey.nrOfDays, price: journey.price}
     return await DBFunctions.addJourneyDB(j);
 }
 
 function editJourney(journey) {
-    let j = {name: journey.name, startDate: journey.startDate, endDate: journey.endDate, customer: journey.customer, price: journey.price, antalPersoner: journey.antalPersoner}
+    let j = {name: journey.name, nrOfDays: journey.nrOfDays, price: journey.price}
     return DBFunctions.editJourneyDB(j);
 }
 
@@ -49,14 +38,10 @@ function getJourney(journey) {
 }
 
 async function deleteJourney(journey) {
-    let j = {name: journey.name, startDate: journey.startDate, endDate: journey.endDate, customer: journey.customer, price: journey.price}
+    let j = {name: journey.name, nrOfDays: journey.nrOfDays, price: journey.price}
     DBFunctions.deleteJourneyDB(j);
 }
 
-async function editStartDate(journey) {
-    let j = {name: journey.name, startDate: journey.startDate, endDate: journey.endDate}
-    return DBFunctions.editStartDateDB(j);
-}
 
 function filterByMonth(monthArray, targetMonth) {
     let res = [];
@@ -72,11 +57,8 @@ function filterByMonth(monthArray, targetMonth) {
     return res;
 }
 
-function addTilvalg(tilvalg) {
-    DBFunctions.addTilvalgToJourneyDB(tilvalg);
-}
 
-export default {getJourneys, getJourneysByMonth, addJourney3Days, addJourney4Days, editJourney, getJourney, deleteJourney, getCustomerJourneys,editStartDate}
+export default {getJourneys, getJourneysByMonth, addJourney, editJourney, getJourney, deleteJourney, getCustomerJourneys}
 
 
 

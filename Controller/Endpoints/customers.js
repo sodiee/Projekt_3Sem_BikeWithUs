@@ -55,16 +55,6 @@ customerRouter.get('/customerLogin', (req, res) => {
     res.render('customerLogin')
 })
 
-// TODO
-// Simulator af databaseopkald
-function checkCustomerUser(customerUsername, customerPassword) {
-    let returnValue = false
-    if (customerUsername == 'Maksym' && customerPassword == '123') {
-        returnValue = true
-    }
-    return returnValue
-}
-
 
 // ------------------------------------------
 // customer-ENDPOINTS for booking / Calender |

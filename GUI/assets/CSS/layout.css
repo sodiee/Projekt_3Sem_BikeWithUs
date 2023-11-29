@@ -44,6 +44,11 @@ main {
     flex-direction: row;
 }
 
+header a {
+    color: azure;
+    padding: 10px;
+}
+
 aside {
     width: 150px;
     flex-shrink: 0;
