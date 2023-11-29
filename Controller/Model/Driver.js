@@ -30,10 +30,12 @@ async function getDrivers() {
 }
 
 //hent driver tasks
+/*
 app.get('/driverTasks', async (req, res) => {
     const driverTasks = await getDriverTasks();
     res.render('driverTasks', {tasks: driverTasks});
 });
+*/
 
 /*
 //add
@@ -67,7 +69,6 @@ let driver = new Driver("Mikkel", "Lindhøj");
 driver = await addDriver(driver);
 
 let c = await getDriver(driver);
-console.log(c);
 
 
 /*

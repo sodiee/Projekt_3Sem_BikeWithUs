@@ -26,6 +26,18 @@ driverRouter.get('/Guests/Options', async (req, res) => {
     }
 });
 
+//hent driver tasks
+driverRouter.get('/driverTasks', async (req, res) => {
+    const driverTasks = await getDriverTasks();
+    res.render('driverTasks', {tasks: driverTasks});
+});
+
+//hent driver tasks
+driverRouter.get('/driverTasks', async (req, res) => {
+    const driverTasks = await getDriverTasks();
+    res.render('driverTasks', {tasks: driverTasks});
+});
+
 driverRouter.delete('/:driverID', async (req, res) => {
     try {
         const driver = await controller.deleteDriver(req.params.driverID);

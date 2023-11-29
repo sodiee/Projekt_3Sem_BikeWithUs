@@ -34,6 +34,7 @@ const CustomersCollection = collection(db, 'Customers');
 const DriversCollection = collection(db, 'Drivers');
 const AdminsCollection = collection(db, 'Admins');
 const JourneyCollection = collection(db, 'Journeys');
+const BookingCollection = collection(db, 'Bookings');
 
 // ------------------------
 // DB functions for customer
@@ -164,6 +165,28 @@ const getAdminByUsernameAndPassword = async (adminUsername, adminPassword) => {
       }
   }
 
+  const getCustomerByUsernameAndPassword = async (customerUsername, customerPassword) => {
+    try {
+        const customersCollectionRef = collection(db, 'Customers');
+        const customerQuerySnapshot = await getDocs(query(customersCollectionRef, where('customerUsername', '==', customerUsername)));
+    
+        if (!customerQuerySnapshot.empty) {
+          const customerDoc = customerQuerySnapshot.docs[0];
+          const customerData = customerDoc.data();
+    
+          if (customerData.customerPassword === customerPassword) {
+            console.log(customerData)
+            return customerData; // Returner admin-data, hvis det matcher
+          }
+        }
+    
+        return null; // Ingen match fundet
+      } catch (error) {
+        console.error('Fejl under opslag i Firestore:', error);
+        throw error; // Kast fejlen igen for yderligere håndtering
+      }
+  }
+
 const deleteAdminDB = async (admin) => {
     const deletedAdmin = await deleteDoc(doc(db, 'Admins', admin.id));
     return admin;
@@ -188,17 +211,6 @@ const editAdminDB = async (admin) => {
 // DB functions for journey\\
 // ------------------------\\
 
-let journeyM;
-let customer = { firstName: "Mewkel", lastName: "Lindhøøøøøj", birthday: "160795", city: "Frederiksbjerg" };
-let price = 5000;
-let startDate = new Date();
-let endDate = new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000);
-  
-   
-journeyM = { startDate, endDate, customer, price };
-    
-  
-
 const getCustomerJourneysDB = async (id) => {
     try {
         // Hent alle rejsedokumenter fra databasen
@@ -221,37 +233,30 @@ const getCustomerJourneysDB = async (id) => {
 };
 const getJourneysDB = async () => {
     let journeyQueryDocs = await getDocs(JourneyCollection);
-    let journey = journeyQueryDocs.docs.map(doc => {
+    let journeys = journeyQueryDocs.docs.map(doc => {
         let data = doc.data();
         data.docID = doc.id;
         return data;
     });
-    return journey;
+    return journeys;
 }
 
-
-const getJourneyDB = async (docID) => {
-    try {
-        const docRef = doc(db, 'Journeys', docID);
-        if (docRef.exists()) {
-            const journeyQueryDoc = await getDoc(docRef);
-            let journey = journeyQueryDoc.data();
-            journey.docID = journeyQueryDoc.id;
-            return journey;
-        } else {
-            throw new Error('Dokumentet eksisterer ikke.');
-        }
-    } catch (error) {
-        console.error('Fejl ved hentning af rejse i DBFunctions:', error);
-        throw new Error('Der opstod en fejl ved hentning af rejse i DBFunctions.');
+const getJourneyDB = async (id) => {
+        const docRef = doc(db, 'Journeys', id);
+        const journeyQueryDoc = await getDoc(docRef);
+        if(journeyQueryDoc.exists()) {
+        const journey = journeyQueryDoc.data();
+        return{ id: journeyQueryDoc.id, ...journey}
+    }else{
+        return null;
     }
 };
 
-const addJourneyDB = async (journey, customerId) => {
-    const docRef = await addDoc(JourneyCollection, journey, customerId);
+const addJourneyDB = async (journey) => {
+    const docRef = await addDoc(JourneyCollection, journey);
     journey.id = docRef.id;
     return journey;
-};
+}
 
 const deleteJourneyDB = async (journeyID) => {
     try {
@@ -273,14 +278,68 @@ const editJourneyDB = async (docID, journeyData) => {
         throw new Error('There was an error updating the journey.');
     }
 };
+ 
 
-const editStartDateDB = async (journey) => {
-    await updateDoc(doc(db, 'Journeys', journey.id), {
-        startDate: journey.startDate, 
+// DB functions for booking
+const getBookingsDB = async () => {
+    let bookingQueryDocs = await getDocs(BookingCollection);
+    let bookings = bookingQueryDocs.docs.map(doc => {
+        let data = doc.data();
+        data.docID = doc.id;
+        return data;
     });
-};  
+    return bookings;
+}
+
+const getBookingDB = async (id) => {
+    const docRef = doc(db, 'Bookings', id);
+    const bookingQueryDoc = await getDoc(docRef);
+    let booking = bookingQueryDoc.data();
+    booking.docID = bookingQueryDoc.id;
+    return booking;
+}
+
+const addBookingDB = async (booking) => {
+    const docRef = await addDoc(BookingCollection, booking);
+    booking.id = docRef.id;
+    return booking;
+}
+
+const deleteBookingDB = async (booking) => {
+    const deletedBooking = await deleteDoc(doc(db, 'Bookings', booking.id));
+    return booking;
+}
+
+const addTilvalgToBookingDB = async (booking, tilvalg) => {
+    booking.tilvalg = [];
+    booking.tilvalg.push(tilvalg);
+
+    await updateDoc(doc(db, 'Bookings', booking.id), {
+          tilvalg: booking.tilvalg
+        });
+}
+
+const editBooking = async (booking) => {
+    await updateDoc(doc(db, 'Bookings', booking.id), {
+        startDate: booking.startDate, 
+        endDate: booking.endDate, 
+        customer: booking.customer, 
+        price: booking.price,
+        tilvalg: booking.tilvalg
+    });
+};
+
+const editStartDateDB = async (booking,newStartDate,newEndDate) => {
+    await updateDoc(doc(db, 'Bookings', booking.id), {
+        startDate: newStartDate,
+        endDate: newEndDate
+    });
+};
+
+ 
 
 
-export default {getCustomerDB, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB,getAdminDB,
+export default {getCustomerDB, getCustomerByUsernameAndPassword, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB,getAdminDB,
 getAdminsDB,deleteAdminDB,addAdminDB,editAdminDB,getAdminByUsernameAndPassword,getDriverDB,getDriversDB,deleteDriverDB,addDriverDB,editDriverDB,
-addJourneyDB, editJourneyDB, deleteJourneyDB, getJourneyDB, getJourneysDB, getCustomerJourneysDB}
+addJourneyDB, editJourneyDB, deleteJourneyDB, getJourneyDB, getJourneysDB, getCustomerJourneysDB, editStartDateDB,addTilvalgToBookingDB,editBooking,
+getBookingDB,getBookingsDB,addBookingDB,deleteBookingDB}

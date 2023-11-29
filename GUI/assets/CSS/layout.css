@@ -44,6 +44,11 @@ main {
     flex-direction: row;
 }
 
+header a {
+    color: azure;
+    padding: 10px;
+}
+
 aside {
     width: 150px;
     flex-shrink: 0;
@@ -79,21 +84,32 @@ section>* {
     padding: 10px;
 }
 
+#table-container {
+    margin-top: 30px;
+    overflow-x: auto;
+    display: table; /* Tilføjet for at få thead og tbody til at passe sammen */
+    width: 100%;
+}
+
 #table-container table {
     border-collapse: collapse;
-    width: 80%;
+    width: 100%;
     margin: auto;
 }
 
 #table-container th,
-td {
+#table-container td {
     padding: 12px;
-    text-align: center;
+    text-align: left;
     border: 1px solid #ddd;
 }
 
 #table-container th {
     background-color: #f2f2f2;
+}
+
+#table-container tr:nth-child(even) {
+    background-color: #f9f9f9;
 }
 
 #table-container td:first-child {
@@ -105,24 +121,17 @@ td {
     width: 80%;
 }
 
-#table-container tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
 #table-container p {
     margin: 0;
 }
 
-#table-container {
-    margin-top: 30px;
-}
-
 #table-container thead,
-tbody {
-    display: block;
+#table-container tbody {
+    display: table; /* Tilføjet for at få thead og tbody til at passe sammen */
+    width: 100%;
 }
 
 #table-container tbody {
-    height: 500px;
-    overflow: auto
+    max-height: 500px;
+    overflow-y: auto;
 }

@@ -1,3 +1,5 @@
+
+import Booking from '../Controller/Model/booking.js';
 import DBFunctions from '../Storage/DBFunctions.js';
 import chai from 'chai'
 const assert = chai.assert
@@ -5,29 +7,62 @@ const assert = chai.assert
 
 
 //DBFUNCTIONS TEST 
-describe('Crud test på Journey', () => {
-    let customer;
-    let journey;
-    beforeEach(() => {
-        customer = { firstName: "Mewkel", lastName: "Lindhøøøøøj", birthday: "160795", city: "Frederiksbjerg" };
-        journey = { customer: customer, startDate: "092598", price: 5000 };
-    })
+describe('Crud test på Booking', () => {
+  let customer;
+  let booking;
+  let journey;
+  let name = "Cykeltur gennem klitterne";
+  let startDate = "2023-11-24"//new Date(1998, 8, 25)
+  let endDate = "2023-11-28"//new Date(startDate)
+  let antalPersoner = 4;
+  //endDate.setUTCDate(endDate.getUTCDate() + 3);
 
-    it('Should return a journey', async () => {
-        const result = await DBFunctions.getJourneyDB(journey);
-        assert.deepStrictEqual(result, journey);
-    });
+    beforeEach(async() => {
+      startDate = "2023-11-24" //new Date(1998, 8, 25)
+      endDate = "2023-11-28" //new Date(startDate)
+      //endDate.setUTCDate(endDate.getUTCDate() + 3);
 
-    it('should edit a journeys start date', async () => {
+     journey = { name: "Håber det virker", antalDage: 4, price: 4300}
+     customer = { firstName: "Mewkel", lastName: "Lindhøøøøøj", birthday: "160795", city: "Frederiksbjerg", bookings: [] };
+     booking = {customer,journey,antalPersoner: 2, startDate: startDate}
+    
+     booking = await DBFunctions.addBookingDB(booking, customer);
 
-        let newJourney = await DBFunctions.addJourneyDB(journey, journey.customer);
+    }
+    );
 
-        let newDate = '2024-05-05';
-        await newJourney.DBFunctions.editStartDateDB(newDate)
+    
+    
+    it('Should return a booking', async () => {
+        const result = await DBFunctions.getBookingDB(booking.id);
+        assert.isObject(result, "Should return a booking id");
+      }
+    );
 
-        assert.strictEqual(newJourney.startDate, '2024-05-05', 'Journey start date should be edited');
-    })
-});
+    it('should edit a bookings start date', async () => {
+      
+      let newDate = '2023-12-06';
+      const endDate = "2023-12-09" //new Date(newDate)
+      //endDate.setUTCDate(endDate.getUTCDate() + 3);
+
+      await DBFunctions.editStartDateDB(booking,newDate, endDate)
+
+      const updatedBooking = await DBFunctions.getBookingDB(booking.id);
+
+      assert.strictEqual(newDate,updatedBooking.startDate, 'Booking start date should be edited');
+  })
+
+  it('should add a tilvalg to a booking', async () => {
+    const tilvalg = { name: 'Test Tilvalg', price: 100 };
+  
+    await DBFunctions.addTilvalgToBookingDB(booking, tilvalg);
+  
+    const updatedBooking = await DBFunctions.getBookingDB(booking.id);
+  
+    assert.include(updatedBooking.tilvalg[0], tilvalg, 'Tilvalg should be added to the booking');
+  });
+
+
 
 
 //DBFunctions-script test
@@ -46,10 +81,9 @@ describe('CRUD test på Customer', () => {
         }
     })
 
-
-    it('should add a customer', async () => {
-        let customer = await DBFunctions.addCustomerDB(customer);
-        addedCustomerId = customer.id
+                
+        it('should add a customer', async () => {
+            addedCustomerId = customer.id
 
         assert.isNotNull(addedCustomerId, 'The customers ID must not be null')
     })

@@ -1,14 +1,19 @@
 extends includes/layout 
 
 block content
-    script(src="/Controller/Calender/adminCalender.js" defer)
+    //script(src="/js/adminCalender.js" defer)
+    script(src="/core.js" defer)
+
     #months
       #radioButtons
-      form
-        each month in ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December']
-          input(type="radio", name="choice", value=month.toLowerCase(), id=`choice-${month.toLowerCase()}`)
-          label(for=`choice-${month.toLowerCase()}`)= month
+      form(id='form')
 
+    br
+
+    #buttons 
+      a(href='/admins/oversigt/redigerRejse')
+        button(type='button' id='btnRedigering' ) Rediger rejse
+        
     #table-container
       table#table
         thead
@@ -25,4 +30,10 @@ block content
             td 
               p 
                 b Tilvalg
+            td 
+              p 
+                b Afhentes
+            td 
+              p 
+                b Antal Personer
         tbody#tableBody

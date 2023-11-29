@@ -34,6 +34,15 @@ async function getCustomers() {
     return await DBFunctions.getCustomersDB();
 }
 
+async function checkCustomer(customerUsername, customerPassword) {
+    try {
+      return await DBFunctions.getCustomerByUsernameAndPassword(customerUsername, customerPassword);
+    } catch (error) {
+      console.error(error);
+      throw error; // Kast fejlen igen for yderligere håndtering
+    }
+  }
+
 /*
 let customer1 = new Customer("Lucas", "Holm", "123456", "Viby");
 customer1 = await addCustomer(customer1);
@@ -42,4 +51,4 @@ customer1.FirstName = 'bølle'
 await editCustomer(customer1)
 */
 
-export default {addCustomer, getCustomer, deleteCustomer, editCustomer, getCustomers}
+export default {addCustomer, getCustomer, deleteCustomer, editCustomer, getCustomers, checkCustomer}

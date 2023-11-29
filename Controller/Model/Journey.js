@@ -1,10 +1,9 @@
 import DBFunctions from '../../Storage/DBFunctions.js';
 
 
-function Journey(startDate, customer, price) {
-    this.startDate = startDate;
-    this.endDate = endDate;
-    this.customer = customer;
+function Journey(name,antalDage, price) {
+    this.name = name;
+    this.antalDage = antalDage;
     this.price = price;
 }
 
@@ -17,18 +16,20 @@ async function getJourneys() {
     return await DBFunctions.getJourneysDB();
 }
 
-async function addJourney3Days(journey) {
-    let j = {startDate: journey.startDate, endDate: journey.startDate + 3, customer: journey.customer, price: journey.price}
-    return await DBFunctions.addJourneyDB(j);
+async function getJourneysByMonth(month) {
+    let arr = await getJourneys();
+
+    arr = filterByMonth(arr, month)
+    return arr;
 }
 
-async function addJourney4Days(journey) {
-    let j = {startDate: journey.startDate, endDate: journey.startDate + 4, customer: journey.customer, price: journey.price}
+async function addJourney(journey) {
+    let j = {name: journey.name, antalDage: journey.antalDage, price: journey.price}
     return await DBFunctions.addJourneyDB(j);
 }
 
 function editJourney(journey) {
-    let j = {startDate: journey.startDate, endDate: journey.endDate, customer: journey.customer, price: journey.price}
+    let j = {name: journey.name, antalDage: journey.antalDage, price: journey.price}
     return DBFunctions.editJourneyDB(j);
 }
 
@@ -37,16 +38,27 @@ function getJourney(journey) {
 }
 
 async function deleteJourney(journey) {
-    let j = {startDate: journey.startDate, endDate: journey.endDate, customer: journey.customer, price: journey.price}
+    let j = {name: journey.name, antalDage: journey.antalDage, price: journey.price}
     DBFunctions.deleteJourneyDB(j);
 }
 
-async function editStartDate(journey) {
-    let j = {startDate: journey.startDate, endDate: journey.endDate}
-    return DBFunctions.editStartDateDB(j);
+
+function filterByMonth(monthArray, targetMonth) {
+    let res = [];
+   
+    for (let i = 0; i < monthArray.length; i++) {
+        
+        let date = new Date(monthArray[i].startDate); 
+       
+        if (date.getMonth() + 1 == targetMonth) {
+            res.push(monthArray[i]);
+        }
+    }
+    return res;
 }
 
-export default {getJourneys, addJourney3Days, addJourney4Days, editJourney, getJourney, deleteJourney, getCustomerJourneys,editStartDate}
+
+export default {getJourneys, getJourneysByMonth, addJourney, editJourney, getJourney, deleteJourney, getCustomerJourneys}
 
 
 
