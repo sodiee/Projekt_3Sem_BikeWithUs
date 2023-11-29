@@ -20,7 +20,7 @@ adminRouter.get('/', (req, res) => {
         //adminUser = req.session.adminData
         res.render('adminMain', { knownUser: isAdminLoggedIn, adminUser: adminUser })
     } else {
-        res.redirect('/adminLogin')
+        res.redirect('/admins/adminLogin')
     }
 })
 
@@ -34,7 +34,7 @@ adminRouter.post('/adminLogin', async (req, res) => {
             req.session.adminUser = adminData;
             res.redirect('/admins/');
         } else {
-            res.status(401).send('Forkert brugernavn eller adgangskode');
+            res.status(401).send('Forkert brugernavn eller adgangskode eller du er ikke længer admin');
         }
     } catch (error) {
         console.error(error);
@@ -57,9 +57,9 @@ adminRouter.get('/adminLogin', (req, res) => {
 })
 
 adminRouter.get('/adminLogout', (req, res) => {
-    req.session.destroy()
-    res.redirect('/adminLogin')
-})
+    req.session.destroy();
+    res.redirect('/admins/adminLogin');
+});
 
 
 // ----------------------------
