@@ -5,6 +5,7 @@ import controllerJourney from '../Model/Journey.js';
 import controllerDriver from '../Model/Driver.js';
 import controllerCustomer from '../Model/Customer.js';
 import controllerAdmin from '../Model/Admin.js'
+import controllerBooking from '../Model/Booking.js';
 import e from 'express';
 
 //----------------------------
@@ -100,28 +101,30 @@ adminRouter.get('/oversigt/redigerRejse', async (req, res) => {
 
 adminRouter.get('/api/oversigt/:month', async (req, res) => {
     try {
-
-        let journeys = await controllerJourney.getJourneysByMonth(req.params.month);
-
-        res.json(journeys);
-
+        console.log('1')
+        let bookings = await controllerBooking.getBookingsByMonth(req.params.month);
+console.log(bookings);
+        console.log('11')
+        res.json(bookings);
+console.log('12')
     } catch (err) {
-        console.log('Fejl ved hentning af journeys pr. måned');
+        console.log('Fejl ved hentning af bookings pr. måned');
         //res.status(500).send('Fejl ved hentning af journeys pr. måned');
     }
 });
 
-adminRouter.get('/api/getJourneys/', async (req, res) => {
+adminRouter.get('/api/getBookings/', async (req, res) => {
     try {
-        let journeys = await controllerJourney.getJourneys();
+        let bookings = await controllerBooking.getBookings();
 
-        res.json(journeys);
+        res.json(bookings);
 
     } catch (error) {
         console.log(error);
     }
 })
 
+//ikke færdig
 adminRouter.put('/api/oversigt/redigerRejse/:journey', async (req, res) => {
     try {
         let journey = req.params.journey;
