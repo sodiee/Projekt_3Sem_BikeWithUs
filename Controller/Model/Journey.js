@@ -1,9 +1,9 @@
 import DBFunctions from '../../Storage/DBFunctions.js';
 
 
-function Journey(name,antalDage, price) {
+function Journey(name,nrOfDays, price) {
     this.name = name;
-    this.antalDage = antalDage;
+    this.nrOfDays = nrOfDays;
     this.price = price;
 }
 
@@ -24,12 +24,12 @@ async function getJourneysByMonth(month) {
 }
 
 async function addJourney(journey) {
-    let j = {name: journey.name, antalDage: journey.antalDage, price: journey.price}
+    let j = {name: journey.name, nrOfDays: journey.nrOfDays, price: journey.price}
     return await DBFunctions.addJourneyDB(j);
 }
 
 function editJourney(journey) {
-    let j = {name: journey.name, antalDage: journey.antalDage, price: journey.price}
+    let j = {name: journey.name, nrOfDays: journey.nrOfDays, price: journey.price}
     return DBFunctions.editJourneyDB(j);
 }
 
@@ -38,7 +38,7 @@ function getJourney(journey) {
 }
 
 async function deleteJourney(journey) {
-    let j = {name: journey.name, antalDage: journey.antalDage, price: journey.price}
+    let j = {name: journey.name, nrOfDays: journey.nrOfDays, price: journey.price}
     DBFunctions.deleteJourneyDB(j);
 }
 
