@@ -167,7 +167,7 @@ customerRouter.post('/Calendar/confirmation', async (req, res) => {
             console.error('Fejl ved håndtering af bekræftelsessiden:', error);
             res.status(500).send('Der opstod en fejl ved håndtering af bekræftelsessiden.');
         }
-    });
+});
 
 
 customerRouter.get('/CustomerPage', async (req, res) => {
