@@ -1,12 +1,15 @@
-doctype html
-html(lang='en')
-  head
-    meta(charset='utf-8')
-  body
-    h1= 'Startdato: ' + startDate
+extends includes/layoutCustomer
 
-    // TODO: should be startDate + chosen journey length
-    //h2= 'Slutdato: ' + endDate
+block content 
+  html(lang='en')
+    head
+      meta(charset='utf-8')
+    
+    body
+      h1= 'Startdato: ' + startDate
+
+      // TODO: should be startDate + chosen journey length
+      //h2= 'Slutdato: ' + endDate
 
     form(action='/Calendar/Book', method='post')
       div
@@ -16,14 +19,14 @@ html(lang='en')
           each journey in journeys
             option(value=(journey.docID)) #{journey.name}
 
-      div
-        //Price of chosen journey * participants TODO
-        label(for='price') Pris:
-        input(type='text', name='price', id='price', readonly='readonly')
+        div
+          //Price of chosen journey * participants TODO
+          label(for='price') Pris:
+          input(type='text', name='price', id='price', readonly='readonly')
 
-      div
-        label(for='participants') Antal personer (1-10):
-        input(type='number', name='participants', id='participants', min='1', max='10', value='1')
+        div
+          label(for='participants') Antal personer (1-10):
+          input(type='number', name='participants', id='participants', min='1', max='10', value='1')
 
-      div
-        input(type='submit', value='Bekræft booking')
+        div
+          input(type='submit', value='Bekræft booking')
