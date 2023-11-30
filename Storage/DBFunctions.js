@@ -244,13 +244,10 @@ const getJourneysDB = async () => {
 const getJourneyDB = async (id) => {
         const docRef = doc(db, 'Journeys', id);
         const journeyQueryDoc = await getDoc(docRef);
-        if(journeyQueryDoc.exists()) {
         const journey = journeyQueryDoc.data();
-        return{ id: journeyQueryDoc.id, ...journey}
-    }else{
-        return null;
-    }
-};
+        journey.docID = journeyQueryDoc.id;
+        return journey;
+}
 
 const addJourneyDB = async (journey) => {
     const docRef = await addDoc(JourneyCollection, journey);
