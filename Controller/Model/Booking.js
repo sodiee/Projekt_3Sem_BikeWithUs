@@ -1,13 +1,24 @@
-function booking(customer, journey,antalPersoner, startdate) {
-  this.customer = customer;
-  this.journey = journey;
-  this.startdate = startdate;
-  this.endDate = this.startdate + journey.antalDage;
-  this.tilvalg = [];
-  this.antalPersoner = antalPersoner;
-  this.bookingDate = new Date();
-  this.bookingPrice = journey.price * antalPersoner;
+import DBFunctions from '../../Storage/DBFunctions.js';
+
+function Booking(customer, journey, nrOfPersons, startDate) {
+    this.customer = customer;
+    this.journey = journey;
+    this.startDate = startDate;
+    this.endDate = addDays(startDate, nrOfDays);
+    this.tilvalg = [];
+    this.nrOfPersons = nrOfPersons;
+    this.bookingDate = new Date();
+    this.bookingPrice = journey.price * nrOfPersons;
 }
+
+function addDays(date, days) {
+    let result = new Date(date);
+    result.setDate(result.getDate() + days);
+    function pad(n) {return n < 10 ? "0"+n : n;}
+    result = result.getFullYear() + "-" + pad(result.getMonth() + 1) + "-" + pad(result.getDate());
+    return result;
+}
+
 /* 
 booking.prototype.calculatePrice = function () {
   let price = this.journey.price;
@@ -25,7 +36,7 @@ function addTilvalg(tilvalg) {
 }
 
 async function editStartDate(booking) {
-    let j = {name: booking.name, startDate: booking.startDate, endDate: startDate + booking.antalDage}
+    let j = { name: booking.name, startDate: booking.startDate, endDate: startDate + booking.nrOfDays }
     return DBFunctions.editStartDateDB(j);
 }
 
@@ -49,4 +60,21 @@ async function editBooking(booking) {
     return await DBFunctions.editBookingDB(booking);
 }
 
-export default {getBooking, getBookings, addBooking, deleteBooking, editBooking, addTilvalg, editStartDate}
+async function getBookingsByMonth(month) {
+    let arr = await getBookings();
+    arr = filterByMonth(arr, month)
+    return arr;
+}
+
+function filterByMonth(monthArray, targetMonth) {
+    let res = [];
+    for (let i = 0; i < monthArray.length; i++) {
+        let date = new Date(monthArray[i].startDate);
+        if (date.getMonth() + 1 == targetMonth) {
+            res.push(monthArray[i]);
+        }
+    }
+    return res;
+}
+
+export default { addDays, getBooking, getBookings, addBooking, deleteBooking, editBooking, addTilvalg, editStartDate, getBookingsByMonth }

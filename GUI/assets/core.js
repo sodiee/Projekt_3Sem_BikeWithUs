@@ -82,22 +82,22 @@ async function editJourney(journeyID) {
 
 //DOM adminCalender.js Dynamic functions
 //oversigt side
-async function getJourneys(rbValue) {
+async function getBookings(rbValue) {
     try {
         let url = `/admins/api/oversigt/` + rbValue;
         const res = await fetch(url);
-        const journeys = await res.json();
+        const bookings = await res.json();
 
         //RBs
 
         //THead
 
         //TBody
-        //tildeler p elementer til td'erne fra journey.
+        //tildeler p elementer til td'erne fra booking.
         let idx = 1;
-        for (const journey of journeys) {
-            let startDate = new Date(journey.startDate)
-            let endDate = new Date(journey.endDate);
+        for (const booking of bookings) {
+            let startDate = new Date(booking.startDate)
+            let endDate = new Date(booking.endDate);
             let totalPersoner;
 
             for (let i = startDate.getDate(); i <= endDate.getDate(); i++) {
@@ -111,10 +111,10 @@ async function getJourneys(rbValue) {
                 if (tdElementRejse) {
                     // Opret et p-element for eventet og tilføj det til cellen
                     let pElementRejse = document.createElement('p');
-                    pElementRejse.id = 'pERejse';
                     //pElementRejse.textContent = '';
                     //nyt
-                    pElementRejse.textContent = idx + ': ' + journey.name + '\n -' //journey.Name // + ' - ';
+                    pElementRejse.textContent = idx + ': ' + booking.journey.name; //booking.Name // + ' - ';
+                    //pElementRejse.textContent += '- '
                     tdElementRejse.appendChild(pElementRejse);
                 } else {
                     console.log('Fejl med at finde tdelementrejse')
@@ -125,7 +125,8 @@ async function getJourneys(rbValue) {
                     let pElementKunde = document.createElement('p');
                     //pElementKunde = '';
                     //nyt
-                    pElementKunde.textContent = idx + ': ' + journey.customer.firstName + ' ' + journey.customer.lastName + ' - ';//kunde; //journey.customer
+                    pElementKunde.textContent = idx + ': ' + booking.customer.firstName + ' ' + booking.customer.lastName;//kunde; //booking.customer
+                    //pElementKunde.textContent += '- '
                     tdElementKunde.appendChild(pElementKunde);
                 } else {
                     console.log('Fejl med at finde tdelementkunde')
@@ -134,13 +135,17 @@ async function getJourneys(rbValue) {
                 //tilvalg
                 if (tdElementTilvalg) {
                     let pElementTilvalg = document.createElement('p');
-                    if (journey.tilvalg.length != 0) {
-                        for (let j = 0; j < journey.tilvalg.length; j++) {
-                            pElementTilvalg.textContent = idx + ': ' + journey.tilvalg[j].name;
+                    //tilvalg virker ik
+                    /*
+                    if (booking.tilvalg.length != 0) {
+                        for (let j = 0; j < booking.tilvalg.length; j++) {
+                            pElementTilvalg.textContent = idx + ': ' + booking.tilvalg[j].name;
+                            pElementTilvalg.textContent += ' '
                         }
-                    } else {
-                        pElementTilvalg.textContent = idx + ': Ingen tilvalg'
-                    }
+                    } else {*/
+                    pElementTilvalg.textContent = idx + ': Ingen tilvalg';
+                    //pElementTilvalg.textContent += '- '
+                    //}
                     tdElementTilvalg.appendChild(pElementTilvalg);
                 } else {
                     console.log('Fejl med at finde tdElementTilvalg')
@@ -149,15 +154,17 @@ async function getJourneys(rbValue) {
                 if (tdElementAfhentes) {
                     let pElementAfhentes = document.createElement('p');
                     if (i == endDate.getDate()) {
-                        pElementAfhentes.textContent = idx + ': Skal hentes denne dag'
+                        pElementAfhentes.textContent = idx + ': Skal hentes denne dag';
+                        //pElementAfhentes.textContent += '- '
                     }
                     tdElementAfhentes.appendChild(pElementAfhentes);
                 }
 
                 if (tdElementAntalPersoner) {
                     let pElementAntalPersoner = document.createElement('p');
-                    pElementAntalPersoner.textContent = idx + ': ' + journey.antalPersoner;
-                    totalPersoner += journey.antalPersoner;
+                    pElementAntalPersoner.textContent = idx + ': ' + booking.nrOfPersons;
+                    totalPersoner += booking.nrOfPersons;
+                    //pElementAntalPersoner.textContent += '- '
 
                     tdElementAntalPersoner.appendChild(pElementAntalPersoner);
                 }
@@ -173,89 +180,90 @@ async function getJourneys(rbValue) {
             idx++;
         }
     } catch (error) {
-        console.error('Error fetch journeys', error);
+        console.error('Error fetch bookings', error);
     }
 };
 
 let months = ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December']
 
+function oversigtSide() {
+    if (window.location.pathname == '/admins/oversigt/') {
+        //RBs
+        let months = ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December']
+        let date = new Date();
+        let i = 0;
+        for (const month of months) {
+            i++;
+            let form = document.getElementById('form');
 
-if (window.location.pathname == '/admins/oversigt/') {
-    //RBs
-    let months = ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December']
-    let date = new Date();
-    let i = 0;
-    for (const month of months) {
-        i++;
-        let form = document.getElementById('form');
+            let rbElement = document.createElement('input');
+            rbElement.type = "radio"
+            rbElement.value = i;
+            rbElement.name = "months"
+            rbElement.id = 'rb-' + month;
+            if (date.getMonth() + 1 == i) {
+                rbElement.checked = true;
+            }
+            form.appendChild(rbElement);
 
-        let rbElement = document.createElement('input');
-        rbElement.type = "radio"
-        rbElement.value = i;
-        rbElement.name = "months"
-        rbElement.id = 'rb-' + month;
-        if (date.getMonth() + 1 == i) {
-            rbElement.checked = true;
+            let labelElement = document.createElement('label');
+            labelElement.innerHTML = month;
+            labelElement.for = 'rb-' + month;
+            form.appendChild(labelElement);
         }
-        form.appendChild(rbElement);
 
-        let labelElement = document.createElement('label');
-        labelElement.innerHTML = month;
-        labelElement.for = 'rb-' + month;
-        form.appendChild(labelElement);
-    }
-
-    let rbs = document.querySelectorAll('input[type="radio"]');
-    let res;
-    for (const rb of rbs) {
-        if (rb.checked) {
-            res = rb.value;
-            break;
+        let rbs = document.querySelectorAll('input[type="radio"]');
+        let res;
+        for (const rb of rbs) {
+            if (rb.checked) {
+                res = rb.value;
+                break;
+            }
         }
+        let selectedMonth = months[res - 1];
+
+        //TBody
+        let table = document.getElementById("tableBody");
+
+        for (let i = 1; i <= 31; i++) {
+            //Laver objekter
+            let trElement = document.createElement('tr');
+            let tdElementDato = document.createElement('td');
+            let tdElementRejse = document.createElement('td');
+            let tdElementKunde = document.createElement('td');
+            let tdElementTilvalg = document.createElement('td');
+            let tdElementAfhentes = document.createElement('td');
+            let tdElementAntalKunder = document.createElement('td');
+
+
+            //Tilfører værdier til elementer
+            tdElementDato.id = i;
+            tdElementDato.textContent = i + '. ' + selectedMonth;
+            tdElementRejse.id = i + ': Rejse'
+            tdElementRejse.textContent = ''
+            tdElementKunde.id = i + ': Kunde'
+            tdElementKunde.textContent = ''
+            tdElementTilvalg.id = i + ': Tilvalg';
+            tdElementTilvalg.textContent = '';
+            tdElementAfhentes.id = i + ': Afhentes'
+            tdElementAfhentes.textContent = ''
+            tdElementAntalKunder.id = i + ': Antal Personer';
+            tdElementAntalKunder.textContent = '';
+
+            //appender elementer til tabel
+            trElement.appendChild(tdElementDato);
+            trElement.appendChild(tdElementRejse);
+            trElement.appendChild(tdElementKunde);
+            trElement.appendChild(tdElementTilvalg);
+            trElement.appendChild(tdElementAfhentes);
+            trElement.appendChild(tdElementAntalKunder);
+            table.appendChild(trElement);
+        }
+
+        rbsOnclick();
+        getBookings(res);
+        updateMonth();
     }
-    let selectedMonth = months[res - 1];
-
-    //TBody
-    let table = document.getElementById("tableBody");
-
-    for (let i = 1; i <= 31; i++) {
-        //Laver objekter
-        let trElement = document.createElement('tr');
-        let tdElementDato = document.createElement('td');
-        let tdElementRejse = document.createElement('td');
-        let tdElementKunde = document.createElement('td');
-        let tdElementTilvalg = document.createElement('td');
-        let tdElementAfhentes = document.createElement('td');
-        let tdElementAntalKunder = document.createElement('td');
-
-
-        //Tilfører værdier til elementer
-        tdElementDato.id = i;
-        tdElementDato.textContent = i + '. ' + selectedMonth;
-        tdElementRejse.id = i + ': Rejse'
-        tdElementRejse.textContent = '-'
-        tdElementKunde.id = i + ': Kunde'
-        tdElementKunde.textContent = '-'
-        tdElementTilvalg.id = i + ': Tilvalg';
-        tdElementTilvalg.textContent = '-';
-        tdElementAfhentes.id = i + ': Afhentes'
-        tdElementAfhentes.textContent = '-'
-        tdElementAntalKunder.id = i + ': Antal Personer';
-        tdElementAntalKunder.textContent = '-';
-
-        //appender elementer til tabel
-        trElement.appendChild(tdElementDato);
-        trElement.appendChild(tdElementRejse);
-        trElement.appendChild(tdElementKunde);
-        trElement.appendChild(tdElementTilvalg);
-        trElement.appendChild(tdElementAfhentes);
-        trElement.appendChild(tdElementAntalKunder);
-        table.appendChild(trElement);
-    }
-
-    rbsOnclick();
-    getJourneys(res);
-    updateMonth();
 }
 
 function clear() {
@@ -266,11 +274,11 @@ function clear() {
         let tdElementAfhentes = document.getElementById(i + ': Afhentes');
         let tdElementAntalKunder = document.getElementById(i + ': Antal Personer');
 
-        tdElementRejse.textContent = '-'
-        tdElementKunde.textContent = '-'
-        tdElementTilvalg.textContent = '-'
-        tdElementAfhentes.textContent = '-'
-        tdElementAntalKunder.textContent = '-';
+        tdElementRejse.textContent = ''
+        tdElementKunde.textContent = ''
+        tdElementTilvalg.textContent = ''
+        tdElementAfhentes.textContent = ''
+        tdElementAntalKunder.textContent = '';
     }
 }
 
@@ -281,7 +289,7 @@ function rbsOnclick() {
         rb.onclick = () => {
             updateMonth();
             clear();
-            getJourneys(rb.value);
+            getBookings(rb.value);
         };
     }
 }
@@ -307,16 +315,16 @@ function updateMonth() {
     //fjerner overflødige datoer
     if (calculateDays(selectedMonthNumber) == 30) {
         let tdElementDato = document.getElementById(31);
-        tdElementDato.textContent = '-'
+        tdElementDato.textContent = ''
     }
     if (calculateDays(selectedMonthNumber) == 28) {
         for (let i = 29; i <= 31; i++) {
             let tdElementDato = document.getElementById(i);
-            tdElementDato.textContent = '-'
+            tdElementDato.textContent = ''
         }
     }
 
-    getJourneys(months[selectedMonthNumber - 1]);
+    //getBookings(months[selectedMonthNumber - 1]);
 }
 
 function calculateDays(month) {
@@ -332,13 +340,13 @@ function calculateDays(month) {
 //rediger side
 async function redigerSide() {
     if (window.location.pathname == '/admins/oversigt/redigerRejse') {
-        let url = '/admins/api/getJourneys/';
+        let url = '/admins/api/getBookings/';
         const res = await fetch(url);
-        const journeys = await res.json();
+        const bookings = await res.json();
 
-        let dropDown = document.getElementById('journeysDropDown');
+        let dropDown = document.getElementById('bookingsDropDown');
         dropDown.onchange = () => {
-            updateTxtFields(journeys);
+            updateTxtFields(bookings);
         }
         /*
         dropDown.onclick = () => {
@@ -350,47 +358,48 @@ async function redigerSide() {
 }
 
 //dynamisk opdaterer tekstfelter med info
-function updateTxtFields(journeys) {
-    let dropDown = document.getElementById('journeysDropDown');
+function updateTxtFields(bookings) {
+    let dropDown = document.getElementById('bookingssDropDown');
     let txtName = document.getElementById('customerName')
-    let txtID = document.getElementById('journeyId')
-    let txtStartDate = document.getElementById('journeyStartDate');
+    let txtID = document.getElementById('bookingId')
+    let txtStartDate = document.getElementById('bookingStartDate');
 
     if (dropDown) {
         let obj = dropDown.options[dropDown.selectedIndex].value;
-        let actualJourney;
-        for (const journey of journeys) {
-            if (obj === journey.docID) {
-                actualJourney = journey;
+        let actualBooking;
+        for (const booking of bookings) {
+            if (obj === booking.docID) {
+                actualBooking = booking;
             }
         }
-        txtName.value = actualJourney.customer.firstName + ' ' + actualJourney.customer.lastName;
-        txtID.value = actualJourney.docID;
-        txtStartDate.value = actualJourney.startDate;
+        txtName.value = actualBooking.customer.firstName + ' ' + actualBooking.customer.lastName;
+        txtID.value = actualBooking.docID;
+        txtStartDate.value = actualBooking.startDate;
     }
 }
 
 async function redigeringsBtnOnclick() {
     let btn = document.getElementById('redigerBtn');
     btn.onclick = () => {
-        let dropDown = document.getElementById('journeysDropDown');
-        let selectedJourneyID = dropDown.options[dropDown.selectedIndex].value;
-        editJourney(selectedJourneyID);
+        let dropDown = document.getElementById('bookingsDropDown');
+        let selectedBookingID = dropDown.options[dropDown.selectedIndex].value;
+        editBooking(selectedBookingID);
     }
 }
 
-async function editJourney(journey) {
-    const response = await fetch(`/api/admins/oversigt/redigerRejse/${journey}`,{
+async function editBooking(booking) {
+    const response = await fetch(`/api/admins/oversigt/redigerRejse/${journey}`, {
         method: 'put'
-      });
-      if (response.status == 204) {
+    });
+    if (response.status == 204) {
         alert('Rejsen er nu redigeret');
         window.location = "/admins/oversigt"
-      } else {
+    } else {
         alert("Der skete en fejl i forsøget på at redigere denne rejse.")
-      }
+    }
 }
 
+oversigtSide();
 redigerSide();
 
 

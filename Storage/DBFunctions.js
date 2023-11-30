@@ -281,6 +281,7 @@ const editJourneyDB = async (docID, journeyData) => {
  
 
 // DB functions for booking
+
 const getBookingsDB = async () => {
     let bookingQueryDocs = await getDocs(BookingCollection);
     let bookings = bookingQueryDocs.docs.map(doc => {
@@ -300,7 +301,12 @@ const getBookingDB = async (id) => {
 }
 
 const addBookingDB = async (booking) => {
+    booking.endDate = new Date(booking.startdate);
+    booking.endDate.setDate(booking.endDate.getDate() + booking.journey.nrOfDays);
+    booking.bookingPrice = booking.journey.price * booking.nrOfPersons;
+
     const docRef = await addDoc(BookingCollection, booking);
+
     booking.id = docRef.id;
     return booking;
 }

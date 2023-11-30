@@ -1,5 +1,5 @@
 
-import Booking from '../Controller/Model/booking.js';
+import Booking from '../Controller/Model/Booking.js';
 import DBFunctions from '../Storage/DBFunctions.js';
 import chai from 'chai'
 const assert = chai.assert
@@ -14,7 +14,7 @@ describe('Crud test på Booking', () => {
   let name = "Cykeltur gennem klitterne";
   let startDate = "2023-11-24"//new Date(1998, 8, 25)
   let endDate = "2023-11-28"//new Date(startDate)
-  let antalPersoner = 4;
+  let nrOfDays = 4;
   //endDate.setUTCDate(endDate.getUTCDate() + 3);
 
     beforeEach(async() => {
@@ -22,9 +22,9 @@ describe('Crud test på Booking', () => {
       endDate = "2023-11-28" //new Date(startDate)
       //endDate.setUTCDate(endDate.getUTCDate() + 3);
 
-     journey = { name: "Håber det virker", antalDage: 4, price: 4300}
+     journey = { name: "Håber det virker", nrOfDays: 4, price: 4300}//"Det bliver en god tur"}
      customer = { firstName: "Mewkel", lastName: "Lindhøøøøøj", birthday: "160795", city: "Frederiksbjerg", bookings: [] };
-     booking = {customer,journey,antalPersoner: 2, startDate: startDate}
+     booking = {customer,journey, nrOfPersons: 2, startDate: startDate, endDate: Booking.addDays(startDate, nrOfDays)}
     
      booking = await DBFunctions.addBookingDB(booking, customer);
 

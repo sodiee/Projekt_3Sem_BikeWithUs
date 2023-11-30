@@ -4,16 +4,20 @@ html(lang='en')
     meta(charset='utf-8')
   body
     h1= 'Startdato: ' + startDate
-    h2= 'Slutdato: ' + endDate
 
-    form(action='/Calendar/confirmation', method='post')
+    // TODO: should be startDate + chosen journey length
+    //h2= 'Slutdato: ' + endDate
+
+    form(action='/Calendar/Book', method='post')
       div
-        label(for='duration') Vælg varighed:
-        select(name='duration', id='duration')
-          option(value='3') 3 dage
-          option(value='4') 4 dage
+        label(for='journey') Vælg tur:
+        select(name='journeyId', id='journeyId')
+          //for each jouney in database
+          each journey in journeys
+            option(value=(journey.id)) #{journey.name}
 
       div
+        //Price of chosen journey * participants TODO
         label(for='price') Pris:
         input(type='text', name='price', id='price', readonly='readonly')
 
@@ -22,12 +26,4 @@ html(lang='en')
         input(type='number', name='participants', id='participants', min='1', max='10', value='1')
 
       div
-        input(type='submit', value='Bekræft booking', id='confirmBookingBtn')
-
-        input(type='hidden', name='endDate', id='endDate', value=endDate)
-
-      script.
-        document.getElementById('confirmBookingBtn').addEventListener('click', function(event) {
-        event.preventDefault(); // Forhindre standardformularindsendels
-        document.querySelector('form').submit()})
-    
+        input(type='submit', value='Bekræft booking')
