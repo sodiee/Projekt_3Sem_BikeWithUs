@@ -15,7 +15,7 @@ customerRouter.get('/', (req, res) => {
     if (req.session.isCustomerLoggedIn && req.session.customerUser) {
         isCustomerLoggedIn = true
         customerUser = req.session.customerUser
-        res.render('CustomerPage', {knownUser: isCustomerLoggedIn, customer: customerUser})
+        res.render('customerPage', {knownUser: isCustomerLoggedIn, customer: customerUser})
     } else {
         res.redirect('/customerLogin')
     }
@@ -107,7 +107,7 @@ customerRouter.get('/Calendar', async (req, res) => {
     // Check for login status using sessions or cookies
     if (req.session.isCustomerLoggedIn) {
         try {
-            res.render('bookingCalendar', {customerUser: customerUser});
+            res.render('bookingCalendar', {customer: customerUser});
         } catch (error) {
             console.error('Fejl ved hentning af rejser', error);
             res.status(500).send('Der opstod en fejl ved hentning af rejser');
@@ -174,7 +174,7 @@ customerRouter.get('/CustomerPage', async (req, res) => {
     // Check for login status using sessions or cookies
     if (req.session.isCustomerLoggedIn) {
         try {
-            res.render('CustomerPage', { customer: customerUser});
+            res.render('customerPage', { customer: customerUser});
         } catch (error) {
             console.error('Fejl ved hentning af kundens side:', error);
             res.status(500).send('Der opstod en fejl ved hentning af kundens side.');
@@ -183,6 +183,31 @@ customerRouter.get('/CustomerPage', async (req, res) => {
         res.redirect('/customerLogin');
     }
 });
+
+customerRouter.get('/CustomerJourneys', async (req, res) => {
+    if(req.session.isCustomerLoggedIn) {
+        try {
+            res.render('customerJourneys', {journeys: customerUser.journeys})
+        } catch (error) {
+            console.error('Fejl ved hentning af kundens rejser:', error);
+            res.status(500).send('Der opstod en fejl ved hentning af kundens rejser.');
+        }
+    }
+    else {
+        res.redirect('/customerLogin')
+    }
+})
+
+customerRouter.get('/Contact', async (req, res) => {
+    if(req.session.isCustomerLoggedIn) {
+        try {
+            res.render('contact')
+        } catch (error) {
+            console.error('Fejl ved hentning af kontaktinformation:', error);
+            res.status(500).send('Der opstod en fejl ved hentning kontaktinformation.');            
+        }
+    }
+})
 
 
 export default customerRouter;
