@@ -1,0 +1,15 @@
+html 
+    head 
+        title Du er logget ind
+    body 
+        h1 Velkommen
+        if customerUser
+            p #{customerUser.firstName}
+            p #{customerUser.lastName}
+            p #{customerUser.birthdate}
+            p #{customerUser.city}
+            a(href="/calendar") Book nu
+            br
+            a(href="/customerLogout") Logout
+        else
+            p Kundens oplysninger er ikke tilgængelige

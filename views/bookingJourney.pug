@@ -11,13 +11,13 @@ block content
       // TODO: should be startDate + chosen journey length
       //h2= 'Slutdato: ' + endDate
 
-      form(action='/Calendar/Book', method='post')
-        div
-          label(for='journey') Vælg tur:
-          select(name='journeyId', id='journeyId')
-            //for each jouney in database
-            each journey in journeys
-              option(value=(journey.id)) #{journey.name}
+    form(action='/Calendar/Book', method='post')
+      div
+        label(for='journey') Vælg tur:
+        select(name='journeyId', id='journeyId')
+          //for each jouney in database
+          each journey in journeys
+            option(value=(journey.docID)) #{journey.name}
 
         div
           //Price of chosen journey * participants TODO
