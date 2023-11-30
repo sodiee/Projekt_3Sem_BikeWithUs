@@ -1,12 +1,11 @@
 import express from 'express';
-import session from 'express-session'
 const adminRouter = express.Router();
 import controllerJourney from '../Model/Journey.js';
 import controllerDriver from '../Model/Driver.js';
 import controllerCustomer from '../Model/Customer.js';
 import controllerAdmin from '../Model/Admin.js'
 import controllerBooking from '../Model/Booking.js';
-import e from 'express';
+
 
 //----------------------------
 // admin-ENDPOINTS for LOGIN |
@@ -198,7 +197,7 @@ adminRouter.get('/overview', async (req, res) => {
     try {
         // Finder alle admins
         const admins = await controllerAdmin.getAdmins();
-        res.render('admins', { admins: admins });
+        res.render('adminsOverview', { admins: admins });
     } catch (error) {
         console.error('Fejl ved hentning af admins', error);
         res.status(500).send('Der opstod en fejl ved hentning af admins');

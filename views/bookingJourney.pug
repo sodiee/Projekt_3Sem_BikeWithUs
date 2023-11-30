@@ -1,0 +1,32 @@
+extends includes/layoutCustomer
+
+block content 
+  html(lang='en')
+    head
+      meta(charset='utf-8')
+    
+    body
+      h1= 'Startdato: ' + startDate
+
+      // TODO: should be startDate + chosen journey length
+      //h2= 'Slutdato: ' + endDate
+
+      form(action='/Calendar/Book', method='post')
+        div
+          label(for='journey') Vælg tur:
+          select(name='journeyId', id='journeyId')
+            //for each jouney in database
+            each journey in journeys
+              option(value=(journey.id)) #{journey.name}
+
+        div
+          //Price of chosen journey * participants TODO
+          label(for='price') Pris:
+          input(type='text', name='price', id='price', readonly='readonly')
+
+        div
+          label(for='participants') Antal personer (1-10):
+          input(type='number', name='participants', id='participants', min='1', max='10', value='1')
+
+        div
+          input(type='submit', value='Bekræft booking')
