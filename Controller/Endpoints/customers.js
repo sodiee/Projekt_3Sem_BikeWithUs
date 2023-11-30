@@ -155,7 +155,7 @@ customerRouter.post('/Calendar/Book', async (req, res) => {
         res.redirect('/customerLogin');
     }
 });
-
+//hej
 
 customerRouter.post('/Calendar/confirmation', async (req, res) => {
         try {

@@ -138,7 +138,6 @@ adminRouter.get('/api/oversigt/:month', async (req, res) => {
 adminRouter.get('/api/getBookings/', async (req, res) => {
     try {
         let bookings = await controllerBooking.getBookings();
-        console.log(bookings)
         res.json(bookings);
 
     } catch (error) {
@@ -147,12 +146,20 @@ adminRouter.get('/api/getBookings/', async (req, res) => {
 })
 
 //ikke færdig
-adminRouter.put('/api/oversigt/redigerRejse/:journey', async (req, res) => {
+adminRouter.put('/api/oversigt/redigerRejse/', async (req, res) => {
     try {
-        let journey = req.params.journey;
-        console.log(journey);
+        let bookingId = req.body;
+        console.log(bookingId);
+        let booking = controllerBooking.getBooking(bookingId);
+        console.log(booking);
+        let newStartDate = req.body.startDate;
+        console.log(newStartDate);
+        let newEndDate = controllerBooking.addDays(newStartDate, booking.nrOfDays);
+        console.log(newEndDate);
+        controllerBooking.editStartDate(journey);
         res.status(204);
-        //controllerJourney.editStartDate(journey);
+        res.end();
+        res.render('bookingUpdateComplete');
     } catch (error) {
         console.log(error)
     }

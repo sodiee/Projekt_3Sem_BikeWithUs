@@ -80,6 +80,7 @@ async function editJourney(journeyID) {
     }
 }
 
+//------------------ BOOKINGS -------------------
 //DOM adminCalender.js Dynamic functions
 //oversigt side
 async function getBookings(rbValue) {
@@ -359,16 +360,15 @@ async function redigerSide() {
 
 //dynamisk opdaterer tekstfelter med info
 function updateTxtFields(bookings) {
-    let dropDown = document.getElementById('bookingssDropDown');
+    let dropDown = document.getElementById('bookingsDropDown');
     let txtName = document.getElementById('customerName')
     let txtID = document.getElementById('bookingId')
     let txtStartDate = document.getElementById('bookingStartDate');
-
     if (dropDown) {
-        let obj = dropDown.options[dropDown.selectedIndex].value;
+        let idFromDropDown = dropDown.options[dropDown.selectedIndex].value;
         let actualBooking;
         for (const booking of bookings) {
-            if (obj === booking.docID) {
+            if (idFromDropDown === booking.docID) {
                 actualBooking = booking;
             }
         }
@@ -388,12 +388,13 @@ async function redigeringsBtnOnclick() {
 }
 
 async function editBooking(booking) {
-    const response = await fetch(`/api/admins/oversigt/redigerRejse/${journey}`, {
-        method: 'put'
+    const response = await fetch(`/api/admins/oversigt/redigerRejse/${booking}`, {
+        method: 'put',
+        body: JSON.stringify(booking),
+        headers: { 'Content-Type': 'application/json' }
     });
     if (response.status == 204) {
         alert('Rejsen er nu redigeret');
-        window.location = "/admins/oversigt"
     } else {
         alert("Der skete en fejl i forsøget på at redigere denne rejse.")
     }

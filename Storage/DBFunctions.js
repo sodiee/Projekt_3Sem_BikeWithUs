@@ -335,7 +335,7 @@ const editBooking = async (booking) => {
     });
 };
 
-const editStartDateDB = async (booking,newStartDate,newEndDate) => {
+const editStartDateDB = async (booking,newStartDate, newEndDate) => {
     await updateDoc(doc(db, 'Bookings', booking.id), {
         startDate: newStartDate,
         endDate: newEndDate
