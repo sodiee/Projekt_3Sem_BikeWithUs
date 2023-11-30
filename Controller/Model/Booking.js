@@ -76,4 +76,8 @@ function filterByMonth(monthArray, targetMonth) {
     return res;
 }
 
-export default { addDays, getBooking, getBookings, addBooking, deleteBooking, editBooking, addTilvalg, editStartDate, getBookingsByMonth }
+async function getCustomerBookings(customerId) {
+    return await DBFunctions.getCustomerBookingsDB(customerId);
+}
+
+export default { addDays, getBooking, getBookings, addBooking, deleteBooking, editBooking, addTilvalg, editStartDate, getBookingsByMonth, getCustomerBookings };  // Tilføj getCustomerBookings her

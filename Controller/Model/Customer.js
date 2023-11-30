@@ -43,6 +43,8 @@ async function checkCustomer(customerUsername, customerPassword) {
     }
   }
 
+  
+
 /*
 let customer1 = new Customer("Lucas", "Holm", "123456", "Viby");
 customer1 = await addCustomer(customer1);

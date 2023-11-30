@@ -346,10 +346,31 @@ const editStartDateDB = async (booking,newStartDate, newEndDate) => {
     });
 };
 
+const getCustomerBookingsDB = async (id) => {
+    try {
+        // Hent alle rejsedokumenter fra databasen
+        const bookingQueryDocs = await getDocs(BookingCollection);
+
+        // Filtrer og map rejsedokumenter til dataarray
+        const bookings = bookingQueryDocs.docs
+            .filter(doc => doc.data().customer.docID === id) // Ændring her
+            .map(doc => {
+                let data = doc.data();
+                data.docID = doc.id;
+                return data;
+            });
+
+        return bookings;
+    } catch (error) {
+        console.error('Fejl ved hentning af kundens bookings i DBFunctions:', error);
+        throw new Error('Der opstod en fejl ved hentning af kundens bookings i DBFunctions.');
+    }
+};
+
  
 
 
 export default {getCustomerDB, getCustomerByUsernameAndPassword, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB,getAdminDB,
 getAdminsDB,deleteAdminDB,addAdminDB,editAdminDB,getAdminByUsernameAndPassword,getDriverDB,getDriversDB,deleteDriverDB,addDriverDB,editDriverDB,
 addJourneyDB, editJourneyDB, deleteJourneyDB, getJourneyDB, getJourneysDB, getCustomerJourneysDB, editStartDateDB,addTilvalgToBookingDB,editBooking,
-getBookingDB,getBookingsDB,addBookingDB,deleteBookingDB}
+getBookingDB,getBookingsDB,addBookingDB,deleteBookingDB, getCustomerBookingsDB}

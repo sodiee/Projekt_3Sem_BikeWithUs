@@ -1,10 +1,15 @@
 extends includes/layoutCustomer
 
-block content 
-    h1 Kære #{customerUser && customerUser.firstName} din reservation er hermed gennemført
-    p Startdato: #{startDate}
-    p Slutdato: #{endDate}
-    p Pris: #{price}
-
-    a(href='/CustomerPage')
-        button(type='button' id='kundeOversigt') Kunde oversigt
+block content
+  h1 Kære #{customerUser} din reservation er hermed gennemført
+  ul
+    each booking in bookings
+      if booking.customer.id === currentCustomerId
+        li 
+          - const dateOptions = { day: '2-digit', month: '2-digit', year: 'numeric' };
+          - const formattedDate = new Date(booking.startDate * 1000).toLocaleString(undefined, dateOptions);
+          - const formattedDate2 = new Date(booking.endDate * 1000).toLocaleString(undefined, dateOptions);
+          p Start Dato: #{formattedDate}
+          p Slut Dato: #{formattedDate2} 
+  a(href='/CustomerPage')
+    button(type='button' id='kundeOversigt') Kunde oversigt

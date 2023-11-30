@@ -126,13 +126,13 @@ customerRouter.post('/Calendar/Book', async (req, res) => {
 });
 
 customerRouter.post('/Calendar/confirmation', async (req, res) => {
-    if(req.session.isCustomerLoggedIn){
+    if (req.session.isCustomerLoggedIn) {
         try {  
-            // Hent oplysninger fra sessionen
+            const bookings = await bookingController.getBookingsForCustomer(req.session.customerId);
             const customerUser = req.session.customerUser;
-            const { startDate, endDate, price } = req.body;
+
             // Render confirmation-siden og send nødvendige oplysninger med
-            res.render('bookingConfirmed', { customerUser, startDate, endDate, price });
+            res.render('bookingConfirmed', { customerUser, bookings });
         } catch (error) {
             console.error('Fejl ved håndtering af bekræftelsessiden:', error);
             res.status(500).send('Der opstod en fejl ved håndtering af bekræftelsessiden.');
@@ -157,19 +157,23 @@ customerRouter.get('/CustomerPage', async (req, res) => {
     }
 });
 
-customerRouter.get('/CustomerJourneys', async (req, res) => {
-    if(req.session.isCustomerLoggedIn) {
+// Ændring af render-metoden i din customers.js-fil
+customerRouter.get('/CustomerBookings', async (req, res) => {
+    if (req.session.isCustomerLoggedIn) {
         try {
-            res.render('customerJourneys', {booking: customerUser.booking})
+            // Hent alle bookinger for den aktuelle kunde
+            const bookings = await bookingController.getCustomerBookings(req.session.customerId);
+
+            // Send bookinger til Pug-filen
+            res.render('customerBookings', { bookings });
         } catch (error) {
-            console.error('Fejl ved hentning af kundens rejser:', error);
-            res.status(500).send('Der opstod en fejl ved hentning af kundens rejser.');
+            console.error('Fejl ved hentning af kundens bookinger:', error);
+            res.status(500).send(`Der opstod en fejl ved hentning af kundens bookinger: ${error.message}`);
         }
+    } else {
+        res.redirect('/customerLogin');
     }
-    else {
-        res.redirect('/customerLogin')
-    }
-})
+});
 
 customerRouter.get('/Contact', async (req, res) => {
     if(req.session.isCustomerLoggedIn) {
