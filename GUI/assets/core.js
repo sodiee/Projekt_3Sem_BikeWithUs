@@ -3,12 +3,14 @@ import { async } from "@firebase/util"
 // mathias lugter hahahah
 
 // ------------------ DRIVERS ------------------
-async function deleteDriver(driverID) {
+export async function deleteDriver(driverID) {
     const response = await fetch(`/drivers/${driverID}`,{
       method: 'DELETE'
     })
     if (response.status == 204) {
-        window.location = "/drivers"
+        if (typeof window !== 'undefined') {
+            window.location = '/drivers';
+            }
     } else {
         alert("Der skete en fejl.")
     }
@@ -26,14 +28,15 @@ async function editDriver(driverID) {
         headers: { 'Content-Type': 'application/json' }
     })
     if (response.status == 200) {
-        window.location = '/drivers'
+        if (typeof window !== 'undefined') {
+        window.location = '/drivers' }
     } else {
         alert("Der skete en fejl.")
     }
 }
 
 
-async function addDriver(driver) {
+export async function addDriver(driver) {
     const response = await fetch('/drivers', {
         method: 'POST',
         headers: {
@@ -43,7 +46,9 @@ async function addDriver(driver) {
     });
 
     if (response.status === 201) {
+        if (typeof window !== 'undefined') {
         window.location = '/drivers';
+        }
     } else {
         alert('Der skete en fejl.');
     }

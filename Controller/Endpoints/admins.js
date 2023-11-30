@@ -452,8 +452,7 @@ adminRouter.get('/Edit/:id', async (req, res) => {
 });
 
 // Edit, add, delete admin
-
-adminRouter.put('/:adminID', async (req, res) => {
+adminRouter.post('/:adminID', async (req, res) => {
     try {
         const admin = await controller.editAdmin(req.params.adminID, req.body);
         res.json(admin);

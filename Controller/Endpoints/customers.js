@@ -59,7 +59,7 @@ customerRouter.get('/customerLogin', (req, res) => {
 
 // edit, delete, add customer
 
-customerRouter.put('/:customerID', async (req, res) => {
+customerRouter.post('/:customerID', async (req, res) => {
     try {
         const customer = await controller.editCustomer(req.params.customerID);
         res.json({ customer });
