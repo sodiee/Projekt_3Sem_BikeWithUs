@@ -1,7 +1,10 @@
 extends includes/layoutCustomer
 
-block content 
-    h2 Your Journeys
-    ul
-        each journey in journeys
-            li #{journey.startDate} - Price: #{journey.price}
+block content
+  h2 Your Journeys
+  ul
+    if journeys && journeys.length
+      each journey in journeys
+        li #{journey.startDate} - Price: #{journey.price}
+    else
+      li No journeys available
