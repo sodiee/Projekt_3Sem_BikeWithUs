@@ -146,9 +146,9 @@ adminRouter.get('/api/getBookings/', async (req, res) => {
 })
 
 //ikke færdig
-adminRouter.put('/api/oversigt/redigerRejse/:bookingId', async (req, res) => {
+adminRouter.put('/api/oversigt/redigerRejse/', async (req, res) => {
     try {
-        let bookingId = req.params.bookingId;
+        let bookingId = req.body;
         console.log(bookingId);
         let booking = controllerBooking.getBooking(bookingId);
         console.log(booking);
