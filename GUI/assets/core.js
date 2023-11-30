@@ -83,10 +83,11 @@ async function editJourney(journeyID) {
 //oversigt side
 async function getBookings(rbValue) {
     try {
+        console.log('1')
         let url = `/admins/api/oversigt/` + rbValue;
         const res = await fetch(url);
         const bookings = await res.json();
-
+        console.log('2')
         //RBs
 
         //THead
@@ -94,12 +95,16 @@ async function getBookings(rbValue) {
         //TBody
         //tildeler p elementer til td'erne fra booking.
         let idx = 1;
+        console.log('3')
         for (const booking of bookings) {
+            console.log('4')
+            console.log('booking.startdate: ' + booking.startDate)
+            console.log('booking.enddate: ' + booking.endDate)
             let startDate = new Date(booking.startDate)
             let endDate = new Date(booking.endDate);
             let totalPersoner;
 
-            for (let i = startDate.getDate(); i <= endDate.getDate(); i++) {
+            for (let i = booking.startDate.getDate(); i <= booking.endDate.getDate(); i++) {
                 let tdElementRejse = document.getElementById(i + ': Rejse');
                 let tdElementKunde = document.getElementById(i + ': Kunde');
                 let tdElementTilvalg = document.getElementById(i + ': Tilvalg');
