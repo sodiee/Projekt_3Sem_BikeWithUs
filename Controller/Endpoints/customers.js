@@ -128,11 +128,11 @@ customerRouter.post('/Calendar/Book', async (req, res) => {
 customerRouter.post('/Calendar/confirmation', async (req, res) => {
     if (req.session.isCustomerLoggedIn) {
         try {  
-            const bookings = await bookingController.getBookingsForCustomer(req.session.customerId);
-            const customerUser = req.session.customerUser;
+            const booking = await bookingController.getBooking();
+            const customerUser = req.session.customerUser; // Antaget objekt fra sessions
 
             // Render confirmation-siden og send nødvendige oplysninger med
-            res.render('bookingConfirmed', { customerUser, bookings });
+            res.render('bookingConfirmed', { customerUser: customer, booking });
         } catch (error) {
             console.error('Fejl ved håndtering af bekræftelsessiden:', error);
             res.status(500).send('Der opstod en fejl ved håndtering af bekræftelsessiden.');
