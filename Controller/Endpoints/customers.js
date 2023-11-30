@@ -2,6 +2,7 @@ import express from 'express';
 const customerRouter = express.Router();
 import controller from '../Model/Customer.js';
 import journeyController from '../Model/Journey.js';
+import bookingController from '../Model/Booking.js';
 import DBFunctions from '../../Storage/DBFunctions.js';
 
 //-------------------------------
@@ -56,6 +57,48 @@ customerRouter.get('/customerLogin', (req, res) => {
     res.render('customerLogin')
 })
 
+// edit, delete, add customer
+
+customerRouter.put('/:customerID', async (req, res) => {
+    try {
+        const customer = await controller.editCustomer(req.params.customerID);
+        res.json({ customer });
+    } catch (error) { 
+        console.error('Fejl ved redigering af kunde:', error);
+        res.status(500).send('Der opstod en fejl ved redigering af kunde.');
+    }
+});
+
+customerRouter.delete('/:customerID', async (req, res) => {
+    try {
+        await controller.deleteCustomer(req.params.customerID);
+        res.status(204).end();
+    } catch (error) {
+        console.error('Fejl ved sletning af kunde:', error);
+        res.status(500).send('Der opstod en fejl ved sletning af kunde.');
+    }
+});
+
+customerRouter.post('/', async (req, res) => {
+    try {
+        const customer = await controller.addCustomer(req.body);
+        res.status(201).json({ customer });
+    } catch (error) {
+        console.error('Fejl ved tilføjelse af kunde:', error);
+        res.status(500).send('Der opstod en fejl ved tilføjelse af kunde.');
+    }
+});
+
+// TODO
+// Simulator af databaseopkald
+function checkCustomerUser(customerUsername, customerPassword) {
+    let returnValue = false
+    if (customerUsername == 'Maksym' && customerPassword == '123') {
+        returnValue = true
+    }
+    return returnValue
+}
+
 
 // ------------------------------------------
 // customer-ENDPOINTS for booking / Calender |
@@ -79,9 +122,9 @@ customerRouter.get('/Calendar/Book', async (req, res) => {
     // Check for login status using sessions or cookies
     if (req.session.isCustomerLoggedIn) {
         try {
-            const journeys = journeyController.getJourneys;
+            const journeys = await journeyController.getJourneys();
             const startDate = req.query.date || 'No date selected'; // Brug datoen gemt i sessionen som startDate
-            res.render('bookAJourney', { startDate, journeys : journeys });
+            res.render('bookingJourney', { startDate, journeys });
         } catch (error) {
             console.error('Fejl ved tilføjelse af Rejse:', error);
             res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
@@ -92,22 +135,27 @@ customerRouter.get('/Calendar/Book', async (req, res) => {
 });
 
 customerRouter.post('/Calendar/Book', async (req, res) => {
-    // Check for login status using sessions or cookies
+    // Check for logi/Calendar/Bookn status using sessions or cookies
     if (req.session.isCustomerLoggedIn) {
         try {
-            const selectedJourney = req.body.journey;
+            const selectedJourneyId = req.body.journeyId;
+            const selectedJourney = await journeyController.getJourney(selectedJourneyId);
             const {price, participants } = req.body;
             const startDate = req.query.date || 'No date selected'; // Brug datoen gemt i sessionen som startDate
-            
+
+            const booking = {customerUser, selectedJourney, participants, startDate}
+            await bookingController.addBooking(booking);
+
+            res.redirect('/Calendar');
         } catch (error) {
             console.error('Fejl ved tilføjelse af booking:', error);
             res.status(500).send('Der opstod en fejl ved tilføjelse af booking.');
         }
     } else {
-        res.redirect('/bookingConfirmed');
+        res.redirect('/customerLogin');
     }
 });
-
+//hej
 
 customerRouter.post('/Calendar/confirmation', async (req, res) => {
         try {
@@ -119,7 +167,7 @@ customerRouter.post('/Calendar/confirmation', async (req, res) => {
             console.error('Fejl ved håndtering af bekræftelsessiden:', error);
             res.status(500).send('Der opstod en fejl ved håndtering af bekræftelsessiden.');
         }
-    });
+});
 
 
 customerRouter.get('/CustomerPage', async (req, res) => {

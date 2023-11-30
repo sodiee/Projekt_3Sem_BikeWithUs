@@ -1,12 +1,11 @@
 import express from 'express';
-import session from 'express-session'
 const adminRouter = express.Router();
 import controllerJourney from '../Model/Journey.js';
 import controllerDriver from '../Model/Driver.js';
 import controllerCustomer from '../Model/Customer.js';
 import controllerAdmin from '../Model/Admin.js'
 import controllerBooking from '../Model/Booking.js';
-import e from 'express';
+
 
 //----------------------------
 // admin-ENDPOINTS for LOGIN |
@@ -116,8 +115,8 @@ adminRouter.get('/oversigt', async (req, res) => {
 
 adminRouter.get('/oversigt/redigerRejse', async (req, res) => {
     try {
-        let journeys = await controllerJourney.getJourneys();
-        res.render('adminOversigtRedigerRejse', { journeys: journeys });
+        let bookings = await controllerBooking.getBookings();
+        res.render('adminOversigtRedigerRejse', { bookings: bookings });
     } catch (error) {
         console.log(error)
     }
@@ -127,12 +126,8 @@ adminRouter.get('/oversigt/redigerRejse', async (req, res) => {
 
 adminRouter.get('/api/oversigt/:month', async (req, res) => {
     try {
-        console.log('1')
         let bookings = await controllerBooking.getBookingsByMonth(req.params.month);
-console.log(bookings);
-        console.log('11')
         res.json(bookings);
-console.log('12')
     } catch (err) {
         console.log('Fejl ved hentning af bookings pr. måned');
         //res.status(500).send('Fejl ved hentning af journeys pr. måned');
@@ -142,7 +137,6 @@ console.log('12')
 adminRouter.get('/api/getBookings/', async (req, res) => {
     try {
         let bookings = await controllerBooking.getBookings();
-
         res.json(bookings);
 
     } catch (error) {
@@ -151,12 +145,20 @@ adminRouter.get('/api/getBookings/', async (req, res) => {
 })
 
 //ikke færdig
-adminRouter.put('/api/oversigt/redigerRejse/:journey', async (req, res) => {
+adminRouter.put('/api/oversigt/redigerRejse/', async (req, res) => {
     try {
-        let journey = req.params.journey;
-        console.log(journey);
+        let bookingId = req.body;
+        console.log(bookingId);
+        let booking = controllerBooking.getBooking(bookingId);
+        console.log(booking);
+        let newStartDate = req.body.startDate;
+        console.log(newStartDate);
+        let newEndDate = controllerBooking.addDays(newStartDate, booking.nrOfDays);
+        console.log(newEndDate);
+        controllerBooking.editStartDate(journey);
         res.status(204);
-        //controllerJourney.editStartDate(journey);
+        res.end();
+        res.render('bookingUpdateComplete');
     } catch (error) {
         console.log(error)
     }
@@ -179,15 +181,11 @@ adminRouter.get('/Customers', async (req, res) => {
     }
 });
 
-adminRouter.get('/Drivers', async (req, res) => {
+adminRouter.get('/admins/drivers', async (req, res) => {
     try {
-        // Finder alle Drivers
+        // Finder alle drivers
         const drivers = await controllerDriver.getDrivers();
-        if (req.session.isAdminLoggedIn) {
-            res.render('drivers', { drivers });
-        } else {
-            res.redirect('/admins/adminLogin')
-        }
+        res.render('drivers', { drivers });
     } catch (error) {
         console.error('Fejl ved hentning af drivers:', error);
         res.status(500).send('Der opstod en fejl ved hentning af drivers.');
@@ -199,7 +197,7 @@ adminRouter.get('/overview', async (req, res) => {
     try {
         // Finder alle admins
         const admins = await controllerAdmin.getAdmins();
-        res.render('admins', { admins: admins });
+        res.render('adminsOverview', { admins: admins });
     } catch (error) {
         console.error('Fejl ved hentning af admins', error);
         res.status(500).send('Der opstod en fejl ved hentning af admins');
@@ -449,6 +447,38 @@ adminRouter.get('/Edit/:id', async (req, res) => {
     } catch (error) {
         console.error('Fejl ved redigering af Admin:', error);
         res.status(500).send('Der opstod en fejl ved redigering af admin.');
+    }
+});
+
+// Edit, add, delete admin
+
+adminRouter.put('/:adminID', async (req, res) => {
+    try {
+        const admin = await controller.editAdmin(req.params.adminID, req.body);
+        res.json(admin);
+    } catch (error) {
+        console.error('Fejl ved redigering af Admin: ', error);
+        res.status(500).send('Der opstod en fejl ved redigering af admin.');
+    }
+});
+
+adminRouter.post('/', async (req, res) => {
+    try {
+        const admin = await controller.addAdmin(req.body);
+        res.json(admin);
+    } catch (error) {
+        console.error('Fejl ved tilføjelse af Admin: ', error);
+        res.status(500).send('Der opstod en fejl ved tilføjelse af admin.');
+    }
+});
+
+adminRouter.delete('/:adminID', async (req, res) => {
+    try {
+        const admin = await controller.deleteAdmin(req.params.adminID);
+        res.json(admin);
+    } catch (error) {
+        console.error('Fejl ved sletning af Admin: ', error);
+        res.status(500).send('Der opstod en fejl ved sletning af admin.');
     }
 });
 
