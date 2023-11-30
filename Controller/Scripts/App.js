@@ -17,6 +17,7 @@ app.use(session({
     resave: false
 }))
 
+
 // Endpoints (routes)
 import customerRouter from '../Endpoints/customers.js'
 app.use('/', customerRouter)

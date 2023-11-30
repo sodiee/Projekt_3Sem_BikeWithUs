@@ -1,12 +1,26 @@
 extends includes/layoutCustomer
 
 block content
-  h1 Booking Bekræftet
-  p
-    | Hej #{customer.firstName}, dit køb er bekræftet.
-  p 
-    | Dato: #{booking.startDate}
-    br
-    | Pris: #{booking.price}
-  a(href='/CustomerPage')
-    button(type='button' id='kundeOversigt') Kunde oversigt
+    h1 Booking Bekræftet
+    ul   
+        if booking.customer.id === currentCustomerId
+            ul
+                - const options = { day: '2-digit', month: '2-digit', year: 'numeric' }
+                - const formattedDate = new Date(booking.startDate).toLocaleString(undefined, options)
+                - const formattedDate2 = new Date(booking.endDate).toLocaleString(undefined, options)
+                p Hej #{customer.firstName}, dit køb er bekræftet.
+                br
+                p Booking detaljer:
+                p Startdato: #{formattedDate}
+                p Slutdato: #{formattedDate2}
+                p Pris: #{booking.bookingPrice}
+                p Antal personer: #{booking.nrOfPersons}
+    
+        a(href='/CustomerPage')
+             button(type='button' id='kundeOversigt') Kunde oversigt
+
+    
+    
+        
+            
+        

@@ -103,20 +103,27 @@ customerRouter.get('/Calendar/Book', async (req, res) => {
 });
 
 customerRouter.post('/Calendar/Book', async (req, res) => {
-    // Check for logi/Calendar/Bookn status using sessions or cookies
     if (req.session.isCustomerLoggedIn) {
         try {
             const selectedJourneyId = req.body.journeyId;
             const selectedJourney = await journeyController.getJourney(selectedJourneyId);
-            const {price, participants} = req.body;
-            const startDate = new Date(req.body.date)
-            const booking = {customer : customerUser, journey : selectedJourney, nrOfPersons : participants, startDate :  startDate}
-            if(await bookingController.addBooking(booking)) {
-                res.render('bookingConfirmed');
-            } else {
-                res.redirect('/Calendar')
-            }
-        }catch (error) {
+            const { price, participants } = req.body;
+            const startDate = new Date(req.body.date);
+
+            const booking = {
+                customer: customerUser,
+                journey: selectedJourney,
+                nrOfPersons: participants,
+                startDate: startDate
+            };
+
+            // Gem booking i sessionen
+            req.session.booking = booking;
+
+            if (await bookingController.addBooking(booking)) {
+                res.redirect('/Calendar/confirmation');
+            } 
+        } catch (error) {
             console.error('Fejl ved tilføjelse af booking:', error);
             res.status(500).send('Der opstod en fejl ved tilføjelse af booking.');
         }
@@ -125,14 +132,17 @@ customerRouter.post('/Calendar/Book', async (req, res) => {
     }
 });
 
-customerRouter.post('/Calendar/confirmation', async (req, res) => {
+
+customerRouter.get('/Calendar/confirmation', async (req, res) => {
     if (req.session.isCustomerLoggedIn) {
-        try {  
-            const booking = await bookingController.getBooking();
-            const customerUser = req.session.customerUser; // Antaget objekt fra sessions
+        try {
+            // Hent booking fra sessionen
+            const booking = req.session.booking;
+
+            const latestBooking = await bookingController.getCustomerBooking(req.session.customerId);
 
             // Render confirmation-siden og send nødvendige oplysninger med
-            res.render('bookingConfirmed', { customerUser: customer, booking });
+            res.render('bookingConfirmed', { customer: booking.customer, booking: booking, latestBooking });
         } catch (error) {
             console.error('Fejl ved håndtering af bekræftelsessiden:', error);
             res.status(500).send('Der opstod en fejl ved håndtering af bekræftelsessiden.');
@@ -141,7 +151,6 @@ customerRouter.post('/Calendar/confirmation', async (req, res) => {
         res.redirect('/customerLogin');
     }
 });
-
 customerRouter.get('/CustomerPage', async (req, res) => {
     // Check for login status using sessions or cookies
     if (req.session.isCustomerLoggedIn) {

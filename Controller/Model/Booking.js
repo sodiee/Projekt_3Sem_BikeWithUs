@@ -80,4 +80,8 @@ async function getCustomerBookings(customerId) {
     return await DBFunctions.getCustomerBookingsDB(customerId);
 }
 
-export default { addDays, getBooking, getBookings, addBooking, deleteBooking, editBooking, addTilvalg, editStartDate, getBookingsByMonth, getCustomerBookings };  // Tilføj getCustomerBookings her
+async function getCustomerBooking(customerId) {
+    return await DBFunctions.getCustomerBookingDB(customerId);
+}
+
+export default { addDays, getBooking, getBookings, addBooking, deleteBooking, editBooking, addTilvalg, editStartDate, getBookingsByMonth, getCustomerBookings, getCustomerBooking};  // Tilføj getCustomerBookings her

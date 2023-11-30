@@ -367,10 +367,33 @@ const getCustomerBookingsDB = async (id) => {
     }
 };
 
+const getCustomerBookingDB = async (id) => {
+    try {
+        const bookingQueryDocs = await getDocs(BookingCollection);
+
+        const bookings = bookingQueryDocs.docs
+            .map(doc => {
+                let data = doc.data();
+                data.docID = doc.id;
+                return data;
+            })
+            .sort((a, b) => b.bookingDate - a.bookingDate); // Sorterer bookings efter bookingDate faldende
+
+        if (bookings.length > 0) {
+            return bookings[0]; // Returnerer den seneste booking
+        } else {
+            throw new Error('Ingen bookings fundet.');
+        }
+    } catch (error) {
+        console.error('Fejl ved hentning af seneste booking i DBFunctions:', error);
+        throw new Error('Der opstod en fejl ved hentning af seneste booking i DBFunctions.');
+    }
+};
+
  
 
 
 export default {getCustomerDB, getCustomerByUsernameAndPassword, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB,getAdminDB,
 getAdminsDB,deleteAdminDB,addAdminDB,editAdminDB,getAdminByUsernameAndPassword,getDriverDB,getDriversDB,deleteDriverDB,addDriverDB,editDriverDB,
 addJourneyDB, editJourneyDB, deleteJourneyDB, getJourneyDB, getJourneysDB, getCustomerJourneysDB, editStartDateDB,addTilvalgToBookingDB,editBooking,
-getBookingDB,getBookingsDB,addBookingDB,deleteBookingDB, getCustomerBookingsDB}
+getBookingDB,getBookingsDB,addBookingDB,deleteBookingDB, getCustomerBookingsDB, getCustomerBookingDB}
