@@ -126,7 +126,10 @@ adminRouter.get('/oversigt/redigerRejse', async (req, res) => {
 
 adminRouter.get('/api/oversigt/:month', async (req, res) => {
     try {
+        console.log('11')
         let bookings = await controllerBooking.getBookingsByMonth(req.params.month);
+        console.log('12')
+        console.log(bookings)
         res.json(bookings);
     } catch (err) {
         console.log('Fejl ved hentning af bookings pr. måned');
@@ -145,17 +148,19 @@ adminRouter.get('/api/getBookings/', async (req, res) => {
 })
 
 //ikke færdig
-adminRouter.put('/api/oversigt/redigerRejse/', async (req, res) => {
+adminRouter.post('/api/oversigt/redigerRejse/', async (req, res) => {
     try {
         let bookingId = req.body;
-        console.log(bookingId);
-        let booking = controllerBooking.getBooking(bookingId);
-        console.log(booking);
+        console.log('bookingId.enddate: ' + bookingId.endDate)
+        console.log('bookingid: ' + bookingId.id);
+        let booking = await controllerBooking.getBooking(bookingId);
+        console.log('booking: ' + booking);
         let newStartDate = req.body.startDate;
-        console.log(newStartDate);
+        console.log('newstardate: ' + newStartDate);
+        console.log('.nrofdays: ' + booking.nrOfDays);
         let newEndDate = controllerBooking.addDays(newStartDate, booking.nrOfDays);
-        console.log(newEndDate);
-        controllerBooking.editStartDate(journey);
+        console.log('newenddate: ' + newEndDate);
+        controllerBooking.editStartDate(booking, newStartDate, newEndDate);
         res.status(204);
         res.end();
         res.render('bookingUpdateComplete');
@@ -164,7 +169,13 @@ adminRouter.put('/api/oversigt/redigerRejse/', async (req, res) => {
     }
 })
 
+adminRouter.get('/api/oversigt/redigerRejse/', async (req, res) => {
+    res.render('bookingUpdateComplete');
+})
+
 //APIsektion slut
+
+
 
 adminRouter.get('/Customers', async (req, res) => {
     try {

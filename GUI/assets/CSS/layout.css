@@ -24,7 +24,7 @@ header {
     flex-shrink: 0;
 }
 
-#logo>img {
+#logo img {
     width: auto;
     height: 40px;
 }

@@ -1,5 +1,5 @@
 
-import Booking from '../Controller/Model/booking.js';
+import Booking from '../Controller/Model/Booking.js';
 import DBFunctions from '../Storage/DBFunctions.js';
 import chai from 'chai'
 const assert = chai.assert

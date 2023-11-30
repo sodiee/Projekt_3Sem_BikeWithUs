@@ -4,7 +4,7 @@ function Booking(customer, journey, nrOfPersons, startDate) {
     this.customer = customer;
     this.journey = journey;
     this.startDate = startDate;
-    this.endDate = addDays(startDate, nrOfDays);
+    this.endDate = addDays(startDate, journey.nrOfDays);
     this.tilvalg = [];
     this.nrOfPersons = nrOfPersons;
     this.bookingDate = new Date();
@@ -14,8 +14,6 @@ function Booking(customer, journey, nrOfPersons, startDate) {
 function addDays(date, days) {
     let result = new Date(date);
     result.setDate(result.getDate() + days);
-    function pad(n) {return n < 10 ? "0"+n : n;}
-    result = result.getFullYear() + "-" + pad(result.getMonth() + 1) + "-" + pad(result.getDate());
     return result;
 }
 
@@ -36,12 +34,13 @@ function addTilvalg(tilvalg) {
 }
 
 async function editStartDate(booking) {
-    let j = { name: booking.name, startDate: booking.startDate, endDate: addDays(startDate, nrOfDays) }
+    let j = { name: booking.name, startDate: booking.startDate, endDate: addDays(booking.startDate, booking.nrOfDays) }
     return DBFunctions.editStartDateDB(j);
 }
 
 async function getBooking(booking) {
-    return await DBFunctions.getBookingDB(booking);
+    console.log('2')
+    return await DBFunctions.getBookingDB(booking.id);
 }
 
 async function getBookings() {
@@ -77,4 +76,4 @@ function filterByMonth(monthArray, targetMonth) {
     return res;
 }
 
-export default { addDays, getBooking, getBookings, addBooking, deleteBooking, editBooking, addTilvalg, editStartDate, getBookingsByMonth, addDays }
+export default { addDays, getBooking, getBookings, addBooking, deleteBooking, editBooking, addTilvalg, editStartDate, getBookingsByMonth }
