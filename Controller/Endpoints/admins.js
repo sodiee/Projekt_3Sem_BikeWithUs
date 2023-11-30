@@ -317,7 +317,7 @@ adminRouter.get('/Customer/Edit/:id', async (req, res) => {
         const customer = await controllerCustomer.getCustomer(customerId);
 
         if (req.session.isAdminLoggedIn) {
-            res.render('EditCustomer', { customer });
+            res.render('customerEdit', { customer });
         } else {
             res.redirect('/adminLogin')
         }
