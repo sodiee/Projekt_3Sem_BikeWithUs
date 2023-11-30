@@ -244,10 +244,13 @@ const getJourneysDB = async () => {
 const getJourneyDB = async (id) => {
         const docRef = doc(db, 'Journeys', id);
         const journeyQueryDoc = await getDoc(docRef);
+        if(journeyQueryDoc.exists()) {
         const journey = journeyQueryDoc.data();
-        journey.docID = journeyQueryDoc.id;
-        return journey;
-}
+        return{ id: journeyQueryDoc.id, ...journey}
+    }else{
+        return null;
+    }
+};
 
 const addJourneyDB = async (journey) => {
     const docRef = await addDoc(JourneyCollection, journey);
@@ -299,6 +302,7 @@ const getBookingDB = async (id) => {
 
 const addBookingDB = async (booking) => {
     booking.endDate = new Date(booking.startdate);
+    console.log(booking.journey)
     booking.endDate.setDate(booking.endDate.getDate() + booking.journey.nrOfDays);
     booking.bookingPrice = booking.journey.price * booking.nrOfPersons;
 

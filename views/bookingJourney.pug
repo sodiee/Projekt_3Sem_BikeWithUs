@@ -14,7 +14,7 @@ html(lang='en')
         select(name='journeyId', id='journeyId')
           //for each jouney in database
           each journey in journeys
-            option(value=(journey.id)) #{journey.name}
+            option(value=(journey.docID)) #{journey.name}
 
       div
         //Price of chosen journey * participants TODO
