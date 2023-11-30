@@ -1,7 +1,11 @@
+import { async } from "@firebase/util"
+
+// mathias lugter hahahah
+
 // ------------------ DRIVERS ------------------
 async function deleteDriver(driverID) {
-    const response = await fetch(`/drivers/${driverID}`, {
-        method: 'DELETE'
+    const response = await fetch(`/drivers/${driverID}`,{
+      method: 'DELETE'
     })
     if (response.status == 204) {
         window.location = "/drivers"
@@ -56,7 +60,7 @@ async function deleteJourney(journeyID) {
     } else {
         alert("Der skete en fejl.")
     }
-}
+  }
 
 async function editJourney(journeyID) {
     const startDate = document.getElementById('startDate').value
@@ -398,3 +402,99 @@ async function editBooking(booking) {
 
 oversigtSide();
 redigerSide();
+
+
+
+//------------------ CUSTOMERS -------------------
+async function deleteCustomer(customerID) {
+    const response = await fetch(`/customers/${customerID}`,{
+      method: 'DELETE'
+    })
+    if (response.status == 204) {
+      window.location = "/customers"
+    } else {
+      alert("Der skete en fejl.")
+    }
+  }
+
+
+async function editCustomer(customerID) {
+    const firstName = document.getElementById('firstName').value 
+    const lastName = document.getElementById('lastName').value
+    let data = {firstName: firstName, lastName: lastName}
+    let url = `/customers/${driverID}`
+    const response = await fetch(url, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+      headers: { 'Content-Type': 'application/json' }
+    })
+    if(response.status == 200){
+      window.location = '/customers'
+    } else {
+      alert("Der skete en fejl.")
+    }
+  }
+
+
+  async function addCustomer(customer) {
+    const response = await fetch('/customers', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(customer),
+    });
+
+    if (response.status === 201) {
+        window.location = '/customers';
+    } else {
+        alert('Der skete en fejl.');
+    }
+}
+//------------------ ADMINS -------------------
+async function deleteAdmin(adminID) {
+    const response = await fetch(`/admins/${adminID}`,{
+      method: 'DELETE'
+    })
+    if (response.status == 204) {
+      window.location = "/admins"
+    } else {
+      alert("Der skete en fejl.")
+    }
+  }
+
+
+async function editAdmin(adminID) {
+    const firstName = document.getElementById('firstName').value 
+    const lastName = document.getElementById('lastName').value
+    let data = {firstName: firstName, lastName: lastName}
+    let url = `/admins/${adminID}`
+    const response = await fetch(url, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+      headers: { 'Content-Type': 'application/json' }
+    })
+    if(response.status == 200){
+      window.location = '/admins'
+    } else {
+      alert("Der skete en fejl.")
+    }
+  }
+
+
+async function addAdmin(admin) {
+    const response = await fetch('/admins', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(admin),
+    });
+
+    if (response.status === 201) {
+        window.location = '/admins';
+    } else {
+        alert('Der skete en fejl.');
+    }
+}  
+

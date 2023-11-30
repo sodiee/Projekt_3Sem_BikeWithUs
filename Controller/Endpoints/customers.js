@@ -57,6 +57,48 @@ customerRouter.get('/customerLogin', (req, res) => {
     res.render('customerLogin')
 })
 
+// edit, delete, add customer
+
+customerRouter.put('/:customerID', async (req, res) => {
+    try {
+        const customer = await controller.editCustomer(req.params.customerID);
+        res.json({ customer });
+    } catch (error) { 
+        console.error('Fejl ved redigering af kunde:', error);
+        res.status(500).send('Der opstod en fejl ved redigering af kunde.');
+    }
+});
+
+customerRouter.delete('/:customerID', async (req, res) => {
+    try {
+        await controller.deleteCustomer(req.params.customerID);
+        res.status(204).end();
+    } catch (error) {
+        console.error('Fejl ved sletning af kunde:', error);
+        res.status(500).send('Der opstod en fejl ved sletning af kunde.');
+    }
+});
+
+customerRouter.post('/', async (req, res) => {
+    try {
+        const customer = await controller.addCustomer(req.body);
+        res.status(201).json({ customer });
+    } catch (error) {
+        console.error('Fejl ved tilføjelse af kunde:', error);
+        res.status(500).send('Der opstod en fejl ved tilføjelse af kunde.');
+    }
+});
+
+// TODO
+// Simulator af databaseopkald
+function checkCustomerUser(customerUsername, customerPassword) {
+    let returnValue = false
+    if (customerUsername == 'Maksym' && customerPassword == '123') {
+        returnValue = true
+    }
+    return returnValue
+}
+
 
 // ------------------------------------------
 // customer-ENDPOINTS for booking / Calender |
