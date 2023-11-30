@@ -124,7 +124,7 @@ customerRouter.get('/Calendar/Book', async (req, res) => {
         try {
             const journeys = await journeyController.getJourneys();
             const startDate = req.query.date || 'No date selected'; // Brug datoen gemt i sessionen som startDate
-            res.render('bookAJourney', { startDate, journeys });
+            res.render('bookingJourney', { startDate, journeys });
         } catch (error) {
             console.error('Fejl ved tilføjelse af Rejse:', error);
             res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');

@@ -48,7 +48,7 @@ driverRouter.delete('/:driverID', async (req, res) => {
     }
 });
 
-
+/** 
 driverRouter.edit('/:driverID', async (req, res) => {
     try {
         const driver = await controller.editDriver(req.params.driverID);
@@ -58,6 +58,6 @@ driverRouter.edit('/:driverID', async (req, res) => {
         res.status(500).send('Der opstod en fejl ved redigering af chauffør.');
     }
 });
-
+*/
 
 export default driverRouter;
