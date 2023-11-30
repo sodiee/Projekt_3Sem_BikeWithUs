@@ -106,9 +106,8 @@ customerRouter.post('/Calendar/Book', async (req, res) => {
         try {
             const selectedJourneyId = req.body.journeyId;
             const selectedJourney = await journeyController.getJourney(selectedJourneyId);
-            const {price, participants } = req.body;
-            const startDate = req.query.date || 'No date selected'; // Brug datoen gemt i sessionen som startDate
-
+            const {price, participants} = req.body;
+            const startDate = new Date(req.body.date)
             const booking = {customer : customerUser, journey : selectedJourney, nrOfPersons : participants, startDate :  startDate}
             await bookingController.addBooking(booking);
 

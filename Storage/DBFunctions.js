@@ -301,10 +301,10 @@ const getBookingDB = async (id) => {
 }
 
 const addBookingDB = async (booking) => {
-    booking.endDate = new Date(booking.startdate);
-    console.log(booking.journey)
-    booking.endDate.setDate(booking.endDate.getDate() + booking.journey.nrOfDays);
+    booking.endDate = new Date(booking.startDate);
+    booking.endDate.setDate(booking.startDate.getDate() + booking.journey.nrOfDays);
     booking.bookingPrice = booking.journey.price * booking.nrOfPersons;
+    booking.bookingDate = new Date();
 
     const docRef = await addDoc(BookingCollection, booking);
 
