@@ -2,7 +2,7 @@ extends includes/layout
 
 block content
     script(src="/core.js" defer)
-    form(id='redigerForm' action=`/api/oversigt/redigerRejse/` method='GET')
+    form(id='redigerForm' action=`/admins/api/oversigt/redigerRejse/` method='POST')
         select(name='bookings', id='bookingsDropDown')
           <option disabled selected value> -- select an option -- </option>
           each booking in bookings

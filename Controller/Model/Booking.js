@@ -36,12 +36,13 @@ function addTilvalg(tilvalg) {
 }
 
 async function editStartDate(booking) {
-    let j = { name: booking.name, startDate: booking.startDate, endDate: addDays(startDate, nrOfDays) }
+    let j = { name: booking.name, startDate: booking.startDate, endDate: addDays(booking.startDate, booking.nrOfDays) }
     return DBFunctions.editStartDateDB(j);
 }
 
 async function getBooking(booking) {
-    return await DBFunctions.getBookingDB(booking);
+    console.log('2')
+    return await DBFunctions.getBookingDB(booking.id);
 }
 
 async function getBookings() {

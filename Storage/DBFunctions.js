@@ -293,10 +293,10 @@ const getBookingsDB = async () => {
 }
 
 const getBookingDB = async (id) => {
-    const docRef = doc(db, 'Bookings', id);
+    const docRef = doc(db, 'Bookings', id + "");
     const bookingQueryDoc = await getDoc(docRef);
     let booking = bookingQueryDoc.data();
-    booking.docID = bookingQueryDoc.id;
+    booking.id = bookingQueryDoc.id;
     return booking;
 }
 
@@ -336,6 +336,9 @@ const editBooking = async (booking) => {
 };
 
 const editStartDateDB = async (booking,newStartDate, newEndDate) => {
+    console.log('editstartdatedb: bboking: ' + booking)
+    console.log('editstartdatedb: newstardate: ' + newStartDate)
+    console.log('editstartdatedb: newenddate: ' + newEndDate)
     await updateDoc(doc(db, 'Bookings', booking.id), {
         startDate: newStartDate,
         endDate: newEndDate

@@ -1,5 +1,3 @@
-import { async } from "@firebase/util"
-
 // mathias lugter hahahah
 
 // ------------------ DRIVERS ------------------
@@ -388,7 +386,7 @@ async function redigeringsBtnOnclick() {
 }
 
 async function editBooking(booking) {
-    const response = await fetch(`/api/admins/oversigt/redigerRejse/${booking}`, {
+    const response = await fetch(`/admins/api/oversigt/redigerRejse/${booking}`, {
         method: 'put',
         body: JSON.stringify(booking),
         headers: { 'Content-Type': 'application/json' }
