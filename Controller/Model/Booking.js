@@ -36,7 +36,7 @@ function addTilvalg(tilvalg) {
 }
 
 async function editStartDate(booking) {
-    let j = { name: booking.name, startDate: booking.startDate, endDate: startDate + booking.nrOfDays }
+    let j = { name: booking.name, startDate: booking.startDate, endDate: addDays(startDate, nrOfDays) }
     return DBFunctions.editStartDateDB(j);
 }
 
@@ -77,4 +77,4 @@ function filterByMonth(monthArray, targetMonth) {
     return res;
 }
 
-export default { addDays, getBooking, getBookings, addBooking, deleteBooking, editBooking, addTilvalg, editStartDate, getBookingsByMonth }
+export default { addDays, getBooking, getBookings, addBooking, deleteBooking, editBooking, addTilvalg, editStartDate, getBookingsByMonth, addDays }

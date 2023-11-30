@@ -2,22 +2,20 @@ extends includes/layout
 
 block content
     script(src="/core.js" defer)
-    form(id='redigerForm' action=`/admins/oversigt/` method='PUT')
+    form(id='redigerForm' action=`/api/oversigt/redigerRejse/` method='POST')
         select(name='bookings', id='bookingsDropDown')
           <option disabled selected value> -- select an option -- </option>
           each booking in bookings
-            option(value=booking.docID) Rejse navn: #{booking.name}
+            option(value=booking.docID) Rejse navn: #{booking.journey.name}
         br
 
         label(for='customerName') Tilhørende kunde: 
         input(type='text', id='customerName', name='name', readonly)
         br
-        label(for='bookingId') RejseId: 
+        label(for='bookingId') Bookingnr.: 
         input(type='text', id='bookingId', name='id', readonly)
         br
         label(for='bookingStartDate') Startdato: 
         input(type='text', id='bookingStartDate', name='startDate', required)
         br
         button(type='submit', name='action', id='redigerBtn') Rediger rejse
-
-        //-.name skal måske stadig være journey
