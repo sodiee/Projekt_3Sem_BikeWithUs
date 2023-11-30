@@ -49,7 +49,7 @@ driverRouter.delete('/:driverID', async (req, res) => {
 });
 
 
-driverRouter.edit('/:driverID', async (req, res) => {
+driverRouter.put('/:driverID', async (req, res) => {
     try {
         const driver = await controller.editDriver(req.params.driverID);
         res.json({ driver });
