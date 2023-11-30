@@ -1,12 +1,11 @@
 import express from 'express';
-import session from 'express-session'
 const adminRouter = express.Router();
 import controllerJourney from '../Model/Journey.js';
 import controllerDriver from '../Model/Driver.js';
 import controllerCustomer from '../Model/Customer.js';
 import controllerAdmin from '../Model/Admin.js'
 import controllerBooking from '../Model/Booking.js';
-import e from 'express';
+
 
 //----------------------------
 // admin-ENDPOINTS for LOGIN |
@@ -127,7 +126,10 @@ adminRouter.get('/oversigt/redigerRejse', async (req, res) => {
 
 adminRouter.get('/api/oversigt/:month', async (req, res) => {
     try {
+        console.log('11')
         let bookings = await controllerBooking.getBookingsByMonth(req.params.month);
+        console.log('12')
+        console.log(bookings)
         res.json(bookings);
     } catch (err) {
         console.log('Fejl ved hentning af bookings pr. måned');
@@ -146,17 +148,19 @@ adminRouter.get('/api/getBookings/', async (req, res) => {
 })
 
 //ikke færdig
-adminRouter.put('/api/oversigt/redigerRejse/', async (req, res) => {
+adminRouter.post('/api/oversigt/redigerRejse/', async (req, res) => {
     try {
         let bookingId = req.body;
-        console.log(bookingId);
-        let booking = controllerBooking.getBooking(bookingId);
-        console.log(booking);
+        console.log('bookingId.enddate: ' + bookingId.endDate)
+        console.log('bookingid: ' + bookingId.id);
+        let booking = await controllerBooking.getBooking(bookingId);
+        console.log('booking: ' + booking);
         let newStartDate = req.body.startDate;
-        console.log(newStartDate);
+        console.log('newstardate: ' + newStartDate);
+        console.log('.nrofdays: ' + booking.nrOfDays);
         let newEndDate = controllerBooking.addDays(newStartDate, booking.nrOfDays);
-        console.log(newEndDate);
-        controllerBooking.editStartDate(journey);
+        console.log('newenddate: ' + newEndDate);
+        controllerBooking.editStartDate(booking, newStartDate, newEndDate);
         res.status(204);
         res.end();
         res.render('bookingUpdateComplete');
@@ -165,7 +169,13 @@ adminRouter.put('/api/oversigt/redigerRejse/', async (req, res) => {
     }
 })
 
+adminRouter.get('/api/oversigt/redigerRejse/', async (req, res) => {
+    res.render('bookingUpdateComplete');
+})
+
 //APIsektion slut
+
+
 
 adminRouter.get('/Customers', async (req, res) => {
     try {
@@ -198,7 +208,7 @@ adminRouter.get('/overview', async (req, res) => {
     try {
         // Finder alle admins
         const admins = await controllerAdmin.getAdmins();
-        res.render('admins', { admins: admins });
+        res.render('adminsOverview', { admins: admins });
     } catch (error) {
         console.error('Fejl ved hentning af admins', error);
         res.status(500).send('Der opstod en fejl ved hentning af admins');
@@ -318,7 +328,7 @@ adminRouter.get('/Customer/Edit/:id', async (req, res) => {
         const customer = await controllerCustomer.getCustomer(customerId);
 
         if (req.session.isAdminLoggedIn) {
-            res.render('EditCustomer', { customer });
+            res.render('customerEdit', { customer });
         } else {
             res.redirect('/adminLogin')
         }

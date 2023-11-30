@@ -1,13 +1,11 @@
-import DBFunctions from '../../Storage/DBFunctions.js';
 import express from 'express'
 import session  from 'express-session';
-import pug from 'pug';
+
 
 const app = express();
 app.set('view engine', 'pug');
 
 // Middleware
-
 //app.use(express.json);
 app.use(express.urlencoded({extended: true}))
 app.use(express.static('/views'))
@@ -18,6 +16,7 @@ app.use(session({
     saveUninitialized: true,
     resave: false
 }))
+
 
 // Endpoints (routes)
 import customerRouter from '../Endpoints/customers.js'

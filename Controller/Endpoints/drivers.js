@@ -58,6 +58,7 @@ driverRouter.put('/:driverID', async (req, res) => {
         res.status(500).send('Der opstod en fejl ved redigering af chauffør.');
     }
 });
+*/
 
 
 export default driverRouter;

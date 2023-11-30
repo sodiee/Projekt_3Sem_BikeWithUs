@@ -26,7 +26,7 @@ describe('Crud test på Booking', () => {
      customer = { firstName: "Mewkel", lastName: "Lindhøøøøøj", birthday: "160795", city: "Frederiksbjerg", bookings: [] };
      booking = {customer,journey, nrOfPersons: 2, startDate: startDate, endDate: Booking.addDays(startDate, nrOfDays)}
     
-     booking = await DBFunctions.addBookingDB(booking, customer);
+     booking = await DBFunctions.addBookingDB(booking);
 
     }
     );

@@ -293,17 +293,18 @@ const getBookingsDB = async () => {
 }
 
 const getBookingDB = async (id) => {
-    const docRef = doc(db, 'Bookings', id);
+    const docRef = doc(db, 'Bookings', id + "");
     const bookingQueryDoc = await getDoc(docRef);
     let booking = bookingQueryDoc.data();
-    booking.docID = bookingQueryDoc.id;
+    booking.id = bookingQueryDoc.id;
     return booking;
 }
 
 const addBookingDB = async (booking) => {
-    booking.endDate = new Date(booking.startdate);
-    booking.endDate.setDate(booking.endDate.getDate() + booking.journey.nrOfDays);
+    booking.endDate = new Date(booking.startDate);
+    booking.endDate.setDate(booking.startDate.getDate() + booking.journey.nrOfDays);
     booking.bookingPrice = booking.journey.price * booking.nrOfPersons;
+    booking.bookingDate = new Date();
 
     const docRef = await addDoc(BookingCollection, booking);
 
@@ -336,10 +337,57 @@ const editBooking = async (booking) => {
 };
 
 const editStartDateDB = async (booking,newStartDate, newEndDate) => {
+    console.log('editstartdatedb: bboking: ' + booking)
+    console.log('editstartdatedb: newstardate: ' + newStartDate)
+    console.log('editstartdatedb: newenddate: ' + newEndDate)
     await updateDoc(doc(db, 'Bookings', booking.id), {
         startDate: newStartDate,
         endDate: newEndDate
     });
+};
+
+const getCustomerBookingsDB = async (id) => {
+    try {
+        // Hent alle rejsedokumenter fra databasen
+        const bookingQueryDocs = await getDocs(BookingCollection);
+
+        // Filtrer og map rejsedokumenter til dataarray
+        const bookings = bookingQueryDocs.docs
+            .filter(doc => doc.data().customer.docID === id) // Ændring her
+            .map(doc => {
+                let data = doc.data();
+                data.docID = doc.id;
+                return data;
+            });
+
+        return bookings;
+    } catch (error) {
+        console.error('Fejl ved hentning af kundens bookings i DBFunctions:', error);
+        throw new Error('Der opstod en fejl ved hentning af kundens bookings i DBFunctions.');
+    }
+};
+
+const getCustomerBookingDB = async (id) => {
+    try {
+        const bookingQueryDocs = await getDocs(BookingCollection);
+
+        const bookings = bookingQueryDocs.docs
+            .map(doc => {
+                let data = doc.data();
+                data.docID = doc.id;
+                return data;
+            })
+            .sort((a, b) => b.bookingDate - a.bookingDate); // Sorterer bookings efter bookingDate faldende
+
+        if (bookings.length > 0) {
+            return bookings[0]; // Returnerer den seneste booking
+        } else {
+            throw new Error('Ingen bookings fundet.');
+        }
+    } catch (error) {
+        console.error('Fejl ved hentning af seneste booking i DBFunctions:', error);
+        throw new Error('Der opstod en fejl ved hentning af seneste booking i DBFunctions.');
+    }
 };
 
  
@@ -348,4 +396,4 @@ const editStartDateDB = async (booking,newStartDate, newEndDate) => {
 export default {getCustomerDB, getCustomerByUsernameAndPassword, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB,getAdminDB,
 getAdminsDB,deleteAdminDB,addAdminDB,editAdminDB,getAdminByUsernameAndPassword,getDriverDB,getDriversDB,deleteDriverDB,addDriverDB,editDriverDB,
 addJourneyDB, editJourneyDB, deleteJourneyDB, getJourneyDB, getJourneysDB, getCustomerJourneysDB, editStartDateDB,addTilvalgToBookingDB,editBooking,
-getBookingDB,getBookingsDB,addBookingDB,deleteBookingDB}
+getBookingDB,getBookingsDB,addBookingDB,deleteBookingDB, getCustomerBookingsDB, getCustomerBookingDB}
