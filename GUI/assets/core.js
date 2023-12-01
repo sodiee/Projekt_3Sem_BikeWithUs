@@ -1,11 +1,11 @@
 // mathias lugter hahahah
 
 // ------------------ DRIVERS ------------------
-export async function deleteDriver(driverID) {
+async function deleteDriver(driverID) {
     const response = await fetch(`/drivers/${driverID}`,{
       method: 'DELETE'
     })
-    if (response.status == 204) {
+    if (response.status == 200) {
         if (typeof window !== 'undefined') {
             window.location = '/drivers';
             }
@@ -34,7 +34,7 @@ async function editDriver(driverID) {
 }
 
 
-export async function addDriver(driver) {
+async function addDriver(driver) {
     const response = await fetch('/drivers', {
         method: 'POST',
         headers: {
@@ -419,25 +419,27 @@ async function deleteCustomer(customerID) {
       method: 'DELETE'
     })
     if (response.status == 204) {
+    if (typeof window !== 'undefined') {
       window.location = "/customers"
+    }
     } else {
       alert("Der skete en fejl.")
     }
   }
 
 
-async function editCustomer(customerID) {
-    const firstName = document.getElementById('firstName').value 
-    const lastName = document.getElementById('lastName').value
+async function editCustomer(customerID, firstName, lastName) {
     let data = {firstName: firstName, lastName: lastName}
-    let url = `/customers/${driverID}`
+    let url = `/customers/${customerID}`
     const response = await fetch(url, {
       method: 'PUT',
       body: JSON.stringify(data),
       headers: { 'Content-Type': 'application/json' }
     })
     if(response.status == 200){
+    if (typeof window !== 'undefined') {
       window.location = '/customers'
+    }
     } else {
       alert("Der skete en fejl.")
     }
@@ -464,8 +466,10 @@ async function deleteAdmin(adminID) {
     const response = await fetch(`/admins/${adminID}`,{
       method: 'DELETE'
     })
-    if (response.status == 204) {
+    if (response.status == 200) // OK 
+    { if (typeof window !== 'undefined') {
       window.location = "/admins"
+    }
     } else {
       alert("Der skete en fejl.")
     }
@@ -483,7 +487,9 @@ async function editAdmin(adminID) {
       headers: { 'Content-Type': 'application/json' }
     })
     if(response.status == 200){
+        if(typeof window !== 'undefined'){
       window.location = '/admins'
+        }
     } else {
       alert("Der skete en fejl.")
     }
@@ -500,7 +506,9 @@ async function addAdmin(admin) {
     });
 
     if (response.status === 201) {
+        if(typeof window !== 'undefined'){
         window.location = '/admins';
+        }
     } else {
         alert('Der skete en fejl.');
     }

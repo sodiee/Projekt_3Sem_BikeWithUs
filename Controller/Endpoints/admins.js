@@ -5,6 +5,7 @@ import controllerDriver from '../Model/Driver.js';
 import controllerCustomer from '../Model/Customer.js';
 import controllerAdmin from '../Model/Admin.js'
 import controllerBooking from '../Model/Booking.js';
+import DBFunctions from '../../Storage/DBFunctions.js';
 
 
 //----------------------------
@@ -462,9 +463,9 @@ adminRouter.get('/Edit/:id', async (req, res) => {
 });
 
 // Edit, add, delete admin
-adminRouter.post('/:adminID', async (req, res) => {
+adminRouter.put('/:adminID', async (req, res) => {
     try {
-        const admin = await controller.editAdmin(req.params.adminID, req.body);
+        const admin = await DBFunctions.editAdminDB(req.params.adminID, req.body);
         res.json(admin);
     } catch (error) {
         console.error('Fejl ved redigering af Admin: ', error);
@@ -474,7 +475,7 @@ adminRouter.post('/:adminID', async (req, res) => {
 
 adminRouter.post('/', async (req, res) => {
     try {
-        const admin = await controller.addAdmin(req.body);
+        const admin = await DBFunctions.addAdminDB(req.body);
         res.json(admin);
     } catch (error) {
         console.error('Fejl ved tilføjelse af Admin: ', error);
@@ -484,7 +485,7 @@ adminRouter.post('/', async (req, res) => {
 
 adminRouter.delete('/:adminID', async (req, res) => {
     try {
-        const admin = await controller.deleteAdmin(req.params.adminID);
+        const admin = await DBFunctions.deleteAdminDB(req.params.adminID);
         res.json(admin);
     } catch (error) {
         console.error('Fejl ved sletning af Admin: ', error);

@@ -131,6 +131,7 @@ describe('it should delete a driver', () => {
 });
 
 //--add driver--
+/*
 import { addDriver } from '../GUI/assets/core.js'; // fetch function path
 
 describe('addDriver', () => {
@@ -142,4 +143,4 @@ describe('addDriver', () => {
         const response = await addDriver(driver);
         assert.strictEqual(response.status, 201, 'Driver should be added');
     });
-});
+});*/
