@@ -286,13 +286,7 @@ adminRouter.get('/Customer/Get/:id', async (req, res) => {
     try {
         const customerId = req.params.id;
         const customer = await controllerCustomer.getCustomer(customerId);
-
-        if (req.session.isAdminLoggedIn) {
-            res.render('CustomerDetails', { customer: customer });
-        } else {
-            res.redirect('/adminLogin')
-        }
-
+        res.render('CustomerDetails', { customer: customer });
     } catch (error) {
         console.error('Fejl ved hentning af kunde:', error);
         res.status(500).send('Der opstod en fejl ved hentning af kunde.');
@@ -327,13 +321,7 @@ adminRouter.get('/Customer/Edit/:id', async (req, res) => {
     try {
         const customerId = req.params.id;
         const customer = await controllerCustomer.getCustomer(customerId);
-
-        if (req.session.isAdminLoggedIn) {
             res.render('customerEdit', { customer });
-        } else {
-            res.redirect('/adminLogin')
-        }
-
     } catch (error) {
         console.error('Fejl ved redigering af kunde:', error);
         res.status(500).send('Der opstod en fejl ved redigering af kunde.');
@@ -387,13 +375,7 @@ adminRouter.get('/Journey/Edit/:id', async (req, res) => {
     try {
         const journeyId = req.params.id;
         const journey = await controllerJourney.getJourney(journeyId);
-
-        if (req.session.isAdminLoggedIn) {
-            res.render('EditJourney', { journey });
-        } else {
-            res.redirect('/adminLogin')
-        }
-
+        res.render('EditJourney', { journey });
     } catch (error) {
         console.error('Fejl ved redigering af Rejse:', error);
         res.status(500).send('Der opstod en fejl ved redigering af rejse.');
@@ -408,13 +390,7 @@ adminRouter.get('/Get/:id', async (req, res) => {
     try {
         const adminId = req.params.id;
         const admin = await controllerAdmin.getAdmin(adminId);
-
-        if (req.session.isAdminLoggedIn) {
             res.render('AdminDetails', { admin: admin });
-        } else {
-            res.redirect('/adminLogin')
-        }
-
     } catch (error) {
         console.error('Fejl ved hentning af admin:', error);
         res.status(500).send('Der opstod en fejl ved hentning af admin.');
@@ -449,13 +425,7 @@ adminRouter.get('/Edit/:id', async (req, res) => {
     try {
         const adminId = req.params.id;
         const admin = await controllerAdmin.getAdmin(adminId);
-
-        if (req.session.isAdminLoggedIn) {
             res.render('EditAdmin', { admin });
-        } else {
-            res.redirect('/adminLogin')
-        }
-
     } catch (error) {
         console.error('Fejl ved redigering af Admin:', error);
         res.status(500).send('Der opstod en fejl ved redigering af admin.');
