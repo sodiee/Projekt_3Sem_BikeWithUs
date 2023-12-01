@@ -1,5 +1,3 @@
-// mathias lugter hahahah
-
 // ------------------ DRIVERS ------------------
 async function deleteDriver(driverID) {
     const response = await fetch(`/drivers/${driverID}`,{
@@ -83,11 +81,9 @@ async function editJourney(journeyID) {
 //oversigt side
 async function getBookings(rbValue) {
     try {
-        console.log('1')
         let url = `/admins/api/oversigt/` + rbValue;
         const res = await fetch(url);
         const bookings = await res.json();
-        console.log('2')
         //RBs
 
         //THead
@@ -95,16 +91,22 @@ async function getBookings(rbValue) {
         //TBody
         //tildeler p elementer til td'erne fra booking.
         let idx = 1;
-        console.log('3')
         for (const booking of bookings) {
-            console.log('4')
-            console.log('booking.startdate: ' + booking.startDate)
-            console.log('booking.enddate: ' + booking.endDate)
             let startDate = new Date(booking.startDate)
             let endDate = new Date(booking.endDate);
             let totalPersoner;
-
-            for (let i = booking.startDate.getDate(); i <= booking.endDate.getDate(); i++) {
+            let theStart = startDate.getDate();
+            let theEnd = endDate.getDate();
+            
+            /*
+            //kalkulering af bookinger på tværs af måneder
+            if (startDate.getDate() > endDate.getDate()) {
+               //hvis en måned går på tværs over i en anden, sørger denne for, 
+               //at de første dage bliver tilføjet korrekt.
+                theEnd = 31;
+            }
+*/
+            for (let i = theStart; i <= theEnd; i++) {
                 let tdElementRejse = document.getElementById(i + ': Rejse');
                 let tdElementKunde = document.getElementById(i + ': Kunde');
                 let tdElementTilvalg = document.getElementById(i + ': Tilvalg');

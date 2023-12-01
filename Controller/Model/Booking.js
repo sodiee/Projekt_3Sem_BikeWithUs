@@ -33,8 +33,8 @@ function addTilvalg(tilvalg) {
     DBFunctions.addTilvalgToBookingDB(tilvalg);
 }
 
-async function editStartDate(booking) {
-    let j = { name: booking.name, startDate: booking.startDate, endDate: addDays(booking.startDate, booking.nrOfDays) }
+async function editStartDate(booking, newStartDate, newEndDate) {
+    let j = { name: booking.name, startDate: newStartDate, endDate: newEndDate }
     return DBFunctions.editStartDateDB(j);
 }
 
@@ -58,9 +58,11 @@ async function deleteBooking(booking) {
 async function editBooking(booking) {
     return await DBFunctions.editBookingDB(booking);
 }
-
 async function getBookingsByMonth(month) {
     let arr = await getBookings();
+
+    
+    
     arr = filterByMonth(arr, month)
     return arr;
 }
@@ -68,8 +70,7 @@ async function getBookingsByMonth(month) {
 function filterByMonth(monthArray, targetMonth) {
     let res = [];
     for (let i = 0; i < monthArray.length; i++) {
-        let date = new Date(monthArray[i].startDate);
-        if (date.getMonth() + 1 == targetMonth) {
+        if (monthArray[i].startDate.getMonth() + 1 == targetMonth) {
             res.push(monthArray[i]);
         }
     }

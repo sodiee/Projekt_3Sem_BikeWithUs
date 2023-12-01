@@ -1,11 +1,12 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import {getFirestore, 
-    collection, 
+import {
+    getFirestore,
+    collection,
     getDoc,
-    getDocs, 
-    doc, 
-    deleteDoc, 
+    getDocs,
+    doc,
+    deleteDoc,
     addDoc,
     updateDoc,
     query,
@@ -16,12 +17,12 @@ import {getFirestore,
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBrsey-IX0FhSucNOCKDrEn8ofFzbwn_7o",
-  authDomain: "bikewithus-7e8f0.firebaseapp.com",
-  projectId: "bikewithus-7e8f0",
-  storageBucket: "bikewithus-7e8f0.appspot.com",
-  messagingSenderId: "285890761175",
-  appId: "1:285890761175:web:ece7f116b6154b440ebb92"
+    apiKey: "AIzaSyBrsey-IX0FhSucNOCKDrEn8ofFzbwn_7o",
+    authDomain: "bikewithus-7e8f0.firebaseapp.com",
+    projectId: "bikewithus-7e8f0",
+    storageBucket: "bikewithus-7e8f0.appspot.com",
+    messagingSenderId: "285890761175",
+    appId: "1:285890761175:web:ece7f116b6154b440ebb92"
 };
 
 
@@ -74,9 +75,9 @@ const addCustomerDB = async (customer) => {
 
 const editCustomerDB = async (customer) => {
     await updateDoc(doc(db, 'Customers', customer.id), {
-        FirstName: customer.firstName, 
-        LastName: customer.lastName, 
-        Birthday: customer.birthday, 
+        FirstName: customer.firstName,
+        LastName: customer.lastName,
+        Birthday: customer.birthday,
         City: customer.city,
     });
 };
@@ -116,8 +117,8 @@ const addDriverDB = async (driver) => {
 const editDriverDB = async (driver) => {
     console.log(driver)
     await updateDoc(doc(db, 'Drivers', driver.id), {
-        firstName: driver.firstName, 
-        lastName: driver.lastName, 
+        firstName: driver.firstName,
+        lastName: driver.lastName,
     });
 };
 
@@ -147,45 +148,45 @@ const getAdminByUsernameAndPassword = async (adminUsername, adminPassword) => {
     try {
         const adminsCollectionRef = collection(db, 'Admins');
         const adminQuerySnapshot = await getDocs(query(adminsCollectionRef, where('adminUsername', '==', adminUsername)));
-    
+
         if (!adminQuerySnapshot.empty) {
-          const adminDoc = adminQuerySnapshot.docs[0];
-          const adminData = adminDoc.data();
-    
-          if (adminData.adminPassword === adminPassword && adminData.adminStatus === true) {
-            console.log(adminData)
-            return adminData; // Returner admin-data, hvis det matcher
-          }
+            const adminDoc = adminQuerySnapshot.docs[0];
+            const adminData = adminDoc.data();
+
+            if (adminData.adminPassword === adminPassword && adminData.adminStatus === true) {
+                console.log(adminData)
+                return adminData; // Returner admin-data, hvis det matcher
+            }
         }
-    
+
         return null; // Ingen match fundet
-      } catch (error) {
+    } catch (error) {
         console.error('Fejl under opslag i Firestore:', error);
         throw error; // Kast fejlen igen for yderligere håndtering
-      }
-  }
+    }
+}
 
-  const getCustomerByUsernameAndPassword = async (customerUsername, customerPassword) => {
+const getCustomerByUsernameAndPassword = async (customerUsername, customerPassword) => {
     try {
         const customersCollectionRef = collection(db, 'Customers');
         const customerQuerySnapshot = await getDocs(query(customersCollectionRef, where('customerUsername', '==', customerUsername)));
-    
+
         if (!customerQuerySnapshot.empty) {
-          const customerDoc = customerQuerySnapshot.docs[0];
-          const customerData = customerDoc.data();
-    
-          if (customerData.customerPassword === customerPassword) {
-            console.log(customerData)
-            return customerData; // Returner admin-data, hvis det matcher
-          }
+            const customerDoc = customerQuerySnapshot.docs[0];
+            const customerData = customerDoc.data();
+
+            if (customerData.customerPassword === customerPassword) {
+                console.log(customerData)
+                return customerData; // Returner admin-data, hvis det matcher
+            }
         }
-    
+
         return null; // Ingen match fundet
-      } catch (error) {
+    } catch (error) {
         console.error('Fejl under opslag i Firestore:', error);
         throw error; // Kast fejlen igen for yderligere håndtering
-      }
-  }
+    }
+}
 
 const deleteAdminDB = async (admin) => {
     const deletedAdmin = await deleteDoc(doc(db, 'Admins', admin.id));
@@ -201,8 +202,8 @@ const addAdminDB = async (admin) => {
 const editAdminDB = async (admin) => {
     console.log(admin)
     await updateDoc(doc(db, 'Admins', admin.id), {
-        firstName: admin.firstName, 
-        lastName: admin.lastName, 
+        firstName: admin.firstName,
+        lastName: admin.lastName,
         adminStatus: admin.adminStatus
     });
 };
@@ -242,12 +243,12 @@ const getJourneysDB = async () => {
 }
 
 const getJourneyDB = async (id) => {
-        const docRef = doc(db, 'Journeys', id);
-        const journeyQueryDoc = await getDoc(docRef);
-        if(journeyQueryDoc.exists()) {
+    const docRef = doc(db, 'Journeys', id);
+    const journeyQueryDoc = await getDoc(docRef);
+    if (journeyQueryDoc.exists()) {
         const journey = journeyQueryDoc.data();
-        return{ id: journeyQueryDoc.id, ...journey}
-    }else{
+        return { id: journeyQueryDoc.id, ...journey }
+    } else {
         return null;
     }
 };
@@ -278,7 +279,7 @@ const editJourneyDB = async (docID, journeyData) => {
         throw new Error('There was an error updating the journey.');
     }
 };
- 
+
 
 // DB functions for booking
 
@@ -289,6 +290,12 @@ const getBookingsDB = async () => {
         data.docID = doc.id;
         return data;
     });
+    for (const booking of bookings) {
+        let newStartDate = new Date(booking.startDate.seconds * 1000 + booking.startDate.nanoseconds / 1000000)
+        booking.startDate = newStartDate;
+        let newEndDate = new Date(booking.endDate.seconds * 1000 + booking.endDate.nanoseconds / 1000000)
+        booking.endDate = newEndDate;
+    }
     return bookings;
 }
 
@@ -297,7 +304,15 @@ const getBookingDB = async (id) => {
     const bookingQueryDoc = await getDoc(docRef);
     let booking = bookingQueryDoc.data();
     booking.id = bookingQueryDoc.id;
-    return booking;
+    
+    let newBookingDate = new Date(booking.bookingDate.seconds * 1000 + booking.bookingDate.nanoseconds / 1000000)
+    booking.bookingDate = newBookingDate;
+    let newStartDate = new Date(booking.startDate.seconds * 1000 + booking.startDate.nanoseconds / 1000000)
+    booking.startDate = newStartDate;
+    let newEndDate = new Date(booking.endDate.seconds * 1000 + booking.endDate.nanoseconds / 1000000)
+    booking.endDate = newEndDate;
+
+   return booking;
 }
 
 const addBookingDB = async (booking) => {
@@ -322,28 +337,26 @@ const addTilvalgToBookingDB = async (booking, tilvalg) => {
     booking.tilvalg.push(tilvalg);
 
     await updateDoc(doc(db, 'Bookings', booking.id), {
-          tilvalg: booking.tilvalg
-        });
+        tilvalg: booking.tilvalg
+    });
 }
 
 const editBooking = async (booking) => {
     await updateDoc(doc(db, 'Bookings', booking.id), {
-        startDate: booking.startDate, 
-        endDate: booking.endDate, 
-        customer: booking.customer, 
+        startDate: booking.startDate,
+        endDate: booking.endDate,
+        customer: booking.customer,
         price: booking.price,
         tilvalg: booking.tilvalg
     });
 };
 
-const editStartDateDB = async (booking,newStartDate, newEndDate) => {
+const editStartDateDB = async (booking) => {
     console.log('editstartdatedb: bboking: ' + booking)
-    console.log('editstartdatedb: newstardate: ' + newStartDate)
-    console.log('editstartdatedb: newenddate: ' + newEndDate)
-    await updateDoc(doc(db, 'Bookings', booking.id), {
-        startDate: newStartDate,
-        endDate: newEndDate
-    });
+    console.log('editstartdatedb: newstardate: ' + booking.startDate)
+    console.log('editstartdatedb: newenddate: ' + booking.endDate)
+    console.log('editstartdatedb: timestamp startdate: ' + firebaseConfig.db.Timestamp.fromDate(booking.startDate)) //serverTimestamp()
+    //await updateDoc(doc(db, 'Bookings', booking.id));
 };
 
 const getCustomerBookingsDB = async (id) => {
@@ -390,10 +403,12 @@ const getCustomerBookingDB = async (id) => {
     }
 };
 
- 
 
 
-export default {getCustomerDB, getCustomerByUsernameAndPassword, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB,getAdminDB,
-getAdminsDB,deleteAdminDB,addAdminDB,editAdminDB,getAdminByUsernameAndPassword,getDriverDB,getDriversDB,deleteDriverDB,addDriverDB,editDriverDB,
-addJourneyDB, editJourneyDB, deleteJourneyDB, getJourneyDB, getJourneysDB, getCustomerJourneysDB, editStartDateDB,addTilvalgToBookingDB,editBooking,
-getBookingDB,getBookingsDB,addBookingDB,deleteBookingDB, getCustomerBookingsDB, getCustomerBookingDB}
+
+export default {
+    getCustomerDB, getCustomerByUsernameAndPassword, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB, getAdminDB,
+    getAdminsDB, deleteAdminDB, addAdminDB, editAdminDB, getAdminByUsernameAndPassword, getDriverDB, getDriversDB, deleteDriverDB, addDriverDB, editDriverDB,
+    addJourneyDB, editJourneyDB, deleteJourneyDB, getJourneyDB, getJourneysDB, getCustomerJourneysDB, editStartDateDB, addTilvalgToBookingDB, editBooking,
+    getBookingDB, getBookingsDB, addBookingDB, deleteBookingDB, getCustomerBookingsDB, getCustomerBookingDB
+}
