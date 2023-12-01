@@ -20,7 +20,7 @@ app.use(session({
 
 // Endpoints (routes)
 import customerRouter from '../Endpoints/customers.js'
-app.use('/', customerRouter)
+app.use('/customers', customerRouter)
 import adminRouter from'../Endpoints/admins.js'
 app.use('/admins', adminRouter)
 import driverRouter from '../Endpoints/drivers.js'
