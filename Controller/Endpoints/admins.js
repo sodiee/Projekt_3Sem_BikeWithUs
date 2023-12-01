@@ -155,10 +155,10 @@ adminRouter.post('/api/oversigt/redigerRejse/', async (req, res) => {
         let newStartDate = req.body.startDate;
         
         let newEndDate = controllerBooking.addDays(newStartDate, booking.journey.nrOfDays);
-        
+        console.log('1')
         controllerBooking.editStartDate(booking, newStartDate, newEndDate);
-        console.log('Booking Opdateret!')
-        res.status(204);
+        console.log('3')
+        res.status(204).send('Bookingen er nu opdateret.');
         res.end();
     } catch (error) {
         console.log(error)

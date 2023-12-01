@@ -355,8 +355,8 @@ const editStartDateDB = async (booking) => {
     console.log('editstartdatedb: bboking: ' + booking)
     console.log('editstartdatedb: newstardate: ' + booking.startDate)
     console.log('editstartdatedb: newenddate: ' + booking.endDate)
-    console.log('editstartdatedb: timestamp startdate: ' + firebaseConfig.db.Timestamp.fromDate(booking.startDate)) //serverTimestamp()
-    //await updateDoc(doc(db, 'Bookings', booking.id));
+    console.log('2')
+    await updateDoc(doc(db, 'Bookings', booking.id));
 };
 
 const getCustomerBookingsDB = async (id) => {
