@@ -3,6 +3,7 @@ const customerRouter = express.Router();
 import controller from '../Model/Customer.js';
 import journeyController from '../Model/Journey.js';
 import bookingController from '../Model/Booking.js'
+import DBFunctions from '../../Storage/DBFunctions.js';
 
 //-------------------------------
 // customer-ENDPOINTS for LOGIN |
@@ -55,6 +56,38 @@ customerRouter.get('/customerLogout', (req, res) => {
 customerRouter.get('/customerLogin', (req, res) => {
     res.render('customerLogin')
 })
+
+// edit, delete, add customer
+
+customerRouter.put('/:customerID', async (req, res) => {
+    try {
+        const customer = await DBFunctions.editCustomerDB(req.params.customerID, req.body);
+        res.json({ customer });
+    } catch (error) { 
+        console.error('Fejl ved redigering af kunde:', error);
+        res.status(500).send('Der opstod en fejl ved redigering af kunde.');
+    }
+});
+
+customerRouter.delete('/:customerID', async (req, res) => {
+    try {
+        await DBFunctions.deleteCustomerDB(req.params.customerID);
+        res.status(204).end();
+    } catch (error) {
+        console.error('Fejl ved sletning af kunde:', error);
+        res.status(500).send('Der opstod en fejl ved sletning af kunde.');
+    }
+});
+
+customerRouter.post('/', async (req, res) => {
+    try {
+        const customer = await DBFunctions.addCustomerDB(req.body);
+        res.status(201).json({ customer });
+    } catch (error) {
+        console.error('Fejl ved tilføjelse af kunde:', error);
+        res.status(500).send('Der opstod en fejl ved tilføjelse af kunde.');
+    }
+});
 
 // TODO
 // Simulator af databaseopkald
