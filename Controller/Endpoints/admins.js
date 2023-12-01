@@ -21,8 +21,9 @@ adminRouter.use((req, res, next) => {
 
 // Middleware til at kræve log ind for beskyttede ruter
 function requireAdminLogin(req, res, next) {
+    console.log('requireAdminLogin Middleware:', req.path, req.session.isAdminLoggedIn);
+
     if (!req.session.isAdminLoggedIn) {
-        // Omdiriger kun, hvis brugeren ikke er logget ind
         res.redirect('/admins/adminLogin');
     } else {
         next();
@@ -40,6 +41,7 @@ adminRouter.use((req, res, next) => {
 
 // Rute til /admins/
 adminRouter.get('/', (req, res) => {
+    console.log('Admin Route:', req.path);
     let isAdminLoggedIn = res.locals.isAdminLoggedIn;
     let adminUser = res.locals.adminUser;
 
@@ -68,16 +70,6 @@ adminRouter.post('/adminLogin', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
-
-/*
-adminRouter.get('/secret', (req, res) => {
-    if (req.session.isAdminLoggedIn) {
-        res.render('adminMain', {knownUser: req.session.isAdminLoggedIn})
-    } else {
-        res.redirect('/adminLogin')
-    }
-})
-*/
 
 adminRouter.get('/adminLogin', (req, res) => {
     res.render('adminLogin')
@@ -177,11 +169,7 @@ adminRouter.get('/Customers', async (req, res) => {
     try {
         // Finder alle customers
         const customers = await controllerCustomer.getCustomers();
-        if (req.session.isAdminLoggedIn) {
-            res.render('customers', { knownUser: isAdminLoggedIn, customers: customers });
-        } else {
-            res.redirect('/adminLogin')
-        }
+        res.render('customers', { knownUser: isAdminLoggedIn, customers: customers });
     } catch (error) {
         console.error('Fejl ved hentning af kunder:', error);
         res.status(500).send('Der opstod en fejl ved hentning af kunder.');
