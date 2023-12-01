@@ -182,8 +182,7 @@ customerRouter.get('/Calendar/confirmation', async (req, res) => {
 customerRouter.get('/CustomerPage', async (req, res) => {
     // Check for login status using sessions or cookies
         try {
-            
-            res.render('customerPage', {customer: customerUser });
+            res.render('customerPage');
         } catch (error) {
             console.error('Fejl ved hentning af kundens side:', error);
             res.status(500).send('Der opstod en fejl ved hentning af kundens side.');
