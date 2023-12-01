@@ -4,12 +4,37 @@ import controller from '../Model/Customer.js';
 import journeyController from '../Model/Journey.js';
 import bookingController from '../Model/Booking.js'
 import DBFunctions from '../../Storage/DBFunctions.js';
+import adminRouter from './admins.js';
 
 //-------------------------------
 // customer-ENDPOINTS for LOGIN |
 //-------------------------------
-let isCustomerLoggedIn = false
-let customerUser = null
+
+// Middleware til at kræve log ind for beskyttede ruter
+customerRouter.use((req, res, next) => {
+    res.locals.isCustomerLoggedIn = req.session.isCustomerLoggedIn || false;
+    res.locals.customerUser = req.session.customerUser || null;
+    next;
+})
+
+// Middleware til at kræve log ing for beskyttede ruter
+function requireCustomerLogin(req, res, next) {
+    if (!req.session.isCustomerLoggedIn) {
+        // Omdiriger kun, hvis brugen er ikke logget ind
+        res.redirect('/customerLogin')
+    } else {
+        next;
+    }
+}
+
+// Anvend middleware på alle bestyttede ruter, undtagen login-ruten
+customerRouter.use((req, res, next) => {
+    if (!req.path !== '/customerLogin') {
+        requireCustomerLogin(req, res, next);
+    } else {
+        next;
+    }
+})
 
 customerRouter.get('/', (req, res) => {
     if (req.session.isCustomerLoggedIn && req.session.customerUser) {
