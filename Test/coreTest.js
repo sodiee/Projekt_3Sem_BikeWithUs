@@ -1,18 +1,18 @@
 // Core test
 
-import { deleteCustomer } from '/core.js'; // Import the function you want to test
+import { deleteCustomer } from '/core.js'; // importer funktionen der skal testes
 import fetchMock from 'jest-fetch-mock';
 
 describe('deleteCustomer', () => {
   beforeEach(() => {
-    fetchMock.resetMocks(); // Reset mocks before each test
+    fetchMock.resetMocks(); // reset mock mellem tests
   });
 
   it('deletes a customer successfully', async () => {
-    fetchMock.mockResponseOnce('', { status: 204 }); // Simulates fictive server answer. 
+    fetchMock.mockResponseOnce('', { status: 204 }); // simulerer en fiktiv server 
 
     const customerID = '123';
-    const redirectSpy = jest.spyOn(window.location, 'assign'); // Checks if they get called correctly by deleteCustomer
+    const redirectSpy = jest.spyOn(window.location, 'assign'); // checker om deleteCustomer bliver kaldt korrekt
 
     await deleteCustomer(customerID);
 
@@ -23,10 +23,10 @@ describe('deleteCustomer', () => {
   });
 
   it('handles delete failure', async () => {
-    fetchMock.mockResponseOnce('', { status: 500 }); // Mock a failed response
+    fetchMock.mockResponseOnce('', { status: 500 }); // mock en fejl
 
     const customerID = '456';
-    const alertSpy = jest.spyOn(window, 'alert'); // Spy on window.alert
+    const alertSpy = jest.spyOn(window, 'alert'); // spy på alert
 
     await deleteCustomer(customerID);
 
