@@ -128,6 +128,8 @@ adminRouter.get('/oversigt/redigerRejse', async (req, res) => {
 adminRouter.get('/api/oversigt/:month', async (req, res) => {
     try {
         let bookings = await controllerBooking.getBookingsByMonth(req.params.month);
+        
+        
         res.json(bookings);
     } catch (err) {
         console.log('Fejl ved hentning af bookings pr. måned');
@@ -138,6 +140,7 @@ adminRouter.get('/api/oversigt/:month', async (req, res) => {
 adminRouter.get('/api/getBookings/', async (req, res) => {
     try {
         let bookings = await controllerBooking.getBookings();
+        
         res.json(bookings);
 
     } catch (error) {
@@ -152,26 +155,25 @@ adminRouter.post('/api/oversigt/redigerRejse/', async (req, res) => {
         
         let booking = await controllerBooking.getBooking(bookingId);
        
-        let newStartDate = req.body.startDate;
+        let newStartDate = new Date(req.body.startDate);
         
         let newEndDate = controllerBooking.addDays(newStartDate, booking.journey.nrOfDays);
-        console.log('1')
+
         controllerBooking.editStartDate(booking, newStartDate, newEndDate);
-        console.log('3')
-        res.status(204).send('Bookingen er nu opdateret.');
-        res.end();
+        
+        //res.status(204).send('Bookingen er nu opdateret.');
+        //res.end();
+        res.redirect('/admins/oversigt/redigerRejseComplete/')
     } catch (error) {
         console.log(error)
     }
 })
 
-adminRouter.get('/api/oversigt/redigerRejse/', async (req, res) => {
-    res.render('bookingUpdateComplete');
-})
-
 //APIsektion slut
 
-
+adminRouter.get('/oversigt/redigerRejseComplete/', async (req, res) => {
+    res.render('bookingUpdateComplete');
+})
 
 adminRouter.get('/Customers', async (req, res) => {
     try {

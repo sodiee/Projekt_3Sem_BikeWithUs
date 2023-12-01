@@ -1,12 +1,12 @@
 // ------------------ DRIVERS ------------------
 async function deleteDriver(driverID) {
-    const response = await fetch(`/drivers/${driverID}`,{
-      method: 'DELETE'
+    const response = await fetch(`/drivers/${driverID}`, {
+        method: 'DELETE'
     })
     if (response.status == 200) {
         if (typeof window !== 'undefined') {
             window.location = '/drivers';
-            }
+        }
     } else {
         alert("Der skete en fejl.")
     }
@@ -25,7 +25,8 @@ async function editDriver(driverID) {
     })
     if (response.status == 200) {
         if (typeof window !== 'undefined') {
-        window.location = '/drivers' }
+            window.location = '/drivers'
+        }
     } else {
         alert("Der skete en fejl.")
     }
@@ -43,7 +44,7 @@ async function addDriver(driver) {
 
     if (response.status === 201) {
         if (typeof window !== 'undefined') {
-        window.location = '/drivers';
+            window.location = '/drivers';
         }
     } else {
         alert('Der skete en fejl.');
@@ -61,7 +62,7 @@ async function deleteJourney(journeyID) {
     } else {
         alert("Der skete en fejl.")
     }
-  }
+}
 
 async function editJourney(journeyID) {
     const startDate = document.getElementById('startDate').value
@@ -100,17 +101,31 @@ async function getBookings(rbValue) {
             let startDate = new Date(booking.startDate)
             let endDate = new Date(booking.endDate);
             let totalPersoner;
+
             let theStart = startDate.getDate();
             let theEnd = endDate.getDate();
-            
-            /*
-            //kalkulering af bookinger på tværs af måneder
-            if (startDate.getDate() > endDate.getDate()) {
-               //hvis en måned går på tværs over i en anden, sørger denne for, 
-               //at de første dage bliver tilføjet korrekt.
-                theEnd = 31;
+
+
+
+            if (startDate.getMonth() !== endDate.getMonth()) {
+                console.log('booking: ' + booking);
+                console.log('booking.startdate: ' + booking.startDate)
+                console.log('booking.enddate: ' + booking.endDate);
+                console.log('startdate.getmonth + rb value: ' + startDate.getMonth() + ' ' + rbValue)
+                console.log('enddate.getmonth + rb value: ' + endDate.getMonth() + ' ' + rbValue)
+                if (startDate.getMonth() + 1 == rbValue) {
+                    console.log('thestart: '+ theStart)
+                    
+                    theEnd = 31;
+                    console.log('theend: '+ theEnd)
+                } else if (endDate.getMonth() == rbValue) {
+                    theStart = 1;
+                    console.log('thestart: '+ theStart)
+                    console.log('theend: '+ theEnd)
+                }
             }
-*/
+
+
             for (let i = theStart; i <= theEnd; i++) {
                 let tdElementRejse = document.getElementById(i + ': Rejse');
                 let tdElementKunde = document.getElementById(i + ': Kunde');
@@ -417,38 +432,38 @@ redigerSide();
 
 //------------------ CUSTOMERS -------------------
 async function deleteCustomer(customerID) {
-    const response = await fetch(`/customers/${customerID}`,{
-      method: 'DELETE'
+    const response = await fetch(`/customers/${customerID}`, {
+        method: 'DELETE'
     })
     if (response.status == 204) {
-    if (typeof window !== 'undefined') {
-      window.location = "/customers"
-    }
+        if (typeof window !== 'undefined') {
+            window.location = "/customers"
+        }
     } else {
-      alert("Der skete en fejl.")
+        alert("Der skete en fejl.")
     }
-  }
+}
 
 
 async function editCustomer(customerID, firstName, lastName) {
-    let data = {firstName: firstName, lastName: lastName}
+    let data = { firstName: firstName, lastName: lastName }
     let url = `/customers/${customerID}`
     const response = await fetch(url, {
-      method: 'PUT',
-      body: JSON.stringify(data),
-      headers: { 'Content-Type': 'application/json' }
+        method: 'PUT',
+        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' }
     })
-    if(response.status == 200){
-    if (typeof window !== 'undefined') {
-      window.location = '/customers'
-    }
+    if (response.status == 200) {
+        if (typeof window !== 'undefined') {
+            window.location = '/customers'
+        }
     } else {
-      alert("Der skete en fejl.")
+        alert("Der skete en fejl.")
     }
-  }
+}
 
 
-  async function addCustomer(customer) {
+async function addCustomer(customer) {
     const response = await fetch('/customers', {
         method: 'POST',
         headers: {
@@ -465,37 +480,38 @@ async function editCustomer(customerID, firstName, lastName) {
 }
 //------------------ ADMINS -------------------
 async function deleteAdmin(adminID) {
-    const response = await fetch(`/admins/${adminID}`,{
-      method: 'DELETE'
+    const response = await fetch(`/admins/${adminID}`, {
+        method: 'DELETE'
     })
     if (response.status == 200) // OK 
-    { if (typeof window !== 'undefined') {
-      window.location = "/admins"
-    }
+    {
+        if (typeof window !== 'undefined') {
+            window.location = "/admins"
+        }
     } else {
-      alert("Der skete en fejl.")
+        alert("Der skete en fejl.")
     }
-  }
+}
 
 
 async function editAdmin(adminID) {
-    const firstName = document.getElementById('firstName').value 
+    const firstName = document.getElementById('firstName').value
     const lastName = document.getElementById('lastName').value
-    let data = {firstName: firstName, lastName: lastName}
+    let data = { firstName: firstName, lastName: lastName }
     let url = `/admins/${adminID}`
     const response = await fetch(url, {
-      method: 'PUT',
-      body: JSON.stringify(data),
-      headers: { 'Content-Type': 'application/json' }
+        method: 'PUT',
+        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' }
     })
-    if(response.status == 200){
-        if(typeof window !== 'undefined'){
-      window.location = '/admins'
+    if (response.status == 200) {
+        if (typeof window !== 'undefined') {
+            window.location = '/admins'
         }
     } else {
-      alert("Der skete en fejl.")
+        alert("Der skete en fejl.")
     }
-  }
+}
 
 
 async function addAdmin(admin) {
@@ -508,11 +524,11 @@ async function addAdmin(admin) {
     });
 
     if (response.status === 201) {
-        if(typeof window !== 'undefined'){
-        window.location = '/admins';
+        if (typeof window !== 'undefined') {
+            window.location = '/admins';
         }
     } else {
         alert('Der skete en fejl.');
     }
-}  
+}
 
