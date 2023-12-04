@@ -24,7 +24,7 @@ function requireAdminLogin(req, res, next) {
     console.log('requireAdminLogin Middleware:', req.path, req.session.isAdminLoggedIn);
 
     if (!req.session.isAdminLoggedIn) {
-        res.redirect('/admins/adminLogin');
+        res.redirect('/');
     } else {
         next();
     }
@@ -48,7 +48,7 @@ adminRouter.get('/', (req, res) => {
     if (isAdminLoggedIn && adminUser) {
         res.render('adminMain', { knownUser: isAdminLoggedIn, adminUser: adminUser });
     } else {
-        res.redirect('/admins/adminLogin');
+        res.redirect('/');
     }
 });
 
@@ -77,7 +77,7 @@ adminRouter.get('/adminLogin', (req, res) => {
 
 adminRouter.get('/adminLogout', (req, res) => {
     req.session.destroy();
-    res.redirect('/admins/adminLogin');
+    res.redirect('/');
 });
 
 
@@ -222,7 +222,7 @@ adminRouter.get('/Driver/Edit/:id', async (req, res) => {
         if (req.session.isAdminLoggedIn) {
             res.render('EditDriver', { driver });
         } else {
-            res.redirect('/adminLogin')
+            res.redirect('/')
         }
 
     } catch (error) {
@@ -252,7 +252,7 @@ adminRouter.get('/Driver/Get/:id', async (req, res) => {
         if (req.session.isAdminLoggedIn) {
             res.render('DriverDetails', { driver });
         } else {
-            res.redirect('/adminLogin')
+            res.redirect('/')
         }
 
     } catch (error) {
@@ -274,6 +274,8 @@ adminRouter.get('/Customer/Get/:id', async (req, res) => {
     }
 })
 
+
+/**? bruges endnu? */
 adminRouter.post('/Customer/Add', async (req, res) => {
     try {
         const { firstName, lastName, birthday, city } = req.body;
@@ -286,6 +288,7 @@ adminRouter.post('/Customer/Add', async (req, res) => {
     }
 });
 
+/**? bruges endnu? */
 adminRouter.post('/Customer/Delete/:id', async (req, res) => {
     try {
         const customerId = req.params.id;
@@ -298,6 +301,7 @@ adminRouter.post('/Customer/Delete/:id', async (req, res) => {
     }
 });
 
+/**? bruges endnu? */
 adminRouter.get('/Customer/Edit/:id', async (req, res) => {
     try {
         const customerId = req.params.id;
@@ -315,7 +319,7 @@ adminRouter.get('/Customer/Edit/:id', async (req, res) => {
 // admin-ENDPOINTS for CRUD til Journeys|
 // --------------------------------------
 
-
+/**? bruges endnu? */
 adminRouter.post('/Journey/Add/4day', async (req, res) => {
     try {
         const { startDate, endDate, customer, price } = req.body;
@@ -328,6 +332,7 @@ adminRouter.post('/Journey/Add/4day', async (req, res) => {
     }
 });
 
+/**? bruges endnu? */
 adminRouter.post('/Journey/Add/3day', async (req, res) => {
     try {
         const { startDate, endDate, customer, price } = req.body;
@@ -340,6 +345,7 @@ adminRouter.post('/Journey/Add/3day', async (req, res) => {
     }
 });
 
+/**? bruges endnu? */
 adminRouter.post('/Journey/Delete/:id', async (req, res) => {
     try {
         const journeyId = req.params.id;
@@ -351,7 +357,7 @@ adminRouter.post('/Journey/Delete/:id', async (req, res) => {
         res.status(500).send('Der opstod en fejl ved sletning af rejse.');
     }
 });
-
+/**? bruges endnu? */
 adminRouter.get('/Journey/Edit/:id', async (req, res) => {
     try {
         const journeyId = req.params.id;
@@ -367,6 +373,7 @@ adminRouter.get('/Journey/Edit/:id', async (req, res) => {
 // -----------------------------------
 // admin-ENDPOINTS for CRUD til Admins|
 // -----------------------------------
+/**? bruges endnu? */
 adminRouter.get('/Get/:id', async (req, res) => {
     try {
         const adminId = req.params.id;
@@ -377,7 +384,7 @@ adminRouter.get('/Get/:id', async (req, res) => {
         res.status(500).send('Der opstod en fejl ved hentning af admin.');
     }
 })
-
+/**? bruges endnu? */
 adminRouter.post('/Add', async (req, res) => {
     try {
         const { firstName, lastName, adminStatus } = req.body;
@@ -389,7 +396,7 @@ adminRouter.post('/Add', async (req, res) => {
         res.status(500).send('Der opstod en fejl ved tilføjelse af admin.');
     }
 });
-
+/**? bruges endnu? */
 adminRouter.post('/Delete/:id', async (req, res) => {
     try {
         const adminId = req.params.id;
@@ -401,7 +408,7 @@ adminRouter.post('/Delete/:id', async (req, res) => {
         res.status(500).send('Der opstod en fejl ved sletning af admin.');
     }
 });
-
+/**? bruges endnu? */
 adminRouter.get('/Edit/:id', async (req, res) => {
     try {
         const adminId = req.params.id;
@@ -412,6 +419,8 @@ adminRouter.get('/Edit/:id', async (req, res) => {
         res.status(500).send('Der opstod en fejl ved redigering af admin.');
     }
 });
+
+
 
 // Edit, add, delete admin
 adminRouter.put('/:adminID', async (req, res) => {
