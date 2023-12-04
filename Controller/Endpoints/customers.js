@@ -43,7 +43,7 @@ customerRouter.get('/', (req, res) => {
     if (isCustomerLoggedIn && customerUser) {
         res.render('customerPage', {knownUser: isCustomerLoggedIn, customer: customerUser})
     } else {
-        res.redirect('/customers/customerLogin')
+        res.redirect('/')
     }
     
 })
@@ -68,7 +68,7 @@ customerRouter.post('/customerLogin', async (req, res) => {
 
 customerRouter.get('/customerLogout', (req, res) => {
     req.session.destroy()
-    res.redirect('/customers/customerLogin')
+    res.redirect('/')
 })
 
 customerRouter.get('/customerLogin', (req, res) => {
@@ -122,7 +122,7 @@ customerRouter.get('/Calendar', async (req, res) => {
             res.status(500).send('An error occurred while retrieving trips');
         }
     } else {
-        res.redirect('/customerLogin');
+        res.redirect('/');
     }
 });
 

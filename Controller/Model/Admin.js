@@ -1,13 +1,14 @@
 import DBFunctions from '../../Storage/DBFunctions.js';
 
+
+// Er tjekket for korrektur
 function Admin(firstName, lastName) {
     this.firstName = firstName;
     this.lastName = lastName;
-    this.adminStatus = true;
 }
 
 async function addAdmin(admin) {
-    let a = {firstName: admin.firstName, lastName: admin.lastName, adminStatus: admin.adminStatus}
+    let a = {firstName: admin.firstName, lastName: admin.lastName}
     return await DBFunctions.addAdminDB(a);
 }
 
@@ -25,12 +26,12 @@ async function checkAdmin(adminUsername, adminPassword) {
   }
 
 function deleteAdmin(admin) {
-    let a = {firstName: admin.firstName, lastName: admin.lastName, adminStatus: admin.adminStatus, id: admin.id};
+    let a = {firstName: admin.firstName, lastName: admin.lastName, id: admin.id};
     DBFunctions.deleteAdminDB(a);
 }
 
 function editAdmin(admin) {
-    let a = {firstName: admin.firstName, lastName: admin.lastName, adminStatus: admin.adminStatus, id: admin.id}
+    let a = {firstName: admin.firstName, lastName: admin.lastName, id: admin.id}
     DBFunctions.editAdminDB(a);
 }
 
