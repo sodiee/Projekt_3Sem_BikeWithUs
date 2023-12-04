@@ -76,12 +76,6 @@ await editDriver(driver);
 //
 
 
-//get
-let driver = new Driver("Mikkel", "Lindhøj");
-driver = await addDriver(driver);
-
-let c = await getDriver(driver);
-
 
 /*
 //getALL
