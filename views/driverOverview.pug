@@ -1,0 +1,25 @@
+extend includes/layout
+
+block content
+    h1 Chauffør oversigt
+    table
+        tr
+            th #
+            th Navn
+            th Efternavn
+            th
+            th Brugernavn 
+            th Kodeord
+
+        each driver, index in drivers
+            tr
+                td #{index + 1}
+                td #{driver.firstName}
+                td #{driver.lastName}
+                td
+                td #{driver.driverUsername}
+                td #{driver.driverPassword}
+    tr
+        td(colspan="4") Totalt antal chaufføre: #{drivers.length}
+
+

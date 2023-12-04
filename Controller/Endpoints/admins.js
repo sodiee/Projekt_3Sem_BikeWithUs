@@ -82,6 +82,17 @@ adminRouter.get('/adminLogout', (req, res) => {
 // ----------------------------
 // admin-ENDPOINTS for oversigt|
 // ----------------------------
+adminRouter.get('/overview/customers', async (req, res) => {
+    try {
+        // Finder alle customers
+        const customers = await controllerCustomer.getCustomers();
+        res.render('customerOverview', { customers });
+    } catch (error) {
+        console.error('Fejl ved hentning af kunder:', error);
+        res.status(500).send('Der opstod en fejl ved hentning af kunder.');
+    }
+});
+
 adminRouter.get('/Journeys', async (req, res) => {
     try {
         //finder alle journeys
