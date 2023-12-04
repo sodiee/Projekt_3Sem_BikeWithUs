@@ -1,5 +1,8 @@
 import DBFunctions from '../../Storage/DBFunctions.js';
 
+
+// Der er ekstra metoder i bunden som måske skal slettes
+
 function Driver(firstName, lastName) {
 this.firstName = firstName;
 this.lastName = lastName;

@@ -1,9 +1,10 @@
-extends includes/layoutCustomer 
+extends includes/layout 
 
 block content
-    p Bookingen er nu blevet opdaeret.
+    p Bookingen er nu blevet opdateret.
     a(href='/admins/oversigt/')
+        br
         button(type='button' id='returnerTilOversigt') Vend tilbage til oversigt
 
-     a(href='/admins/oversigt/redigerRejse')
+    //-a(href='/admins/oversigt/')
         button(type='button' id='btnRedigering') 
