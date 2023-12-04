@@ -9,14 +9,13 @@ html
     
     body 
         main 
-            h2 BikeWithUs admin login
-            form(action='/admins/adminLogin', method='POST')
+            h2 BikeWithUs buschauffør login
+            form(action='/drivers/driverLogin', method='POST')
                 label(for='username') Brugernavn
-                input(type='text', id='adminUsername', name='username', required)
+                input(type='text', id='driverUsername', name='username', required)
 
                 label(for='password') Adgangskode
-                input(type='password', id='adminPassword', name='password', required)
-
-                button(type='submit', name='action', value='login') Login Admin
+                input(type='password', id='driverPassword', name='password', required)
+                button(type='submit', name='action', value='Login') Login buschauffør
                 
             

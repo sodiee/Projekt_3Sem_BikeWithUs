@@ -1,12 +1,5 @@
 import DBFunctions from '../../Storage/DBFunctions.js';
 
-function Customer(firstName, lastName, birthday, city) {
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.birthday = birthday;
-    this.city = city;
-}
-
 async function getAllCustomers() {
     return await DBFunctions.getCustomersDB();
 }
@@ -39,7 +32,7 @@ async function checkCustomer(customerUsername, customerPassword) {
       return await DBFunctions.getCustomerByUsernameAndPassword(customerUsername, customerPassword);
     } catch (error) {
       console.error(error);
-      throw error; // Kast fejlen igen for yderligere håndtering
+      throw error;
     }
   }
 export default {addCustomer, getCustomer, deleteCustomer, editCustomer, getCustomers, checkCustomer}
