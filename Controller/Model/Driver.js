@@ -42,14 +42,6 @@ async function getDrivers() {
     return await DBFunctions.getDriversDB();
 }
 
-async function checkDriver(driverUsername, driverPassword) { 
-    try {
-      return await DBFunctions.getDriverByUsernameAndPassword(driverUsername, driverPassword);
-    } catch (error) {
-      console.error(error);
-      throw error; // Kast fejlen igen for yderligere håndtering
-    }
-  }
 
 //hent driver tasks
 /*
