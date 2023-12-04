@@ -15,6 +15,8 @@ import {
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
+//ER GENNEMGÅET
+
 // Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyBrsey-IX0FhSucNOCKDrEn8ofFzbwn_7o",
@@ -26,11 +28,9 @@ const firebaseConfig = {
 };
 
 
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-//CustomerCollection
 const CustomersCollection = collection(db, 'Customers');
 const DriversCollection = collection(db, 'Drivers');
 const AdminsCollection = collection(db, 'Admins');
@@ -92,15 +92,14 @@ const getCustomerByUsernameAndPassword = async (customerUsername, customerPasswo
             const customerData = customerDoc.data();
 
             if (customerData.customerPassword === customerPassword) {
-                console.log(customerData)
-                return customerData; // Returner admin-data, hvis det matcher
+                return customerData;
             }
         }
 
-        return null; // Ingen match fundet
+        return null;
     } catch (error) {
         console.error('Fejl under opslag i Firestore:', error);
-        throw error; // Kast fejlen igen for yderligere håndtering
+        throw error;
     }
 }
 
@@ -155,14 +154,14 @@ const getDriverByUsernameAndPassword = async (driverUsername, driverPassword) =>
 
             if (driverData.driverPassword === driverPassword) {
             
-                return driverData; // Returner admin-data, hvis det matcher
+                return driverData;
 
             }
         }
         return null;
     } catch (error) {
         console.error('Fejl under opslag i Firestore:', error);
-        throw error; // Kast fejlen igen for yderligere håndtering
+        throw error;
     }
 }
 
@@ -199,14 +198,14 @@ const getAdminByUsernameAndPassword = async (adminUsername, adminPassword) => {
 
             if (adminData.adminPassword === adminPassword && adminData.adminStatus === true) {
                 console.log(adminData)
-                return adminData; // Returner admin-data, hvis det matcher
+                return adminData;
             }
         }
 
-        return null; // Ingen match fundet
+        return null;
     } catch (error) {
         console.error('Fejl under opslag i Firestore:', error);
-        throw error; // Kast fejlen igen for yderligere håndtering
+        throw error;
     }
 }
 
@@ -236,12 +235,10 @@ const editAdminDB = async (admin) => {
 
 const getCustomerJourneysDB = async (id) => {
     try {
-        // Hent alle rejsedokumenter fra databasen
         const journeyQueryDocs = await getDocs(JourneyCollection);
 
-        // Filtrer og map rejsedokumenter til dataarray
         const journeys = journeyQueryDocs.docs
-            .filter(doc => doc.data().customer.docID === id) // Ændring her
+            .filter(doc => doc.data().customer.docID === id)
             .map(doc => {
                 let data = doc.data();
                 data.docID = doc.id;
@@ -251,9 +248,9 @@ const getCustomerJourneysDB = async (id) => {
         return journeys;
     } catch (error) {
         console.error('Fejl ved hentning af kundens rejser i DBFunctions:', error);
-        throw new Error('Der opstod en fejl ved hentning af kundens rejser i DBFunctions.');
     }
 };
+
 const getJourneysDB = async () => {
     let journeyQueryDocs = await getDocs(JourneyCollection);
     let journeys = journeyQueryDocs.docs.map(doc => {
@@ -284,10 +281,9 @@ const addJourneyDB = async (journey) => {
 const deleteJourneyDB = async (journeyID) => {
     try {
         await deleteDoc(doc(db, 'Journeys', journeyID));
-        console.log('Journey deleted successfully.');
+        console.log('Journey er slettet.');
     } catch (error) {
-        console.error('Error deleting journey:', error);
-        throw new Error('An error occurred while deleting the journey.');
+        throw new Error('Det skete en fejl ved sletning af journey');
     }
 };
 
@@ -295,16 +291,15 @@ const deleteJourneyDB = async (journeyID) => {
 const editJourneyDB = async (docID, journeyData) => {
     try {
         await updateDoc(doc(db, 'Journeys', docID), journeyData);
-        console.log('Journey updated successfully.');
+        console.log('Journey er opdateres.');
     } catch (error) {
-        console.error('Error updating journey:', error);
-        throw new Error('There was an error updating the journey.');
+        throw new Error('Der skete en fejl ved opdatering af journey');
     }
 };
 
-
-// DB functions for booking
-
+// ------------------------\\
+// DB functions for booking\\
+// ------------------------\\
 const getBookingsDB = async () => {
     let bookingQueryDocs = await getDocs(BookingCollection);
     let bookings = bookingQueryDocs.docs.map(doc => {
@@ -313,6 +308,7 @@ const getBookingsDB = async () => {
         return data;
     });
 
+    //Fixer formatet og konverterer datoen, til noget der kan arbejdes med
     for (const booking of bookings) {
         let newStartDate = new Date(booking.startDate.seconds * 1000 + booking.startDate.nanoseconds / 1000000)
         booking.startDate = newStartDate;
@@ -328,6 +324,7 @@ const getBookingDB = async (id) => {
     let booking = bookingQueryDoc.data();
     booking.id = bookingQueryDoc.id;
 
+    //Fixer formatet og konverterer datoen, til noget der kan arbejdes med
     let newBookingDate = new Date(booking.bookingDate.seconds * 1000 + booking.bookingDate.nanoseconds / 1000000)
     booking.bookingDate = newBookingDate;
     let newStartDate = new Date(booking.startDate.seconds * 1000 + booking.startDate.nanoseconds / 1000000)
@@ -383,12 +380,9 @@ const editStartDateDB = async (booking) => {
 
 const getCustomerBookingsDB = async (id) => {
     try {
-        // Hent alle rejsedokumenter fra databasen
         const bookingQueryDocs = await getDocs(BookingCollection);
-
-        // Filtrer og map rejsedokumenter til dataarray
         const bookings = bookingQueryDocs.docs
-            .filter(doc => doc.data().customer.docID === id) // Ændring her
+            .filter(doc => doc.data().customer.docID === id)
             .map(doc => {
                 let data = doc.data();
                 data.docID = doc.id;
@@ -398,7 +392,6 @@ const getCustomerBookingsDB = async (id) => {
         return bookings;
     } catch (error) {
         console.error('Fejl ved hentning af kundens bookings i DBFunctions:', error);
-        throw new Error('Der opstod en fejl ved hentning af kundens bookings i DBFunctions.');
     }
 };
 
@@ -421,16 +414,12 @@ const getCustomerBookingDB = async (id) => {
         }
     } catch (error) {
         console.error('Fejl ved hentning af seneste booking i DBFunctions:', error);
-        throw new Error('Der opstod en fejl ved hentning af seneste booking i DBFunctions.');
     }
 };
-
-
-
 
 export default {
     getCustomerDB, getCustomerByUsernameAndPassword, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB, getAdminDB,
     getAdminsDB, deleteAdminDB, addAdminDB, editAdminDB, getAdminByUsernameAndPassword, getDriverDB, getDriversDB, deleteDriverDB, addDriverDB, editDriverDB,
-    addJourneyDB, editJourneyDB, deleteJourneyDB, getJourneyDB, getJourneysDB, getCustomerJourneysDB, editStartDateDB, addAddonsToBookingDB, editBooking,
-    getBookingDB, getBookingsDB, addBookingDB, deleteBookingDB, getCustomerBookingsDB, getCustomerBookingDB
+    addJourneyDB, editJourneyDB, deleteJourneyDB, getJourneyDB, getJourneysDB, getCustomerJourneysDB, editStartDateDB, editBooking,
+    getBookingDB, getBookingsDB, addBookingDB, deleteBookingDB, getCustomerBookingsDB, getCustomerBookingDB, getDriverByUsernameAndPassword, addAddonsToBookingDB
 }

@@ -2,13 +2,6 @@ import DBFunctions from '../../Storage/DBFunctions.js';
 
 // Er tjekket for korrektur
 
-function Journey(name,nrOfDays, price, description) {
-    this.name = name;
-    this.nrOfDays = nrOfDays;
-    this.price = price;
-    this.description = description;
-}
-
 async function getCustomerJourneys(customerId) {
         const journeys = await DBFunctions.getCustomerJourneysDB(customerId);
         return journeys;

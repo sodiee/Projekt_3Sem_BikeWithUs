@@ -21,7 +21,6 @@ adminRouter.use((req, res, next) => {
 
 // Middleware to require login for protected routes
 function requireAdminLogin(req, res, next) {
-    console.log('requireAdminLogin Middleware:', req.path, req.session.isAdminLoggedIn);
 
     if (!req.session.isAdminLoggedIn) {
         res.redirect('/');
@@ -119,7 +118,7 @@ adminRouter.get('/api/oversigt/:month', async (req, res) => {
         let bookings = await controllerBooking.getBookingsByMonth(req.params.month);
         res.json(bookings);
     } catch (err) {
-        console.log('Error when retrieving bookings per month');
+        console.log('Fejl ved hentning af bookings pr. måned');
         //res.status(500).send('Fejl ved hentning af journeys pr. måned');
     }
 });
@@ -133,7 +132,6 @@ adminRouter.get('/api/getBookings/', async (req, res) => {
     }
 })
 
-// TODO
 //ikke færdig
 adminRouter.post('/api/oversigt/redigerRejse/', async (req, res) => {
     try {
@@ -147,8 +145,6 @@ adminRouter.post('/api/oversigt/redigerRejse/', async (req, res) => {
 
         controllerBooking.editStartDate(booking, newStartDate, newEndDate);
         
-        //res.status(204).send('Bookingen er nu opdateret.');
-        //res.end();
         res.redirect('/admins/oversigt/redigerRejseComplete/')
     } catch (error) {
         console.log(error)

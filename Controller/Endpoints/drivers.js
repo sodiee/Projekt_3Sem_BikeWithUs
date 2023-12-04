@@ -3,6 +3,76 @@ const driverRouter = express.Router();
 import controller from '../Model/Driver.js';
 import DBFunctions from '../../Storage/DBFunctions.js';
 
+//-------------------------------
+// driver-ENDPOINTS for LOGIN |
+//-------------------------------
+
+// Middleware til at kræve log ind for beskyttede ruter
+driverRouter.use((req, res, next) => {
+    res.locals.isDriverLoggedIn = req.session.isDriverLoggedIn || false;
+    res.locals.driverUser = req.session.driverUser || null;
+    next();
+})
+
+// Middleware til at kræve log ing for beskyttede ruter
+function requireDriverLogin(req, res, next) {
+    if (!req.session.isDriverLoggedIn) {
+        // Omdiriger kun, hvis brugen er ikke logget ind
+        res.redirect('/')
+    } else {
+        next();
+    }
+}
+
+// Anvend middleware på alle bestyttede ruter, undtagen login-ruten
+driverRouter.use((req, res, next) => {
+    if (req.path !== '/driverLogin') {
+        requireDriverLogin(req, res, next);
+    } else {
+        next();
+    }
+})
+
+driverRouter.get('/', (req, res) => {
+    let isDriverLoggedIn = res.locals.isDriverLoggedIn;
+    let driverUser = res.locals.driverUser
+
+    if (isDriverLoggedIn && driverUser) {
+        res.render('driverMain', {knownUser: isDriverLoggedIn, driver: driverUser})
+    } else {
+        res.redirect('/')
+    }
+    
+})
+
+driverRouter.post('/driverLogin', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        const driverData = await controller.checkDriver(username, password);
+    
+        if (driverData) {
+          req.session.isDriverLoggedIn = true;
+          req.session.driverUser = driverData;
+          res.redirect('/drivers/');
+        } else {
+          res.status(401).send('Forkert brugernavn eller adgangskode');
+        }
+      } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+      }
+});
+
+driverRouter.get('/driverLogout', (req, res) => {
+    req.session.destroy()
+    res.redirect('/')
+})
+
+driverRouter.get('/driverLogin', (req, res) => {
+    res.render('driverLogin')
+})
+
+
 // Arbejdsopgaver til chaufføren
 driverRouter.get('/Tasks/Assign', async (req, res) => {
     try {
