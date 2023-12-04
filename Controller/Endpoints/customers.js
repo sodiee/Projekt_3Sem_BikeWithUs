@@ -21,7 +21,7 @@ customerRouter.use((req, res, next) => {
 function requireCustomerLogin(req, res, next) {
     if (!req.session.isCustomerLoggedIn) {
         // Omdiriger kun, hvis brugen er ikke logget ind
-        res.redirect('/customers/customerLogin')
+        res.redirect('/')
     } else {
         next();
     }
@@ -43,7 +43,7 @@ customerRouter.get('/', (req, res) => {
     if (isCustomerLoggedIn && customerUser) {
         res.render('customerPage', {knownUser: isCustomerLoggedIn, customer: customerUser})
     } else {
-        res.redirect('/customers/customerLogin')
+        res.redirect('/')
     }
     
 })
@@ -68,7 +68,7 @@ customerRouter.post('/customerLogin', async (req, res) => {
 
 customerRouter.get('/customerLogout', (req, res) => {
     req.session.destroy()
-    res.redirect('/customers/customerLogin')
+    res.redirect('/')
 })
 
 customerRouter.get('/customerLogin', (req, res) => {
@@ -122,7 +122,7 @@ customerRouter.get('/Calendar', async (req, res) => {
             res.status(500).send('Der opstod en fejl ved hentning af rejser');
         }
     } else {
-        res.redirect('/customerLogin');
+        res.redirect('/');
     }
 });
 
