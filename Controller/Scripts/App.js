@@ -19,10 +19,15 @@ app.use(session({
 
 
 // Endpoints (routes)
+import loginRouter from '../Endpoints/login.js'
+app.use('/', loginRouter)
+
 import customerRouter from '../Endpoints/customers.js'
-app.use('/', customerRouter)
+app.use('/customers', customerRouter)
+
 import adminRouter from'../Endpoints/admins.js'
 app.use('/admins', adminRouter)
+
 import driverRouter from '../Endpoints/drivers.js'
 app.use('/drivers', driverRouter)
 

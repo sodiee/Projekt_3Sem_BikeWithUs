@@ -312,6 +312,7 @@ const getBookingsDB = async () => {
         data.docID = doc.id;
         return data;
     });
+
     for (const booking of bookings) {
         let newStartDate = new Date(booking.startDate.seconds * 1000 + booking.startDate.nanoseconds / 1000000)
         booking.startDate = newStartDate;
@@ -326,7 +327,7 @@ const getBookingDB = async (id) => {
     const bookingQueryDoc = await getDoc(docRef);
     let booking = bookingQueryDoc.data();
     booking.id = bookingQueryDoc.id;
-    
+
     let newBookingDate = new Date(booking.bookingDate.seconds * 1000 + booking.bookingDate.nanoseconds / 1000000)
     booking.bookingDate = newBookingDate;
     let newStartDate = new Date(booking.startDate.seconds * 1000 + booking.startDate.nanoseconds / 1000000)
@@ -334,7 +335,7 @@ const getBookingDB = async (id) => {
     let newEndDate = new Date(booking.endDate.seconds * 1000 + booking.endDate.nanoseconds / 1000000)
     booking.endDate = newEndDate;
 
-   return booking;
+    return booking;
 }
 
 const addBookingDB = async (booking) => {
@@ -374,11 +375,10 @@ const editBooking = async (booking) => {
 };
 
 const editStartDateDB = async (booking) => {
-    console.log('editstartdatedb: bboking: ' + booking)
-    console.log('editstartdatedb: newstardate: ' + booking.startDate)
-    console.log('editstartdatedb: newenddate: ' + booking.endDate)
-    console.log('editstartdatedb: timestamp startdate: ' + firebaseConfig.db.Timestamp.fromDate(booking.startDate)) //serverTimestamp()
-    //await updateDoc(doc(db, 'Bookings', booking.id));
+    await updateDoc(doc(db, 'Bookings', booking.id), {
+        startDate: booking.startDate,
+        endDate: booking.endDate
+    });
 };
 
 const getCustomerBookingsDB = async (id) => {

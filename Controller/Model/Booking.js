@@ -36,7 +36,7 @@ function addaddons(addons) {
 }
 
 async function editStartDate(booking, newStartDate, newEndDate) {
-    let j = { name: booking.name, startDate: newStartDate, endDate: newEndDate }
+    let j = {id: booking.id, name: booking.name, startDate: newStartDate, endDate: newEndDate }
     return DBFunctions.editStartDateDB(j);
 }
 
@@ -62,7 +62,6 @@ async function editBooking(booking) {
 async function getBookingsByMonth(month) {
     let arr = await getBookings();
 
-    
     
     arr = filterByMonth(arr, month)
     return arr;

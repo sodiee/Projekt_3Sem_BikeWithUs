@@ -4,20 +4,46 @@ import controller from '../Model/Customer.js';
 import journeyController from '../Model/Journey.js';
 import bookingController from '../Model/Booking.js'
 import DBFunctions from '../../Storage/DBFunctions.js';
+import adminRouter from './admins.js';
 
 //-------------------------------
 // customer-ENDPOINTS for LOGIN |
 //-------------------------------
-let isCustomerLoggedIn = false
-let customerUser = null
+
+// Middleware til at kræve log ind for beskyttede ruter
+customerRouter.use((req, res, next) => {
+    res.locals.isCustomerLoggedIn = req.session.isCustomerLoggedIn || false;
+    res.locals.customerUser = req.session.customerUser || null;
+    next();
+})
+
+// Middleware til at kræve log ing for beskyttede ruter
+function requireCustomerLogin(req, res, next) {
+    if (!req.session.isCustomerLoggedIn) {
+        // Omdiriger kun, hvis brugen er ikke logget ind
+        res.redirect('/customers/customerLogin')
+    } else {
+        next();
+    }
+}
+
+// Anvend middleware på alle bestyttede ruter, undtagen login-ruten
+customerRouter.use((req, res, next) => {
+    if (req.path !== '/customerLogin') {
+        requireCustomerLogin(req, res, next);
+    } else {
+        next();
+    }
+})
 
 customerRouter.get('/', (req, res) => {
-    if (req.session.isCustomerLoggedIn && req.session.customerUser) {
-        isCustomerLoggedIn = true
-        customerUser = req.session.customerUser
+    let isCustomerLoggedIn = res.locals.isCustomerLoggedIn;
+    let customerUser = res.locals.customerUser
+
+    if (isCustomerLoggedIn && customerUser) {
         res.render('customerPage', {knownUser: isCustomerLoggedIn, customer: customerUser})
     } else {
-        res.redirect('/customerLogin')
+        res.redirect('/customers/customerLogin')
     }
     
 })
@@ -30,7 +56,7 @@ customerRouter.post('/customerLogin', async (req, res) => {
         if (customerData) {
           req.session.isCustomerLoggedIn = true;
           req.session.customerUser = customerData;
-          res.redirect('/');
+          res.redirect('/customers/');
         } else {
           res.status(401).send('Forkert brugernavn eller adgangskode');
         }
@@ -40,17 +66,9 @@ customerRouter.post('/customerLogin', async (req, res) => {
       }
 });
 
-customerRouter.get('/secret', (req, res) => {
-    if (req.session.isCustomerLoggedIn) {
-        res.render('customers', {knownUser: req.session.isCustomerLoggedIn})
-    } else {
-        res.redirect('/customerLogin')
-    }
-})
-
 customerRouter.get('/customerLogout', (req, res) => {
     req.session.destroy()
-    res.redirect('/')
+    res.redirect('/customers/customerLogin')
 })
 
 customerRouter.get('/customerLogin', (req, res) => {
@@ -89,17 +107,6 @@ customerRouter.post('/', async (req, res) => {
     }
 });
 
-// TODO
-// Simulator af databaseopkald
-function checkCustomerUser(customerUsername, customerPassword) {
-    let returnValue = false
-    if (customerUsername == 'Maksym' && customerPassword == '123') {
-        returnValue = true
-    }
-    return returnValue
-}
-
-
 // ------------------------------------------
 // customer-ENDPOINTS for booking / Calender |
 // ------------------------------------------
@@ -108,6 +115,7 @@ customerRouter.get('/Calendar', async (req, res) => {
     // Check for login status using sessions or cookies
     if (req.session.isCustomerLoggedIn) {
         try {
+            const customerUser = req.session.customerUser; // Hent kunden fra sessionen
             res.render('bookingCalendar', {customer: customerUser});
         } catch (error) {
             console.error('Fejl ved hentning af rejser', error);
@@ -121,7 +129,6 @@ customerRouter.get('/Calendar', async (req, res) => {
 
 customerRouter.get('/Calendar/Book', async (req, res) => {
     // Check for login status using sessions or cookies
-    if (req.session.isCustomerLoggedIn) {
         try {
             const journeys = await journeyController.getJourneys();
             const startDate = req.query.date || 'No date selected'; // Brug datoen gemt i sessionen som startDate
@@ -130,19 +137,16 @@ customerRouter.get('/Calendar/Book', async (req, res) => {
             console.error('Fejl ved tilføjelse af Rejse:', error);
             res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
         }
-    } else {
-        res.redirect('/customerLogin');
-    }
-});
+    });
 
 customerRouter.post('/Calendar/Book', async (req, res) => {
-    if (req.session.isCustomerLoggedIn) {
         try {
             const selectedJourneyId = req.body.journeyId;
             const selectedJourney = await journeyController.getJourney(selectedJourneyId);
             const { price, participants } = req.body;
             const startDate = new Date(req.body.date);
-
+            const customerUser = req.session.customerUser;
+        
             const booking = {
                 customer: customerUser,
                 journey: selectedJourney,
@@ -154,20 +158,16 @@ customerRouter.post('/Calendar/Book', async (req, res) => {
             req.session.booking = booking;
 
             if (await bookingController.addBooking(booking)) {
-                res.redirect('/Calendar/confirmation');
+                res.redirect('/customers/Calendar/confirmation');
             } 
         } catch (error) {
             console.error('Fejl ved tilføjelse af booking:', error);
             res.status(500).send('Der opstod en fejl ved tilføjelse af booking.');
         }
-    } else {
-        res.redirect('/customerLogin');
-    }
 });
 
 
 customerRouter.get('/Calendar/confirmation', async (req, res) => {
-    if (req.session.isCustomerLoggedIn) {
         try {
             // Hent booking fra sessionen
             const booking = req.session.booking;
@@ -180,28 +180,20 @@ customerRouter.get('/Calendar/confirmation', async (req, res) => {
             console.error('Fejl ved håndtering af bekræftelsessiden:', error);
             res.status(500).send('Der opstod en fejl ved håndtering af bekræftelsessiden.');
         }
-    } else {
-        res.redirect('/customerLogin');
-    }
 });
 customerRouter.get('/CustomerPage', async (req, res) => {
     // Check for login status using sessions or cookies
-    if (req.session.isCustomerLoggedIn) {
         try {
-            
-            res.render('customerPage', {customer: customerUser });
+            const customerUser = req.session.customerUser; // Hent kunden fra sessionen
+            res.render('customerPage', {customer: customerUser});
         } catch (error) {
             console.error('Fejl ved hentning af kundens side:', error);
             res.status(500).send('Der opstod en fejl ved hentning af kundens side.');
         }
-    } else {
-        res.redirect('/customerLogin');
-    }
 });
 
 // Ændring af render-metoden i din customers.js-fil
 customerRouter.get('/CustomerBookings', async (req, res) => {
-    if (req.session.isCustomerLoggedIn) {
         try {
             // Hent alle bookinger for den aktuelle kunde
             const bookings = await bookingController.getCustomerBookings(req.session.customerId);
@@ -212,21 +204,16 @@ customerRouter.get('/CustomerBookings', async (req, res) => {
             console.error('Fejl ved hentning af kundens bookinger:', error);
             res.status(500).send(`Der opstod en fejl ved hentning af kundens bookinger: ${error.message}`);
         }
-    } else {
-        res.redirect('/customerLogin');
-    }
 });
 
 customerRouter.get('/Contact', async (req, res) => {
-    if(req.session.isCustomerLoggedIn) {
         try {
             res.render('contact')
         } catch (error) {
             console.error('Fejl ved hentning af kontaktinformation:', error);
             res.status(500).send('Der opstod en fejl ved hentning kontaktinformation.');            
         }
-    }
-})
+    })
 
 
 export default customerRouter;
