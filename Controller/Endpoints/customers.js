@@ -115,6 +115,7 @@ customerRouter.get('/Calendar', async (req, res) => {
     // Check for login status using sessions or cookies
     if (req.session.isCustomerLoggedIn) {
         try {
+            const customerUser = req.session.customerUser; // Hent kunden fra sessionen
             res.render('bookingCalendar', {customer: customerUser});
         } catch (error) {
             console.error('Fejl ved hentning af rejser', error);
@@ -144,7 +145,8 @@ customerRouter.post('/Calendar/Book', async (req, res) => {
             const selectedJourney = await journeyController.getJourney(selectedJourneyId);
             const { price, participants } = req.body;
             const startDate = new Date(req.body.date);
-
+            const customerUser = req.session.customerUser;
+        
             const booking = {
                 customer: customerUser,
                 journey: selectedJourney,
@@ -156,7 +158,7 @@ customerRouter.post('/Calendar/Book', async (req, res) => {
             req.session.booking = booking;
 
             if (await bookingController.addBooking(booking)) {
-                res.redirect('/Calendar/confirmation');
+                res.redirect('/customers/Calendar/confirmation');
             } 
         } catch (error) {
             console.error('Fejl ved tilføjelse af booking:', error);
@@ -182,7 +184,8 @@ customerRouter.get('/Calendar/confirmation', async (req, res) => {
 customerRouter.get('/CustomerPage', async (req, res) => {
     // Check for login status using sessions or cookies
         try {
-            res.render('customerPage');
+            const customerUser = req.session.customerUser; // Hent kunden fra sessionen
+            res.render('customerPage', {customer: customerUser});
         } catch (error) {
             console.error('Fejl ved hentning af kundens side:', error);
             res.status(500).send('Der opstod en fejl ved hentning af kundens side.');
