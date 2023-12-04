@@ -120,11 +120,9 @@ adminRouter.get('/oversigt/redigerRejse', async (req, res) => {
 adminRouter.get('/api/oversigt/:month', async (req, res) => {
     try {
         let bookings = await controllerBooking.getBookingsByMonth(req.params.month);
-        
         res.json(bookings);
     } catch (err) {
         console.log('Fejl ved hentning af bookings pr. måned');
-        //res.status(500).send('Fejl ved hentning af journeys pr. måned');
     }
 });
 
