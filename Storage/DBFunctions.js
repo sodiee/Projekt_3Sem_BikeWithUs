@@ -188,6 +188,28 @@ const getCustomerByUsernameAndPassword = async (customerUsername, customerPasswo
     }
 }
 
+const getDriverByUsernameAndPassword = async (driverUsername, driverPassword) => {
+    try { 
+        const driversCollectionRef = collection(db, 'Drivers');
+        const driverQuerySnapshot = await getDocs(query(driversCollectionRef, where('driverUsername', '==', driverUsername)));
+
+        if (!driverQuerySnapshot.empty) {
+            const driverDoc = driverQuerySnapshot.docs[0];
+            const driverData = driverDoc.data();
+
+            if (driverData.driverPassword === driverPassword) {
+            
+                return driverData; // Returner admin-data, hvis det matcher
+
+            }
+        }
+        return null;
+    } catch (error) {
+        console.error('Fejl under opslag i Firestore:', error);
+        throw error; // Kast fejlen igen for yderligere håndtering
+    }
+}
+
 const deleteAdminDB = async (admin) => {
     const deletedAdmin = await deleteDoc(doc(db, 'Admins', admin.id));
     return admin;

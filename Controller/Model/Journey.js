@@ -1,5 +1,6 @@
 import DBFunctions from '../../Storage/DBFunctions.js';
 
+// Er tjekket for korrektur
 
 function Journey(name,nrOfDays, price, description) {
     this.name = name;
