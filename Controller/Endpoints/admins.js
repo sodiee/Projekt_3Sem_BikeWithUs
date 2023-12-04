@@ -82,19 +82,6 @@ adminRouter.get('/adminLogout', (req, res) => {
 // ----------------------------
 // admin-ENDPOINTS for oversigt|
 // ----------------------------
-adminRouter.get('/Journeys', async (req, res) => {
-    try {
-        //finder alle journeys
-        //const journeys = await controllerJourney.getJourneys();
-
-
-        res.render('journeys', { journeys: journeys })
-    } catch (error) {
-        console.error('Fejl ved hentning af rejser', error);
-        res.status(500).send('Der opstod en fejl ved hentning af rejser');
-    }
-})
-
 adminRouter.get('/oversigt', async (req, res) => {
     try {
         res.render('adminJSCalender')
@@ -109,18 +96,17 @@ adminRouter.get('/oversigt/redigerRejse', async (req, res) => {
         let bookings = await controllerBooking.getBookings();
         res.render('adminOversigtRedigerRejse', { bookings: bookings });
     } catch (error) {
-        console.log(error)
+        console.log("Problem med at tilgå redigeringsside", error)
     }
 });
 
 //APIsektion start
-
 adminRouter.get('/api/oversigt/:month', async (req, res) => {
     try {
         let bookings = await controllerBooking.getBookingsByMonth(req.params.month);
         res.json(bookings);
     } catch (err) {
-        console.log('Fejl ved hentning af bookings pr. måned');
+        console.log('Fejl ved hentning af bookings pr. måned', err);
     }
 });
 
@@ -131,7 +117,7 @@ adminRouter.get('/api/getBookings/', async (req, res) => {
         res.json(bookings);
 
     } catch (error) {
-        console.log(error);
+        console.log('Fejl i "/api/getBookings/" i endpoints', error);
     }
 })
 
@@ -149,7 +135,7 @@ adminRouter.post('/api/oversigt/redigerRejse/', async (req, res) => {
         
         res.redirect('/admins/oversigt/redigerRejseComplete/')
     } catch (error) {
-        console.log(error)
+        console.log('Fejl i "/api/oversigt/redigerRejse/"', error)
     }
 })
 
@@ -161,7 +147,6 @@ adminRouter.get('/oversigt/redigerRejseComplete/', async (req, res) => {
 
 adminRouter.get('/Customers', async (req, res) => {
     try {
-        // Finder alle customers
         const customers = await controllerCustomer.getCustomers();
         res.render('customers', { knownUser: isAdminLoggedIn, customers: customers });
     } catch (error) {
@@ -170,9 +155,8 @@ adminRouter.get('/Customers', async (req, res) => {
     }
 });
 
-adminRouter.get('/admins/drivers', async (req, res) => {
+adminRouter.get('/drivers', async (req, res) => {
     try {
-        // Finder alle drivers
         const drivers = await controllerDriver.getDrivers();
         res.render('drivers', { drivers });
     } catch (error) {
@@ -181,10 +165,8 @@ adminRouter.get('/admins/drivers', async (req, res) => {
     }
 });
 
-// Rute til /admins/overview
 adminRouter.get('/overview', async (req, res) => {
     try {
-        // Finder alle admins
         const admins = await controllerAdmin.getAdmins();
         res.render('adminsOverview', { admins: admins });
     } catch (error) {
@@ -199,19 +181,19 @@ adminRouter.get('/overview', async (req, res) => {
 // ------------------------------------
 // admin-ENDPOINTS for CRUD til drivers|
 // ------------------------------------
-adminRouter.post('/Driver/Add', async (req, res) => {
+adminRouter.post('/driver/add', async (req, res) => {
     try {
         const { firstName, lastName } = req.body;
         await controllerDriver.addDriver({ firstName, lastName });
 
-        res.redirect('/Drivers'); //redirecting to driver page
+        res.redirect('/Drivers');
     } catch (error) {
         console.error('Fejl ved tilføjelse af Driver');
         res.status(500).send('Der opstod en fejl ved tilføjelse af Driver');
     }
 });
 
-adminRouter.get('/Driver/Edit/:id', async (req, res) => {
+adminRouter.get('/driver/edit/:id', async (req, res) => {
     try {
         const driverId = req.params.id;
         const driver = await controllerDriver.getDriver(driverId)
@@ -228,19 +210,19 @@ adminRouter.get('/Driver/Edit/:id', async (req, res) => {
     }
 });
 
-adminRouter.post('/Driver/Delete/:id', async (req, res) => {
+adminRouter.post('/driver/delete/:id', async (req, res) => {
     try {
         const driverId = req.params.id;
         await controllerDriver.deleteDriver(driverId);
 
-        res.redirect('/Drivers'); //redirect til en oversigt over drivers
+        res.redirect('/drivers');
     } catch (error) {
         console.error('fejl ved sletning af driver: ', error);
         res.status(500).send('Der opstod en fejl ved sletning af driver')
     }
 });
 
-adminRouter.get('/Driver/Get/:id', async (req, res) => {
+adminRouter.get('/driver/get/:id', async (req, res) => {
     try {
         const driverId = req.params.id;
         const driver = await controllerDriver.getDriver(driverId)
@@ -256,10 +238,11 @@ adminRouter.get('/Driver/Get/:id', async (req, res) => {
         res.status(500).send('Der opstod en fejl ved hentning af driver')
     }
 });
+
 // --------------------------------------
 // admin-ENDPOINTS for CRUD til customers|
 // --------------------------------------
-adminRouter.get('/Customer/Get/:id', async (req, res) => {
+adminRouter.get('/customer/get/:id', async (req, res) => {
     try {
         const customerId = req.params.id;
         const customer = await controllerCustomer.getCustomer(customerId);
@@ -272,12 +255,12 @@ adminRouter.get('/Customer/Get/:id', async (req, res) => {
 
 
 /**? bruges endnu? */
-adminRouter.post('/Customer/Add', async (req, res) => {
+adminRouter.post('/customer/ddd', async (req, res) => {
     try {
         const { firstName, lastName, birthday, city } = req.body;
         await controllerCustomer.addCustomer({ firstName, lastName, birthday, city });
 
-        res.redirect('/Customers'); // Redirect til en oversigtsside eller anden relevant side
+        res.redirect('/Customers');
     } catch (error) {
         console.error('Fejl ved tilføjelse af kunde:', error);
         res.status(500).send('Der opstod en fejl ved tilføjelse af kunde.');
@@ -285,12 +268,12 @@ adminRouter.post('/Customer/Add', async (req, res) => {
 });
 
 /**? bruges endnu? */
-adminRouter.post('/Customer/Delete/:id', async (req, res) => {
+adminRouter.post('/customer/delete/:id', async (req, res) => {
     try {
         const customerId = req.params.id;
         await controllerCustomer.deleteCustomer(customerId);
 
-        res.redirect('/Customers'); // Redirect til en oversigtsside eller anden relevant side
+        res.redirect('/Customers');
     } catch (error) {
         console.error('Fejl ved sletning af kunde: ', error);
         res.status(500).send('Der opstod en fejl ved sletning af kunde.');
@@ -298,7 +281,7 @@ adminRouter.post('/Customer/Delete/:id', async (req, res) => {
 });
 
 /**? bruges endnu? */
-adminRouter.get('/Customer/Edit/:id', async (req, res) => {
+adminRouter.get('/customer/edit/:id', async (req, res) => {
     try {
         const customerId = req.params.id;
         const customer = await controllerCustomer.getCustomer(customerId);
@@ -316,12 +299,12 @@ adminRouter.get('/Customer/Edit/:id', async (req, res) => {
 // --------------------------------------
 
 /**? bruges endnu? */
-adminRouter.post('/Journey/Add/4day', async (req, res) => {
+adminRouter.post('/journey/add/4day', async (req, res) => {
     try {
         const { startDate, endDate, customer, price } = req.body;
         await controllerJourney.addJourney4Days({ startDate, endDate, customer, price });
 
-        res.redirect('/Journeys'); // Redirect til en oversigtsside eller anden relevant side
+        res.redirect('/Journeys');
     } catch (error) {
         console.error('Fejl ved tilføjelse af Rejse:', error);
         res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
@@ -329,12 +312,12 @@ adminRouter.post('/Journey/Add/4day', async (req, res) => {
 });
 
 /**? bruges endnu? */
-adminRouter.post('/Journey/Add/3day', async (req, res) => {
+adminRouter.post('/journey/add/3day', async (req, res) => {
     try {
         const { startDate, endDate, customer, price } = req.body;
         await controllerJourney.addJourney3Days({ startDate, endDate, customer, price });
 
-        res.redirect('/Journeys'); // Redirect til en oversigtsside eller anden relevant side
+        res.redirect('/Journeys');
     } catch (error) {
         console.error('Fejl ved tilføjelse af Rejse:', error);
         res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
@@ -342,19 +325,20 @@ adminRouter.post('/Journey/Add/3day', async (req, res) => {
 });
 
 /**? bruges endnu? */
-adminRouter.post('/Journey/Delete/:id', async (req, res) => {
+adminRouter.post('/journey/delete/:id', async (req, res) => {
     try {
         const journeyId = req.params.id;
         await controllerJourney.deleteJourney(journeyId);
 
-        res.redirect('/Journeys/'); // Redirect til en oversigtsside eller anden relevant side
+        res.redirect('/Journeys/');
     } catch (error) {
         console.error('Fejl ved sletning af Rejse: ', error);
         res.status(500).send('Der opstod en fejl ved sletning af rejse.');
     }
 });
+
 /**? bruges endnu? */
-adminRouter.get('/Journey/Edit/:id', async (req, res) => {
+adminRouter.get('/journey/edit/:id', async (req, res) => {
     try {
         const journeyId = req.params.id;
         const journey = await controllerJourney.getJourney(journeyId);
@@ -370,7 +354,7 @@ adminRouter.get('/Journey/Edit/:id', async (req, res) => {
 // admin-ENDPOINTS for CRUD til Admins|
 // -----------------------------------
 /**? bruges endnu? */
-adminRouter.get('/Get/:id', async (req, res) => {
+adminRouter.get('/get/:id', async (req, res) => {
     try {
         const adminId = req.params.id;
         const admin = await controllerAdmin.getAdmin(adminId);
@@ -381,31 +365,32 @@ adminRouter.get('/Get/:id', async (req, res) => {
     }
 })
 /**? bruges endnu? */
-adminRouter.post('/Add', async (req, res) => {
+adminRouter.post('/add', async (req, res) => {
     try {
         const { firstName, lastName, adminStatus } = req.body;
         await controllerAdmin.addAdmin({ firstName, lastName, adminStatus });
 
-        res.redirect('/Admins'); // Redirect til en oversigtsside eller anden relevant side
+        res.redirect('/Admins');
     } catch (error) {
         console.error('Fejl ved tilføjelse af Admin:', error);
         res.status(500).send('Der opstod en fejl ved tilføjelse af admin.');
     }
 });
 /**? bruges endnu? */
-adminRouter.post('/Delete/:id', async (req, res) => {
+adminRouter.post('/delete/:id', async (req, res) => {
     try {
         const adminId = req.params.id;
         await controllerAdmin.deleteAdmin(adminId);
 
-        res.redirect('/Admins'); // Redirect til en oversigtsside eller anden relevant side
+        res.redirect('/Admins');
     } catch (error) {
         console.error('Fejl ved sletning af Admin: ', error);
         res.status(500).send('Der opstod en fejl ved sletning af admin.');
     }
 });
+
 /**? bruges endnu? */
-adminRouter.get('/Edit/:id', async (req, res) => {
+adminRouter.get('/edit/:id', async (req, res) => {
     try {
         const adminId = req.params.id;
         const admin = await controllerAdmin.getAdmin(adminId);
