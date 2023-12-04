@@ -162,7 +162,7 @@ adminRouter.post('/api/overview/editBooking/', async (req, res) => {
 
         controllerBooking.editStartDate(booking, newStartDate, newEndDate);
         
-        res.redirect('/admins/oversigt/redigerRejseComplete/')
+        res.redirect('/admins/overview/editBookingComplete/')
     } catch (error) {
         console.log(error)
     }
