@@ -1,17 +1,6 @@
 import DBFunctions from '../../Storage/DBFunctions.js';
 
-
 // Er tjekket for korrektur
-function Booking(customer, journey, nrOfPersons, startDate) {
-    this.customer = customer;
-    this.journey = journey;
-    this.startDate = startDate;
-    this.endDate = addDays(startDate, journey.nrOfDays);
-    this.addons = [];
-    this.nrOfPersons = nrOfPersons;
-    this.bookingDate = new Date();
-    this.bookingPrice = journey.price * nrOfPersons;
-}
 
 function addDays(date, days) {
     let result = new Date(date);
