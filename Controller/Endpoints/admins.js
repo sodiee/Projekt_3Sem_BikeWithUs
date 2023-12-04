@@ -93,6 +93,17 @@ adminRouter.get('/overview/customers', async (req, res) => {
     }
 });
 
+adminRouter.get('/overview/drivers', async (req, res) => {
+    try {
+        // Finder alle drivers
+        const drivers = await controllerDriver.getDrivers();
+        res.render('driverOverview', { drivers });
+    } catch (error) {
+        console.error('Fejl ved hentning af chauffører:', error);
+        res.status(500).send('Der opstod en fejl ved hentning af chauffører.');
+    }
+});
+
 adminRouter.get('/Journeys', async (req, res) => {
     try {
         // Finds all journeys
