@@ -284,10 +284,9 @@ const addJourneyDB = async (journey) => {
 const deleteJourneyDB = async (journeyID) => {
     try {
         await deleteDoc(doc(db, 'Journeys', journeyID));
-        console.log('Journey deleted successfully.');
+        console.log('Journey er slettet.');
     } catch (error) {
-        console.error('Error deleting journey:', error);
-        throw new Error('An error occurred while deleting the journey.');
+        throw new Error('Det skete en fejl ved sletning af journey');
     }
 };
 
@@ -295,10 +294,9 @@ const deleteJourneyDB = async (journeyID) => {
 const editJourneyDB = async (docID, journeyData) => {
     try {
         await updateDoc(doc(db, 'Journeys', docID), journeyData);
-        console.log('Journey updated successfully.');
+        console.log('Journey er opdateres.');
     } catch (error) {
-        console.error('Error updating journey:', error);
-        throw new Error('There was an error updating the journey.');
+        throw new Error('Der skete en fejl ved opdatering af journey');
     }
 };
 
