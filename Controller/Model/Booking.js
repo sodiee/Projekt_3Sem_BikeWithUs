@@ -31,8 +31,8 @@ booking.prototype.calculatePrice = function () {
 };
 */
 
-function addaddons(addons) {
-    DBFunctions.addaddonsToBookingDB(addons);
+function addAddons(addons) {
+    DBFunctions.addAddonsToBookingDB(addons);
 }
 
 async function editStartDate(booking, newStartDate, newEndDate) {
@@ -85,4 +85,4 @@ async function getCustomerBooking(customerId) {
     return await DBFunctions.getCustomerBookingDB(customerId);
 }
 
-export default { addDays, getBooking, getBookings, addBooking, deleteBooking, editBooking, addaddons, editStartDate, getBookingsByMonth, getCustomerBookings, getCustomerBooking};  // Tilføj getCustomerBookings her
+export default { addDays, getBooking, getBookings, addBooking, deleteBooking, editBooking, addAddons, editStartDate, getBookingsByMonth, getCustomerBookings, getCustomerBooking};  // Tilføj getCustomerBookings her

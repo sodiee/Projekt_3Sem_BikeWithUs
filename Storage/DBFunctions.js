@@ -82,6 +82,28 @@ const editCustomerDB = async (customer) => {
     });
 };
 
+const getCustomerByUsernameAndPassword = async (customerUsername, customerPassword) => {
+    try {
+        const customersCollectionRef = collection(db, 'Customers');
+        const customerQuerySnapshot = await getDocs(query(customersCollectionRef, where('customerUsername', '==', customerUsername)));
+
+        if (!customerQuerySnapshot.empty) {
+            const customerDoc = customerQuerySnapshot.docs[0];
+            const customerData = customerDoc.data();
+
+            if (customerData.customerPassword === customerPassword) {
+                console.log(customerData)
+                return customerData; // Returner admin-data, hvis det matcher
+            }
+        }
+
+        return null; // Ingen match fundet
+    } catch (error) {
+        console.error('Fejl under opslag i Firestore:', error);
+        throw error; // Kast fejlen igen for yderligere håndtering
+    }
+}
+
 // ------------------------
 // DB functions for driver
 // ------------------------
@@ -122,6 +144,28 @@ const editDriverDB = async (driver) => {
     });
 };
 
+const getDriverByUsernameAndPassword = async (driverUsername, driverPassword) => {
+    try { 
+        const driversCollectionRef = collection(db, 'Drivers');
+        const driverQuerySnapshot = await getDocs(query(driversCollectionRef, where('driverUsername', '==', driverUsername)));
+
+        if (!driverQuerySnapshot.empty) {
+            const driverDoc = driverQuerySnapshot.docs[0];
+            const driverData = driverDoc.data();
+
+            if (driverData.driverPassword === driverPassword) {
+            
+                return driverData; // Returner admin-data, hvis det matcher
+
+            }
+        }
+        return null;
+    } catch (error) {
+        console.error('Fejl under opslag i Firestore:', error);
+        throw error; // Kast fejlen igen for yderligere håndtering
+    }
+}
+
 
 // ------------------------
 // DB functions for admin
@@ -160,50 +204,6 @@ const getAdminByUsernameAndPassword = async (adminUsername, adminPassword) => {
         }
 
         return null; // Ingen match fundet
-    } catch (error) {
-        console.error('Fejl under opslag i Firestore:', error);
-        throw error; // Kast fejlen igen for yderligere håndtering
-    }
-}
-
-const getCustomerByUsernameAndPassword = async (customerUsername, customerPassword) => {
-    try {
-        const customersCollectionRef = collection(db, 'Customers');
-        const customerQuerySnapshot = await getDocs(query(customersCollectionRef, where('customerUsername', '==', customerUsername)));
-
-        if (!customerQuerySnapshot.empty) {
-            const customerDoc = customerQuerySnapshot.docs[0];
-            const customerData = customerDoc.data();
-
-            if (customerData.customerPassword === customerPassword) {
-                console.log(customerData)
-                return customerData; // Returner admin-data, hvis det matcher
-            }
-        }
-
-        return null; // Ingen match fundet
-    } catch (error) {
-        console.error('Fejl under opslag i Firestore:', error);
-        throw error; // Kast fejlen igen for yderligere håndtering
-    }
-}
-
-const getDriverByUsernameAndPassword = async (driverUsername, driverPassword) => {
-    try { 
-        const driversCollectionRef = collection(db, 'Drivers');
-        const driverQuerySnapshot = await getDocs(query(driversCollectionRef, where('driverUsername', '==', driverUsername)));
-
-        if (!driverQuerySnapshot.empty) {
-            const driverDoc = driverQuerySnapshot.docs[0];
-            const driverData = driverDoc.data();
-
-            if (driverData.driverPassword === driverPassword) {
-            
-                return driverData; // Returner admin-data, hvis det matcher
-
-            }
-        }
-        return null;
     } catch (error) {
         console.error('Fejl under opslag i Firestore:', error);
         throw error; // Kast fejlen igen for yderligere håndtering
@@ -355,12 +355,12 @@ const deleteBookingDB = async (booking) => {
     return booking;
 }
 
-const addTilvalgToBookingDB = async (booking, tilvalg) => {
-    booking.tilvalg = [];
-    booking.tilvalg.push(tilvalg);
+const addAddonsToBookingDB = async (booking, addons) => {
+    booking.addons = [];
+    booking.addons.push(addons);
 
     await updateDoc(doc(db, 'Bookings', booking.id), {
-        tilvalg: booking.tilvalg
+        addons: booking.addons
     });
 }
 
@@ -370,7 +370,7 @@ const editBooking = async (booking) => {
         endDate: booking.endDate,
         customer: booking.customer,
         price: booking.price,
-        tilvalg: booking.tilvalg
+        addons: booking.addons
     });
 };
 
@@ -431,6 +431,6 @@ const getCustomerBookingDB = async (id) => {
 export default {
     getCustomerDB, getCustomerByUsernameAndPassword, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB, getAdminDB,
     getAdminsDB, deleteAdminDB, addAdminDB, editAdminDB, getAdminByUsernameAndPassword, getDriverDB, getDriversDB, deleteDriverDB, addDriverDB, editDriverDB,
-    addJourneyDB, editJourneyDB, deleteJourneyDB, getJourneyDB, getJourneysDB, getCustomerJourneysDB, editStartDateDB, addTilvalgToBookingDB, editBooking,
+    addJourneyDB, editJourneyDB, deleteJourneyDB, getJourneyDB, getJourneysDB, getCustomerJourneysDB, editStartDateDB, addAddonsToBookingDB, editBooking,
     getBookingDB, getBookingsDB, addBookingDB, deleteBookingDB, getCustomerBookingsDB, getCustomerBookingDB
 }
