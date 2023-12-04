@@ -9,10 +9,20 @@ this.lastName = lastName;
 }
 
 
+
 async function addDriver(driver) {
     let d = {firstName: driver.firstName, lastName: driver.lastName}
     return await DBFunctions.addDriverDB(d);
 }
+
+async function checkDriver(driverUsername, driverPassword) {
+    try {
+      return await DBFunctions.getDriverByUsernameAndPassword(driverUsername, driverPassword);
+    } catch (error) {
+      console.error(error);
+      throw error; // Kast fejlen igen for yderligere håndtering
+    }
+  }
 
 function getDriver(driver) {
     return DBFunctions.getDriverDB(driver.id);
@@ -67,13 +77,6 @@ await editDriver(driver);
 //
 
 
-//get
-let driver = new Driver("Mikkel", "Lindhøj");
-driver = await addDriver(driver);
-
-let c = await getDriver(driver);
-
-
 /*
 //getALL
 let driver = new Driver("Mikkel", "Lindhøj");
@@ -83,4 +86,4 @@ let drivers = await getDrivers();
 console.log(drivers);
 */
 
-export default {addDriver, getDrivers, deleteDriver, editDriver, getDriver}
+export default {addDriver, getDrivers, deleteDriver, editDriver, getDriver, checkDriver}

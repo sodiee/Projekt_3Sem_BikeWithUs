@@ -21,7 +21,6 @@ adminRouter.use((req, res, next) => {
 
 // Middleware til at kræve log ind for beskyttede ruter
 function requireAdminLogin(req, res, next) {
-    console.log('requireAdminLogin Middleware:', req.path, req.session.isAdminLoggedIn);
 
     if (!req.session.isAdminLoggedIn) {
         res.redirect('/');
@@ -41,7 +40,6 @@ adminRouter.use((req, res, next) => {
 
 // Rute til /admins/
 adminRouter.get('/', (req, res) => {
-    console.log('Admin Route:', req.path);
     let isAdminLoggedIn = res.locals.isAdminLoggedIn;
     let adminUser = res.locals.adminUser;
 

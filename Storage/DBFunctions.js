@@ -432,5 +432,5 @@ export default {
     getCustomerDB, getCustomerByUsernameAndPassword, getCustomersDB, deleteCustomerDB, addCustomerDB, editCustomerDB, getAdminDB,
     getAdminsDB, deleteAdminDB, addAdminDB, editAdminDB, getAdminByUsernameAndPassword, getDriverDB, getDriversDB, deleteDriverDB, addDriverDB, editDriverDB,
     addJourneyDB, editJourneyDB, deleteJourneyDB, getJourneyDB, getJourneysDB, getCustomerJourneysDB, editStartDateDB, addTilvalgToBookingDB, editBooking,
-    getBookingDB, getBookingsDB, addBookingDB, deleteBookingDB, getCustomerBookingsDB, getCustomerBookingDB
+    getBookingDB, getBookingsDB, addBookingDB, deleteBookingDB, getCustomerBookingsDB, getCustomerBookingDB, getDriverByUsernameAndPassword
 }
