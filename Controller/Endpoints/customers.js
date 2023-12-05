@@ -152,12 +152,14 @@ customerRouter.post('/Calendar/Book', async (req, res) => {
             const { price, participants } = req.body;
             const startDate = new Date(req.body.date);
             const customerUser = req.session.customerUser;
+            const selectedAddons = req.body.selectedAddons ? req.body.selectedAddons.map(JSON.parse) : [];
         
             const booking = {
                 customer: customerUser,
                 journey: selectedJourney,
                 nrOfPersons: participants,
-                startDate: startDate
+                startDate: startDate,
+                addons: selectedAddons
             };
 
             // Save booking in the session

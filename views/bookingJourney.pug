@@ -31,52 +31,51 @@ block content
           label(for='participants') Antal personer (1-10):
           input(type='number', name='participants', id='participants', min='1', max='10', value='1')
 
+        div(id='addons')
+
         div
           input(type='submit', value='Bekræft booking')
 
     script.
       async function updateAddons(journeyId) {
+        let journeyData;
 
         const response = await fetch(`/customers/api/journeys/${journeyId}`, {
           method: 'GET'
         });
+
         if (response.status === 200) {
-          const journeyData = await response.json();
-          console.log(journeyData);
+        journeyData = await response.json();
+        console.log(journeyData);
         } else {
           alert("Der skete en fejl ved hentningen af den valgte tur");
         }
-        /*
-         await lav et FETCH kald til .../api/getAddOns/:id
-        check for fejl
-        inject modtaget data ind i DOM
-        */
 
-        /*
-        const addons = journey.addons
+        // Check if 'addons' array is present in the journey data
+        const addons = journeyData && journeyData.addons ? journeyData.addons : [];
 
-        // Clear existing radio buttons
-        var radioDiv = document.getElementById('addons');
-        radioDiv.innerHTML = '';
+        // Clear existing checkboxes if 'addons' element is found
+        var checkboxDiv = document.getElementById('addons');
+        if (checkboxDiv) {
+          checkboxDiv.innerHTML = '';
 
-        // Display radio buttons for each addon in the selected journey
-        addons.forEach(addon => {
-          var radioDiv = document.getElementById('addons');
-          var radioInput = document.createElement('input');
-          radioInput.type = 'radio';
-          radioInput.name = 'selectedAddons';
-          radioInput.value = addon.title + '-' + addon.price;
+          // Display checkboxes for each addon in the selected journey
+          addons.forEach(addon => {
+            var checkboxInput = document.createElement('input');
+            checkboxInput.type = 'checkbox';
+            checkboxInput.name = 'selectedAddons';
+            checkboxInput.value = JSON.stringify(addon);
 
-          var label = document.createElement('label');
-          label.htmlFor = `addon-${addon.title}`;
-          label.textContent = `${addon.title} - ${addon.price} DKK`;
+            var label = document.createElement('label');
+            label.htmlFor = `addon-${addon.title}`;
+            label.textContent = `${addon.title} - ${addon.price} DKK`;
 
-          radioDiv.appendChild(radioInput);
-          radioDiv.appendChild(label);
-          radioDiv.appendChild(document.createElement('br'));
-        });
-        */
-
-        
+            checkboxDiv.appendChild(checkboxInput);
+            checkboxDiv.appendChild(label);
+            checkboxDiv.appendChild(document.createElement('br'));
+          });
+        } else {
+          console.error("Element with ID 'addons' not found in the document.");
+        }
       }
     script.
