@@ -39,7 +39,7 @@ main > h2{
 main > form{
     width: 400px;
     margin: 0 auto;
-    background-color: white;
+    background-color:rgb(235, 235, 235);
     padding: 20px;
     border-radius: 10px;
 }
@@ -77,3 +77,48 @@ main > form > button{
     margin: 0 20px 0 0;
 }
 
+/* Basal nulstilling af margin og padding for at undgå uønsket rum */
+body, h1, h2, table {
+    margin: 0;
+    padding: 0;
+}
+
+/* Centrerer h1 og justerer margin */
+h1 {
+    text-align: center;
+    background-color: rgb(235, 235, 235);
+    margin-top: 20px;
+    font-size: 2em;
+    color: #101010;
+}
+
+/* Basal styling for tabellen */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+/* Styling for tabelhovedet (th) */
+th {
+    background-color: #f2f2f2;
+    padding: 10px;
+    text-align: left;
+}
+
+/* Styling for tabelceller (td) */
+td {
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+/* Styling for sidste række (total antal kunder) */
+tr:last-child {
+    font-weight: bold;
+    background-color: #f2f2f2;
+}
+
+/* Styling for alternativ rækkefarve */
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
