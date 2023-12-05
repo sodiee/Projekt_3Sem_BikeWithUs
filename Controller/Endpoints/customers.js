@@ -133,7 +133,7 @@ customerRouter.get('/Calendar/Book', async (req, res) => {
         }
     });
 
-customerRouter.get('/customers/api/journeys/:journeyID', async (req, res) =>{
+customerRouter.get('/api/journeys/:journeyID', async (req, res) =>{
     try{
         const journeyID = req.params.journeyID
         const journey = await journeyController.getJourney(journeyID)
