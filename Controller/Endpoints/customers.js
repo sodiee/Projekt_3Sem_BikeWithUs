@@ -157,6 +157,7 @@ customerRouter.post('/Calendar/Book', async (req, res) => {
             const booking = {
                 customer: customerUser,
                 journey: selectedJourney,
+                price: price,
                 nrOfPersons: participants,
                 startDate: startDate,
                 addons: selectedAddons
