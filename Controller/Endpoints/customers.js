@@ -111,18 +111,13 @@ customerRouter.post('/', async (req, res) => {
 
 customerRouter.get('/Calendar', async (req, res) => {
     // Check for login status using sessions or cookies
-    if (req.session.isCustomerLoggedIn) {
         try {
-            const customerUser = req.session.customerUser; // Get the client from the session
-            res.render('bookingCalendar', {customer: customerUser});
+            res.render('bookingCalendar');
         } catch (error) {
             console.error('Error retrieving journeys', error);
             res.status(500).send('An error occurred while retrieving trips');
         }
-    } else {
-        res.redirect('/');
-    }
-});
+    });
 
 
 customerRouter.get('/Calendar/Book', async (req, res) => {
@@ -137,6 +132,18 @@ customerRouter.get('/Calendar/Book', async (req, res) => {
             res.status(500).send('An error occurred while adding trip.');
         }
     });
+
+customerRouter.get('/customers/api/journeys/:journeyID', async (req, res) =>{
+    try{
+        const journeyID = req.params.journeyID
+        const journey = await journeyController.getJourney(journeyID)
+        res.json(journey)
+
+    } catch(error) {
+        console.log('Fejl ved hentning af tur: ', error)
+        res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
+    }
+})
 
 customerRouter.post('/Calendar/Book', async (req, res) => {
         try {

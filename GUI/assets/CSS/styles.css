@@ -1,8 +1,0 @@
-ul.contact-list {
-    list-style-type: none; /* Fjern punkterne */
-    padding: 0; /* Fjern indrykning */
-}
-
-ul.contact-list li {
-    margin-bottom: 10px; /* Juster afstand mellem listeelementer efter behov */
-}

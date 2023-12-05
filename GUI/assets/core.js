@@ -66,6 +66,31 @@ async function deleteJourney(journeyID) {
     }
 }
 
+  async function getJourney(journeyID) {
+    const response = await fetch(`/journeys/${journeyID}`, {
+        method: 'GET'
+    });
+
+    if (response.status === 200) {
+        const journeyData = await response.json();
+        console.log(journeyData);
+    } else {
+        alert("Der skete en fejl ved hentningen af den valgte tur");
+    }
+}
+
+async function getJourneys() {
+    const response = await fetch('/journeys', {
+        method: 'GET'
+    });
+    if (response.status === 200) {
+        const journeysData = await response.json();
+        console.log(journeysData);
+    } else {
+        alert("Der skete en fejl ved hentningen af alle ture");
+    }
+}
+
 async function editJourney(journeyID) {
     const startDate = document.getElementById('startDate').value
     const endDate = document.getElementById('endDate').value
