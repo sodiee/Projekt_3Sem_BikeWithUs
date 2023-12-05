@@ -46,7 +46,7 @@ adminRouter.get('/', (req, res) => {
     if (isAdminLoggedIn && adminUser) {
         res.render('adminMain', { knownUser: isAdminLoggedIn, adminUser: adminUser });
     } else {
-        res.redirect('/');
+        res.redirect('/admins/adminLogin');
     }
 });
 
