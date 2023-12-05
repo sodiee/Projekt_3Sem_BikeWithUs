@@ -66,7 +66,7 @@ async function deleteJourney(journeyID) {
     }
 }
 
-  async function getJourney(journeyID) {
+async function getJourney(journeyID) {
     const response = await fetch(`/journeys/${journeyID}`, {
         method: 'GET'
     });
@@ -117,36 +117,20 @@ async function getBookings(rbValue) {
         let url = `/admins/api/overview/` + rbValue;
         const res = await fetch(url);
         const bookings = await res.json();
-    
+
         let idx = 1;
         for (const booking of bookings) {
+            console.log(booking);
+
             let startDate = new Date(booking.startDate)
             let endDate = new Date(booking.endDate);
-            let totalPersoner;
 
             let theStart = startDate.getDate();
             let theEnd = endDate.getDate();
-            /*
-            console.log('startdate.getmonth ' + startDate.getMonth());
-            console.log('enddate.getmonth + 1: ' + (endDate.getMonth() + 1))
-            console.log('rbvalue : ' + rbValue);
-
-            if (startDate.getMonth() !== endDate.getMonth()) {
-                console.log('1')
-                if (startDate.getMonth() == rbValue) {
-                    console.log('2')
-                    theEnd = calculateDays(startDate.getMonth() + 1);
-                } else if (endDate.getMonth() + 1 == rbValue) {
-                    console.log('3')
-                    theStart = 1;
-                }
-            }
-            */
 
             for (let i = theStart; i <= theEnd; i++) {
                 let tdElementJourney = document.getElementById(i + ': Rejse');
                 let tdElementCustomer = document.getElementById(i + ': Kunde');
-                let tdElementAddons = document.getElementById(i + ': Tilvalg');
                 let tdElementPickup = document.getElementById(i + ': Afhentes');
                 let tdElementNrOfPersons = document.getElementById(i + ': Antal Personer');
 
@@ -168,25 +152,7 @@ async function getBookings(rbValue) {
                     console.log('Fejl med at finde tdelementkunde')
                 }
 
-                //tilvalg
-                if (tdElementAddons) {
-                    let pElementAddons = document.createElement('p');
-                    //tilvalg virker ik
-                    /*
-                    if (booking.tilvalg.length != 0) {
-                        for (let j = 0; j < booking.tilvalg.length; j++) {
-                            pElementTilvalg.textContent = idx + ': ' + booking.tilvalg[j].name;
-                            pElementTilvalg.textContent += ' '
-                        }
-                    } else {*/
-                    pElementAddons.textContent = idx + ': Ingen tilvalg';
-                    //pElementTilvalg.textContent += '- '
-                    //}
-                    tdElementAddons.appendChild(pElementAddons);
-                } else {
-                    console.log('Fejl med at finde tdElementTilvalg')
-                }
-
+                //pickup
                 if (tdElementPickup) {
                     let pElementPickup = document.createElement('p');
                     if (i == endDate.getDate()) {
@@ -198,7 +164,6 @@ async function getBookings(rbValue) {
                 if (tdElementNrOfPersons) {
                     let pElementNrOfPersons = document.createElement('p');
                     pElementNrOfPersons.textContent = idx + ': ' + booking.nrOfPersons;
-                    totalPersoner += booking.nrOfPersons;
 
                     tdElementNrOfPersons.appendChild(pElementNrOfPersons);
                 }
@@ -256,7 +221,6 @@ function oversigtSide() {
             let tdElementDate = document.createElement('td');
             let tdElementJourney = document.createElement('td');
             let tdElementCustomer = document.createElement('td');
-            let tdElementAddons = document.createElement('td');
             let tdElementPickup = document.createElement('td');
             let tdElementNrOfPersons = document.createElement('td');
 
@@ -267,8 +231,6 @@ function oversigtSide() {
             tdElementJourney.textContent = ''
             tdElementCustomer.id = i + ': Kunde'
             tdElementCustomer.textContent = ''
-            tdElementAddons.id = i + ': Tilvalg';
-            tdElementAddons.textContent = '';
             tdElementPickup.id = i + ': Afhentes'
             tdElementPickup.textContent = ''
             tdElementNrOfPersons.id = i + ': Antal Personer';
@@ -278,7 +240,6 @@ function oversigtSide() {
             trElement.appendChild(tdElementDate);
             trElement.appendChild(tdElementJourney);
             trElement.appendChild(tdElementCustomer);
-            trElement.appendChild(tdElementAddons);
             trElement.appendChild(tdElementPickup);
             trElement.appendChild(tdElementNrOfPersons);
             table.appendChild(trElement);
@@ -293,13 +254,11 @@ function clear() {
     for (let i = 1; i <= 31; i++) {
         let tdElementJourney = document.getElementById(i + ': Rejse');
         let tdElementCustomer = document.getElementById(i + ': Kunde');
-        let tdElementAddons = document.getElementById(i + ': Tilvalg');
         let tdElementPickup = document.getElementById(i + ': Afhentes');
         let tdElementNrOfPersons = document.getElementById(i + ': Antal Personer');
 
         tdElementJourney.textContent = ''
         tdElementCustomer.textContent = ''
-        tdElementAddons.textContent = ''
         tdElementPickup.textContent = ''
         tdElementNrOfPersons.textContent = '';
     }

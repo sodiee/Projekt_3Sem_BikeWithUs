@@ -59,8 +59,23 @@ async function getBookingsByMonth(month) {
 function filterByMonth(monthArray, targetMonth) {
     let res = [];
     for (let i = 0; i < monthArray.length; i++) {
+  
         if (monthArray[i].startDate.getMonth() + 1 == targetMonth) {
             res.push(monthArray[i]);
+        }
+
+
+        //startdato fra måned 10 kommer i 10. måned
+        if (monthArray[i].startDate.getMonth() !== monthArray[i].endDate.getMonth()) {
+            if (monthArray[i].startDate.getMonth() + 1 == targetMonth) {
+                let b = {journey: { name: monthArray[i].journey.name } , startDate: monthArray[i].startDate, endDate: 31, customer: monthArray[i].customer, nrOfPersons: monthArray[i].nrOfPersons, addons: monthArray[i].addons}
+                res.push(b);
+            }
+        //slutdato fra måned 11 kommer i 11. måned
+            if (monthArray[i].endDate.getMonth() + 1 == targetMonth) {
+                let b = {journey: { name: monthArray[i].journey.name } , startDate: 1, endDate: monthArray[i].endDate, customer: monthArray[i].customer, nrOfPersons: monthArray[i].nrOfPersons, addons: monthArray[i].addons}
+                res.push(b);
+            }
         }
     }
     return res;
@@ -72,6 +87,16 @@ async function getCustomerBookings(customerId) {
 
 async function getCustomerBooking(customerId) {
     return await DBFunctions.getCustomerBookingDB(customerId);
+}
+
+function calculateDays(month) {
+    if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
+        return 31;
+    } else if (month == 2) {
+        return 28;
+    } else {
+        return 30;
+    }
 }
 
 export default { addDays, getBooking, getBookings, addBooking, deleteBooking, editBooking, addAddons, editStartDate, getBookingsByMonth, getCustomerBookings, getCustomerBooking};  // Tilføj getCustomerBookings her
