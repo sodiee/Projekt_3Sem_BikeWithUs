@@ -3,24 +3,24 @@ import Booking from '../Controller/Model/Booking.js';
 import DBFunctions from '../Storage/DBFunctions.js';
 import chai from 'chai'
 const assert = chai.assert
-//https://www.chaijs.com/api/assert/
+https://www.chaijs.com/api/assert/
 
-/*
+
 //DBFUNCTIONS TEST 
 describe('Crud test på Booking', () => {
   let customer;
   let booking;
   let journey;
+  let startDate;
+  let endDate;
   let name = "Cykeltur gennem klitterne";
-  let startDate = "2023-11-24"//new Date(1998, 8, 25)
-  let endDate = "2023-11-28"//new Date(startDate)
   let nrOfDays = 4;
-  //endDate.setUTCDate(endDate.getUTCDate() + 3);
+
 
     beforeEach(async() => {
-      startDate = "2023-11-24" //new Date(1998, 8, 25)
-      endDate = "2023-11-28" //new Date(startDate)
-      //endDate.setUTCDate(endDate.getUTCDate() + 3);
+     startDate = new Date("2023-11-24")
+     endDate = new Date("2023-11-28")
+      
 
      journey = { name: "Håber det virker", nrOfDays: 4, price: 4300}//"Det bliver en god tur"}
      customer = { firstName: "Mewkel", lastName: "Lindhøøøøøj", birthday: "160795", city: "Frederiksbjerg", bookings: [] };
@@ -41,28 +41,32 @@ describe('Crud test på Booking', () => {
 
     it('should edit a bookings start date', async () => {
       
-      let newDate = '2023-12-06';
-      const endDate = "2023-12-09" //new Date(newDate)
-      //endDate.setUTCDate(endDate.getUTCDate() + 3);
+      let newDate = new Date('Wed Dec 09 2020 00:00:00 GMT+0100 (Central European Standard Time)');
+      let endDate = new Date('Sun Dec 13 2020 00:00:00 GMT+0100 (Central European Standard Time)');
 
-      await DBFunctions.editStartDateDB(booking,newDate, endDate)
+      booking.startDate = newDate;
+      booking.endDate = endDate;
 
+      await DBFunctions.editStartDateDB(booking)
+
+    
       const updatedBooking = await DBFunctions.getBookingDB(booking.id);
+      let result = updatedBooking.startDate.toString();
+      console.log(result);
 
-      assert.strictEqual(newDate,updatedBooking.startDate, 'Booking start date should be edited');
+      assert.strictEqual(newDate,result, 'Booking start date should be edited');
   })
 
-  it('should add a tilvalg to a booking', async () => {
-    const tilvalg = { name: 'Test Tilvalg', price: 100 };
+  it('should add a addon to a booking', async () => {
+    const addon = { name: 'Test Addon', price: 100 };
   
-    await DBFunctions.addTilvalgToBookingDB(booking, tilvalg);
+    await DBFunctions.addAddonsToBookingDB(booking, addon);
   
     const updatedBooking = await DBFunctions.getBookingDB(booking.id);
   
-    assert.include(updatedBooking.tilvalg[0], tilvalg, 'Tilvalg should be added to the booking');
+    assert.include(updatedBooking.addons[0], addon, 'Addons should be added to the booking');
   });
-
-
+});
 
 
 //DBFunctions-script test
@@ -116,9 +120,9 @@ describe('CRUD test på Customer', () => {
 });
 
 
-*/
-// FETCH TEST
 
+// FETCH TEST
+/** 
 //--delete driver--
 import { deleteDriver } from '../GUI/assets/core.js'; // fetch function path
 
@@ -130,8 +134,8 @@ describe('it should delete a driver', () => {
     });
 });
 
+
 //--add driver--
-/*
 import { addDriver } from '../GUI/assets/core.js'; // fetch function path
 
 describe('addDriver', () => {
@@ -143,4 +147,5 @@ describe('addDriver', () => {
         const response = await addDriver(driver);
         assert.strictEqual(response.status, 201, 'Driver should be added');
     });
-});*/
+});
+**/

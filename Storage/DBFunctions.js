@@ -153,9 +153,7 @@ const getDriverByUsernameAndPassword = async (driverUsername, driverPassword) =>
             const driverData = driverDoc.data();
 
             if (driverData.driverPassword === driverPassword) {
-            
                 return driverData;
-
             }
         }
         return null;
@@ -197,7 +195,6 @@ const getAdminByUsernameAndPassword = async (adminUsername, adminPassword) => {
             const adminData = adminDoc.data();
 
             if (adminData.adminPassword === adminPassword && adminData.adminStatus === true) {
-                console.log(adminData)
                 return adminData;
             }
         }

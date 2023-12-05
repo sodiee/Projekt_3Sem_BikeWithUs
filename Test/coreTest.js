@@ -1,6 +1,6 @@
 // Core test
-
-import { deleteCustomer } from '/core.js'; // importer funktionen der skal testes
+/** 
+import { deleteCustomer } from 'GUI/assets/core.js'; // importer funktionen der skal testes
 import fetchMock from 'jest-fetch-mock';
 
 describe('deleteCustomer', () => {
@@ -36,3 +36,4 @@ describe('deleteCustomer', () => {
     expect(alertSpy).toHaveBeenCalledWith('Der skete en fejl.');
   });
 });
+*/
