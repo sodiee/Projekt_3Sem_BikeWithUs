@@ -45,7 +45,6 @@ customerRouter.get('/', (req, res) => {
     } else {
         res.redirect('/')
     }
-    
 })
 
 customerRouter.post('/customerLogin', async (req, res) => {
@@ -76,7 +75,6 @@ customerRouter.get('/customerLogin', (req, res) => {
 })
 
 // edit, delete, add customer
-
 customerRouter.put('/:customerID', async (req, res) => {
     try {
         const customer = await DBFunctions.editCustomerDB(req.params.customerID, req.body);
@@ -113,31 +111,39 @@ customerRouter.post('/', async (req, res) => {
 
 customerRouter.get('/Calendar', async (req, res) => {
     // Check for login status using sessions or cookies
-    if (req.session.isCustomerLoggedIn) {
         try {
-            const customerUser = req.session.customerUser; // Get the client from the session
-            res.render('bookingCalendar', {customer: customerUser});
+            res.render('bookingCalendar');
         } catch (error) {
             console.error('Error retrieving journeys', error);
             res.status(500).send('An error occurred while retrieving trips');
         }
-    } else {
-        res.redirect('/');
-    }
-});
+    });
 
 
 customerRouter.get('/Calendar/Book', async (req, res) => {
     // Check for login status using sessions or cookies
         try {
             const journeys = await journeyController.getJourneys();
-            const startDate = req.query.date || 'No date selected'; // Use the date stored in the session as startDate
+            // Use the date stored in the session as startDate, or use 'No date selected' if no date is stored
+            const startDate = req.query.date || 'No date selected'; 
             res.render('bookingJourney', { startDate, journeys });
         } catch (error) {
             console.error('Error when adding Travel:', error);
             res.status(500).send('An error occurred while adding trip.');
         }
     });
+
+customerRouter.get('/api/journeys/:journeyID', async (req, res) =>{
+    try{
+        const journeyID = req.params.journeyID
+        const journey = await journeyController.getJourney(journeyID)
+        res.json(journey)
+
+    } catch(error) {
+        console.log('Fejl ved hentning af tur: ', error)
+        res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
+    }
+})
 
 customerRouter.post('/Calendar/Book', async (req, res) => {
         try {
@@ -146,12 +152,14 @@ customerRouter.post('/Calendar/Book', async (req, res) => {
             const { price, participants } = req.body;
             const startDate = new Date(req.body.date);
             const customerUser = req.session.customerUser;
+            const selectedAddons = req.body.selectedAddons ? req.body.selectedAddons.map(JSON.parse) : [];
         
             const booking = {
                 customer: customerUser,
                 journey: selectedJourney,
                 nrOfPersons: participants,
-                startDate: startDate
+                startDate: startDate,
+                addons: selectedAddons
             };
 
             // Save booking in the session
@@ -171,7 +179,6 @@ customerRouter.get('/Calendar/confirmation', async (req, res) => {
         try {
             // Get booking from the session
             const booking = req.session.booking;
-
             const latestBooking = await bookingController.getCustomerBooking(req.session.customerId);
 
             // Render the confirmation page and send the necessary information with it
@@ -182,7 +189,6 @@ customerRouter.get('/Calendar/confirmation', async (req, res) => {
         }
 });
 customerRouter.get('/CustomerPage', async (req, res) => {
-    // Check for login status using sessions or cookies
         try {
             const customerUser = req.session.customerUser; // Get customer from the session
             res.render('customerPage', {customer: customerUser});
@@ -192,7 +198,7 @@ customerRouter.get('/CustomerPage', async (req, res) => {
         }
 });
 
-// Changing the render method in your customers.js file
+
 customerRouter.get('/CustomerBookings', async (req, res) => {
         try {
             // Retrieve all bookings for the current customer

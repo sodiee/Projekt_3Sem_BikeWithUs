@@ -14,7 +14,7 @@ block content
     form(action='/customers/Calendar/Book', method='post')
       div
         label(for='journey') Vælg tur:
-        select(name='journeyId', id='journeyId')
+        select(name='journeyId', id='journeyId', onchange='updateAddons(this.value)')
           //for each jouney in database
           each journey in journeys
             option(value=(journey.docID)) #{journey.name}
@@ -31,5 +31,51 @@ block content
           label(for='participants') Antal personer (1-10):
           input(type='number', name='participants', id='participants', min='1', max='10', value='1')
 
+        div(id='addons')
+
         div
           input(type='submit', value='Bekræft booking')
+
+    script.
+      async function updateAddons(journeyId) {
+        let journeyData;
+
+        const response = await fetch(`/customers/api/journeys/${journeyId}`, {
+          method: 'GET'
+        });
+
+        if (response.status === 200) {
+        journeyData = await response.json();
+        console.log(journeyData);
+        } else {
+          alert("Der skete en fejl ved hentningen af den valgte tur");
+        }
+
+        // Check if 'addons' array is present in the journey data
+        const addons = journeyData && journeyData.addons ? journeyData.addons : [];
+
+        // Clear existing checkboxes if 'addons' element is found
+        var checkboxDiv = document.getElementById('addons');
+        if (checkboxDiv) {
+          checkboxDiv.innerHTML = '';
+
+          // Display checkboxes for each addon in the selected journey
+          addons.forEach(addon => {
+            var checkboxInput = document.createElement('input');
+            checkboxInput.type = 'checkbox';
+            checkboxInput.name = 'selectedAddons';
+            checkboxInput.value = JSON.stringify(addon);
+
+            var label = document.createElement('label');
+            label.htmlFor = `addon-${addon.title}`;
+            label.textContent = `${addon.title} - ${addon.price} DKK`;
+
+            checkboxDiv.appendChild(checkboxInput);
+            checkboxDiv.appendChild(label);
+            checkboxDiv.appendChild(document.createElement('br'));
+          });
+        } else {
+          console.error("Element with ID 'addons' not found in the document.");
+        }
+      }
+    script.
