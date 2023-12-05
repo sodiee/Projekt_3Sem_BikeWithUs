@@ -1,7 +1,7 @@
 extends includes/layoutCustomer
 
 block content
-    h1 Booking Bekræftet
+    h3 Booking Bekræftet
     ul   
         if booking.customer.id === currentCustomerId
             ul
@@ -15,6 +15,7 @@ block content
                 p Slutdato: #{formattedDate2}
                 p Pris: #{booking.price}
                 p Antal personer: #{booking.nrOfPersons}
+                br
     
         a(href='/customers/CustomerPage')
              button(type='button' id='kundeOversigt') Kunde oversigt

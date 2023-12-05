@@ -136,3 +136,14 @@ section>* {
     max-height: 500px;
     overflow-y: auto;
 }
+
+#buttons {
+    background-color: rgb(235, 235, 235);
+}
+
+#months {
+    background-color: rgb(235, 235, 235);
+    margin-left: 5px;
+    padding: 20px;
+}
+

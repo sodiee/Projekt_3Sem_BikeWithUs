@@ -1,0 +1,214 @@
+/* Basal nulstilling af margin og padding for at undgå uønsket rum */
+body, h1, h2, table {
+    margin: 0;
+    padding: 0;
+}
+
+main > section > p {
+    background-color: rgb(235, 235, 235);
+    text-align: center;
+}
+
+main > section > h2 {
+    background-color: rgb(235, 235, 235);
+    text-align: center;
+}
+
+/* Centrerer h1 og justerer margin */
+h1 {
+    background-color: rgb(235,235,235);
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Basal styling for tabellen */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+/* Styling for tabelhovedet (th) */
+th {
+    background-color: #f2f2f2;
+    padding: 10px;
+    text-align: left;
+}
+
+/* Styling for tabelceller (td) */
+td {
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+#button {
+    background-color: rgb(235, 235, 235);
+}
+
+/* Styling for sidste række (total antal kunder) */
+tr:last-child {
+    font-weight: bold;
+    background-color: #f2f2f2;
+}
+
+/* Styling for alternativ rækkefarve */
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+
+/********** KALENDER GUI **********/
+
+/* Nulstil margin og padding for alle elementer */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f5f5f5; /* Ændr efter behov */
+}
+
+#months {
+    text-align: center;
+    padding: 20px;
+}
+
+#radioButtons {
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(235, 235, 235);
+
+}
+
+main > section > h3 {
+    background-color: rgb(235, 235, 235);
+    text-align: left;
+}
+
+main > section > table {
+    background-color: rgb(235, 235, 235);
+}
+
+main > section > ul {
+    background-color: rgb(235, 235, 235);
+}
+
+#submitBooking {
+        background-color: rgb(255, 140, 0);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        padding: 10px;
+        font-size: 15px;
+        font-weight: 400;
+        margin: 0 20px 0 0;
+}
+
+
+
+#vælgBookingDiv{
+    display: grid;
+    grid-template-rows: repeat(5, 1fr);
+}
+
+#navnDiv{
+    display: grid;
+    grid-template-rows: repeat(5, 1fr);
+}
+
+#bookingDiv {
+    display: grid;
+    grid-template-rows: repeat(5, 1fr);
+}
+
+#startDateDiv {
+    display: grid;
+    grid-template-rows: repeat(5, 1fr);
+}
+
+#buttonDiv {
+    display: grid;
+    grid-template-rows: repeat(5, 1fr);
+}
+
+#journeyDiv {
+    display: grid;
+    grid-template-rows: repeat(5, 1fr);
+}
+
+#priceDiv {
+   display: grid;
+   grid-template-rows: repeat(5, 1fr);
+}
+
+#dateDiv {
+    display: grid;
+    grid-template-rows: repeat(5, 1fr);
+}
+
+#participantsDiv {
+    display: grid;
+    grid-template-rows: repeat(5, 1fr);
+}
+
+#submitDiv {
+    display: grid;
+    grid-template-rows: repeat(5, 1fr);
+}
+
+
+#buttons {
+    hover: rgb(213, 117, 0); 
+}
+
+button {
+        background-color: rgb(255, 140, 0);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        padding: 15px;
+        font-size: 15px;
+        font-weight: 400;
+        margin: 0 -20px 0 -10px;
+        
+}
+
+
+button:hover {
+    background-color: #ff8c00; /* Ændr efter behov */
+}
+
+#table-container {
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+thead {
+    background-color: #f2f2f2;
+}
+
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+td p b {
+    display: block;
+    font-weight: bold;
+}
+
+tbody#tableBody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tbody#tableBody tr:hover {
+    background-color: #f0f0f0;
+}
+

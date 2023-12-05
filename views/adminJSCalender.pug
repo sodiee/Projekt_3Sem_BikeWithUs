@@ -4,12 +4,13 @@ block content
     //script(src="/js/adminCalender.js" defer)
     script(src="/core.js" defer)
 
-    #months
-      #radioButtons
-      form(id='form')
-
+    table#tableMonth
+      thead 
+        tr
+          #months
+            #radioButtons
+              form(id='form')
     br
-
     #buttons 
       a(href='/admins/overview/editBooking')
         button(type='button' id='btnRedigering' ) Rediger rejse

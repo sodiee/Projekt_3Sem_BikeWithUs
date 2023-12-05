@@ -1,5 +1,6 @@
 extends includes/layoutCustomer
 
+<<<<<<< Updated upstream
 block content 
   html(lang='en')
     head
@@ -117,3 +118,35 @@ block content
           priceInput.value = totalPrice.toFixed(2);
         }
       script.
+=======
+block content
+  h3= 'Startdato: ' + startDate
+
+  // TODO: should be startDate + chosen journey length
+  //h2= 'Slutdato: ' + endDate
+
+  form(action='/customers/Calendar/Book', method='post')
+    div(id='bookingDiv')
+      div(id='journeyDiv')
+        label(for='journey') Vælg tur:
+        select(name='journeyId', id='journeyId')
+          //for each journey in database
+          each journey in journeys
+            option(value=(journey.docID)) #{journey.name}
+      
+      div(id='priceDiv')
+        //Price of chosen journey * participants TODO
+        label(for='price') Pris:
+        input(type='text', name='price', id='price', readonly='readonly')
+    
+      div(id='dateDiv')
+        label(for='date') Valgt dato:
+        input(type='date', name='date', id='date', readonly='readonly', value=startDate)
+    
+      div(id='participantsDiv')
+        label(for='participants') Antal personer (1-10):
+        input(type='number', name='participants', id='participants', min='1', max='10', value='1')
+    
+      div(div='submitDiv')
+        input(type='submit', value='Bekræft booking', id='submitBooking')
+>>>>>>> Stashed changes
