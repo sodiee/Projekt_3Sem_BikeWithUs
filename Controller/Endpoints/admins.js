@@ -149,7 +149,6 @@ adminRouter.get('/api/getBookings/', async (req, res) => {
     }
 })
 
-//ikke færdig
 adminRouter.post('/api/overview/editBooking/', async (req, res) => {
     try {
         let bookingId = req.body;
@@ -169,6 +168,7 @@ adminRouter.post('/api/overview/editBooking/', async (req, res) => {
 })
 
 //API - section end
+
 adminRouter.get('/overview/editBookingComplete/', async (req, res) => {
     res.render('bookingUpdateComplete');
 })
