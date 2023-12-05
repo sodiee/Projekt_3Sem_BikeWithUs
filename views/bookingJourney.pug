@@ -1,152 +1,117 @@
 extends includes/layoutCustomer
 
-<<<<<<< Updated upstream
-block content 
-  html(lang='en')
-    head
-      meta(charset='utf-8')
-    
-    body
-      h1= 'Valgt startsdato: ' + startDate
-
-      form(action='/customers/Calendar/Book', method='post')
-        div
-          label(for='journey') Vælg tur:
-          select(name='journeyId', id='journeyId', onchange='onJourneySelect(this.value)')
-            //for each jouney in database
-            each journey in journeys
-              option(value=(journey.docID)) #{journey.name}
-
-          div
-            //Total Price of chosen journey * participants + addons TODO
-            label(for='price') Pris:
-            input(type='text', name='price', id='price', readonly='readonly')
-          div 
-            label(for='date') Valgt dato:
-            input(type='date', name='date', id='date', readonly='readonly' value=startDate)
-
-          div
-            label(for='participants') Antal personer (1-10):
-            input(type='number', name='participants', id='participants', min='1', max='10', value='1', onchange="updateTotalPrice()")
-
-          div(id='addons')
-
-          div
-            input(type='submit', value='Bekræft booking')
-
-      script.
-        document.addEventListener('DOMContentLoaded', function () {
-          // Get the initially selected journey on page load
-          const initialJourneyId = document.getElementById('journeyId').value;
-          // Call onJourneySelect to initialize the page with the correct price
-          onJourneySelect(initialJourneyId);
-        });
-
-        async function onJourneySelect(journeyId) {
-          // Call updateAddons to update the addons based on the selected journey
-          updateAddons(journeyId);
-          // Call updateTotalPrice to update the total price based on the selected journey and addons
-          updateTotalPrice();
-        }
-
-        async function updateAddons(journeyId) {
-          let journeyData;
-
-          const response = await fetch(`/customers/api/journeys/${journeyId}`, {
-            method: 'GET'
-          });
-
-          if (response.status === 200) {
-            journeyData = await response.json();
-          } else {
-            alert("Der skete en fejl ved hentningen af den valgte tur");
-          }
-
-          // Check if 'addons' array is present in the journey data
-          const addons = journeyData && journeyData.addons ? journeyData.addons : [];
-
-          // Clear existing checkboxes if 'addons' element is found
-          var checkboxDiv = document.getElementById('addons');
-          if (checkboxDiv) {
-            checkboxDiv.innerHTML = '';
-
-            // Display checkboxes for each addon in the selected journey
-            addons.forEach(addon => {
-              var checkboxInput = document.createElement('input');
-              checkboxInput.type = 'checkbox';
-              checkboxInput.name = 'selectedAddons';
-              checkboxInput.value = JSON.stringify(addon);
-              checkboxInput.onchange = updateTotalPrice;
-
-              var label = document.createElement('label');
-              label.htmlFor = `addon-${addon.title}`;
-              label.textContent = `${addon.title} - ${addon.price} DKK`;
-
-              checkboxDiv.appendChild(checkboxInput);
-              checkboxDiv.appendChild(label);
-              checkboxDiv.appendChild(document.createElement('br'));
-            });
-          } else {
-            console.error("Element with ID 'addons' not found in the document.");
-          }
-        }
-
-        async function updateTotalPrice() {
-          let journeyId = document.getElementById('journeyId').value;
-          let journeyData;
-          
-          const response = await fetch(`/customers/api/journeys/${journeyId}`, {
-            method: 'GET'
-          });
-          if (response.status === 200) {
-            journeyData = await response.json();
-          } else {
-            alert("Der skete en fejl ved hentningen af den valgte tur");
-          }
-
-          const priceInput = document.getElementById('price');
-          const participantsValue = document.getElementById('participants').value;
-
-          const selectedAddons = document.querySelectorAll('input[name="selectedAddons"]:checked');
-          let addonSum = 0;
-          selectedAddons.forEach(addon => {
-            const addonData = JSON.parse(addon.value);
-            addonSum += parseFloat(addonData.price) || 0;
-          });
-
-          let totalPrice = (journeyData.price + addonSum) * participantsValue;
-          priceInput.value = totalPrice.toFixed(2);
-        }
-      script.
-=======
 block content
-  h3= 'Startdato: ' + startDate
-
-  // TODO: should be startDate + chosen journey length
-  //h2= 'Slutdato: ' + endDate
+  h3= 'Valgt startsdato: ' + startDate
 
   form(action='/customers/Calendar/Book', method='post')
     div(id='bookingDiv')
       div(id='journeyDiv')
         label(for='journey') Vælg tur:
-        select(name='journeyId', id='journeyId')
-          //for each journey in database
+        select(name='journeyId', id='journeyId', onchange='onJourneySelect(this.value)')
+          //for each jouney in database
           each journey in journeys
             option(value=(journey.docID)) #{journey.name}
-      
+
       div(id='priceDiv')
-        //Price of chosen journey * participants TODO
+        //Total Price of chosen journey * participants + addons TODO
         label(for='price') Pris:
         input(type='text', name='price', id='price', readonly='readonly')
-    
       div(id='dateDiv')
         label(for='date') Valgt dato:
-        input(type='date', name='date', id='date', readonly='readonly', value=startDate)
-    
+        input(type='date', name='date', id='date', readonly='readonly' value=startDate)
+
       div(id='participantsDiv')
         label(for='participants') Antal personer (1-10):
-        input(type='number', name='participants', id='participants', min='1', max='10', value='1')
-    
-      div(div='submitDiv')
-        input(type='submit', value='Bekræft booking', id='submitBooking')
->>>>>>> Stashed changes
+        input(type='number', name='participants', id='participants', min='1', max='10', value='1', onchange="updateTotalPrice()")
+
+      div(id='addons')
+
+      div(id='submitDiv')
+        input(type='submit', value='Bekræft booking')
+      
+      
+
+  script.
+    document.addEventListener('DOMContentLoaded', function () {
+      // Get the initially selected journey on page load
+      const initialJourneyId = document.getElementById('journeyId').value;
+      // Call onJourneySelect to initialize the page with the correct price
+      onJourneySelect(initialJourneyId);
+    });
+
+    async function onJourneySelect(journeyId) {
+      // Call updateAddons to update the addons based on the selected journey
+      updateAddons(journeyId);
+      // Call updateTotalPrice to update the total price based on the selected journey and addons
+      updateTotalPrice();
+    }
+
+    async function updateAddons(journeyId) {
+      let journeyData;
+
+      const response = await fetch(`/customers/api/journeys/${journeyId}`, {
+        method: 'GET'
+      });
+
+      if (response.status === 200) {
+        journeyData = await response.json();
+      } else {
+        alert("Der skete en fejl ved hentningen af den valgte tur");
+      }
+
+      // Check if 'addons' array is present in the journey data
+      const addons = journeyData && journeyData.addons ? journeyData.addons : [];
+
+      // Clear existing checkboxes if 'addons' element is found
+      var checkboxDiv = document.getElementById('addons');
+      if (checkboxDiv) {
+        checkboxDiv.innerHTML = '';
+
+        // Display checkboxes for each addon in the selected journey
+        addons.forEach(addon => {
+          var checkboxInput = document.createElement('input');
+          checkboxInput.type = 'checkbox';
+          checkboxInput.name = 'selectedAddons';
+          checkboxInput.value = JSON.stringify(addon);
+          checkboxInput.onchange = updateTotalPrice;
+
+          var label = document.createElement('label');
+          label.htmlFor = `addon-${addon.title}`;
+          label.textContent = `${addon.title} - ${addon.price} DKK`;
+
+          checkboxDiv.appendChild(checkboxInput);
+          checkboxDiv.appendChild(label);
+          checkboxDiv.appendChild(document.createElement('br'));
+        });
+      } else {
+        console.error("Element with ID 'addons' not found in the document.");
+      }
+    }
+
+    async function updateTotalPrice() {
+      let journeyId = document.getElementById('journeyId').value;
+      let journeyData;
+
+      const response = await fetch(`/customers/api/journeys/${journeyId}`, {
+        method: 'GET'
+      });
+      if (response.status === 200) {
+        journeyData = await response.json();
+      } else {
+        alert("Der skete en fejl ved hentningen af den valgte tur");
+      }
+
+      const priceInput = document.getElementById('price');
+      const participantsValue = document.getElementById('participants').value;
+
+      const selectedAddons = document.querySelectorAll('input[name="selectedAddons"]:checked');
+      let addonSum = 0;
+      selectedAddons.forEach(addon => {
+        const addonData = JSON.parse(addon.value);
+        addonSum += parseFloat(addonData.price) || 0;
+      });
+
+      let totalPrice = (journeyData.price + addonSum) * participantsValue;
+      priceInput.value = totalPrice.toFixed(2);
+    }
+  script.

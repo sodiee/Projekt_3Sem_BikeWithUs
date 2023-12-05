@@ -84,6 +84,7 @@ form {
 main > section > h3 {
     background-color: rgb(235, 235, 235);
     text-align: left;
+    
 }
 
 main > section > table {
@@ -92,6 +93,23 @@ main > section > table {
 
 main > section > ul {
     background-color: rgb(235, 235, 235);
+    
+}
+
+main > section > ul > li {
+    padding-top: 20px;
+}
+
+
+main > section > #contactDiv > ul > li{
+    list-style: none;
+    padding-top: 10px;
+    
+}
+
+main > section > #contactDiv {
+    background-color: rgb(235, 235, 235);
+   
 }
 
 #submitBooking {
@@ -107,6 +125,7 @@ main > section > ul {
 
 
 
+
 #vælgBookingDiv{
     display: grid;
     grid-template-rows: repeat(5, 1fr);
@@ -119,7 +138,10 @@ main > section > ul {
 
 #bookingDiv {
     display: grid;
-    grid-template-rows: repeat(5, 1fr);
+}
+
+label {
+    margin: 15px 0 0 0;
 }
 
 #startDateDiv {
@@ -127,34 +149,37 @@ main > section > ul {
     grid-template-rows: repeat(5, 1fr);
 }
 
+
 #buttonDiv {
     display: grid;
-    grid-template-rows: repeat(5, 1fr);
+    grid-template-rows: repeat(2, 1fr);
 }
 
 #journeyDiv {
     display: grid;
-    grid-template-rows: repeat(5, 1fr);
+    grid-template-rows: repeat(2, 40px);
 }
 
 #priceDiv {
    display: grid;
-   grid-template-rows: repeat(5, 1fr);
+   grid-template-rows: repeat(2, 40px);
+   
 }
 
 #dateDiv {
     display: grid;
-    grid-template-rows: repeat(5, 1fr);
+    grid-template-rows: repeat(2, 40px);
 }
 
 #participantsDiv {
     display: grid;
-    grid-template-rows: repeat(5, 1fr);
+    grid-template-rows: repeat(2, 40px);
 }
 
 #submitDiv {
     display: grid;
-    grid-template-rows: repeat(5, 1fr);
+    grid-template-rows: repeat(2, 40px);
+    margin-top: 15px;
 }
 
 
@@ -171,7 +196,17 @@ button {
         font-size: 15px;
         font-weight: 400;
         margin: 0 -20px 0 -10px;
-        
+}
+
+#submitDiv > input {
+        background-color: rgb(255, 140, 0);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        padding: 15px;
+        font-size: 15px;
+        font-weight: 400;
+        margin: 0 -20px 0 -10px;
 }
 
 
