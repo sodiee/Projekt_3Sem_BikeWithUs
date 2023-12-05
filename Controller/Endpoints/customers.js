@@ -111,18 +111,13 @@ customerRouter.post('/', async (req, res) => {
 
 customerRouter.get('/Calendar', async (req, res) => {
     // Check for login status using sessions or cookies
-    if (req.session.isCustomerLoggedIn) {
         try {
-            const customerUser = req.session.customerUser; // Get the client from the session
-            res.render('bookingCalendar', {customer: customerUser});
+            res.render('bookingCalendar');
         } catch (error) {
             console.error('Error retrieving journeys', error);
             res.status(500).send('An error occurred while retrieving trips');
         }
-    } else {
-        res.redirect('/');
-    }
-});
+    });
 
 
 customerRouter.get('/Calendar/Book', async (req, res) => {
