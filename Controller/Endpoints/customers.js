@@ -45,7 +45,6 @@ customerRouter.get('/', (req, res) => {
     } else {
         res.redirect('/')
     }
-    
 })
 
 customerRouter.post('/customerLogin', async (req, res) => {
@@ -76,7 +75,6 @@ customerRouter.get('/customerLogin', (req, res) => {
 })
 
 // edit, delete, add customer
-
 customerRouter.put('/:customerID', async (req, res) => {
     try {
         const customer = await DBFunctions.editCustomerDB(req.params.customerID, req.body);
@@ -126,7 +124,8 @@ customerRouter.get('/Calendar/Book', async (req, res) => {
     // Check for login status using sessions or cookies
         try {
             const journeys = await journeyController.getJourneys();
-            const startDate = req.query.date || 'No date selected'; // Use the date stored in the session as startDate
+            // Use the date stored in the session as startDate, or use 'No date selected' if no date is stored
+            const startDate = req.query.date || 'No date selected'; 
             res.render('bookingJourney', { startDate, journeys });
         } catch (error) {
             console.error('Error when adding Travel:', error);
@@ -166,7 +165,6 @@ customerRouter.get('/Calendar/confirmation', async (req, res) => {
         try {
             // Get booking from the session
             const booking = req.session.booking;
-
             const latestBooking = await bookingController.getCustomerBooking(req.session.customerId);
 
             // Render the confirmation page and send the necessary information with it
@@ -177,7 +175,6 @@ customerRouter.get('/Calendar/confirmation', async (req, res) => {
         }
 });
 customerRouter.get('/CustomerPage', async (req, res) => {
-    // Check for login status using sessions or cookies
         try {
             const customerUser = req.session.customerUser; // Get customer from the session
             res.render('customerPage', {customer: customerUser});
@@ -187,7 +184,7 @@ customerRouter.get('/CustomerPage', async (req, res) => {
         }
 });
 
-// Changing the render method in your customers.js file
+
 customerRouter.get('/CustomerBookings', async (req, res) => {
         try {
             // Retrieve all bookings for the current customer

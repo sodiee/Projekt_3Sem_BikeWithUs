@@ -21,7 +21,6 @@ adminRouter.use((req, res, next) => {
 
 // Middleware to require login for protected routes
 function requireAdminLogin(req, res, next) {
-
     if (!req.session.isAdminLoggedIn) {
         res.redirect('/');
     } else {
@@ -82,9 +81,28 @@ adminRouter.get('/adminLogout', (req, res) => {
 // ----------------------------
 // admin-ENDPOINTS for oversigt|
 // ----------------------------
+adminRouter.get('/overview/customers', async (req, res) => {
+    try {
+        const customers = await controllerCustomer.getCustomers();
+        res.render('customerOverview', { customers });
+    } catch (error) {
+        console.error('Fejl ved hentning af kunder:', error);
+        res.status(500).send('Der opstod en fejl ved hentning af kunder.');
+    }
+});
+
+adminRouter.get('/overview/drivers', async (req, res) => {
+    try {
+        const drivers = await controllerDriver.getDrivers();
+        res.render('driverOverview', { drivers });
+    } catch (error) {
+        console.error('Fejl ved hentning af chauffører:', error);
+        res.status(500).send('Der opstod en fejl ved hentning af chauffører.');
+    }
+});
+
 adminRouter.get('/Journeys', async (req, res) => {
     try {
-        // Finds all journeys
         const journeys = await controllerJourney.getJourneys();
         res.render('journeys', { journeys: journeys })
     } catch (error) {
@@ -93,7 +111,7 @@ adminRouter.get('/Journeys', async (req, res) => {
     }
 })
 
-adminRouter.get('/oversigt', async (req, res) => {
+adminRouter.get('/overview', async (req, res) => {
     try {
         res.render('adminJSCalender')
     } catch (err) {
@@ -102,18 +120,17 @@ adminRouter.get('/oversigt', async (req, res) => {
     }
 });
 
-adminRouter.get('/oversigt/redigerRejse', async (req, res) => {
+adminRouter.get('/overview/editBooking', async (req, res) => {
     try {
         let bookings = await controllerBooking.getBookings();
-        res.render('adminOversigtRedigerRejse', { bookings: bookings });
+        res.render('adminEditBooking', { bookings: bookings });
     } catch (error) {
         console.log(error)
     }
 });
 
-//APIsektion start
-
-adminRouter.get('/api/oversigt/:month', async (req, res) => {
+//API - section start
+adminRouter.get('/api/overview/:month', async (req, res) => {
     try {
         let bookings = await controllerBooking.getBookingsByMonth(req.params.month);
         res.json(bookings);
@@ -133,7 +150,7 @@ adminRouter.get('/api/getBookings/', async (req, res) => {
 })
 
 //ikke færdig
-adminRouter.post('/api/oversigt/redigerRejse/', async (req, res) => {
+adminRouter.post('/api/overview/editBooking/', async (req, res) => {
     try {
         let bookingId = req.body;
         
@@ -145,15 +162,14 @@ adminRouter.post('/api/oversigt/redigerRejse/', async (req, res) => {
 
         controllerBooking.editStartDate(booking, newStartDate, newEndDate);
         
-        res.redirect('/admins/oversigt/redigerRejseComplete/')
+        res.redirect('/admins/overview/editBookingComplete/')
     } catch (error) {
         console.log(error)
     }
 })
 
-//APIsektion end
-
-adminRouter.get('/oversigt/redigerRejseComplete/', async (req, res) => {
+//API - section end
+adminRouter.get('/overview/editBookingComplete/', async (req, res) => {
     res.render('bookingUpdateComplete');
 })
 

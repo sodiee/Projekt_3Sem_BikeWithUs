@@ -89,7 +89,7 @@ async function editJourney(journeyID) {
 //oversigt side
 async function getBookings(rbValue) {
     try {
-        let url = `/admins/api/oversigt/` + rbValue;
+        let url = `/admins/api/overview/` + rbValue;
         const res = await fetch(url);
         const bookings = await res.json();
     
@@ -188,7 +188,7 @@ async function getBookings(rbValue) {
 let months = ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December']
 
 function oversigtSide() {
-    if (window.location.pathname == '/admins/oversigt/') {
+    if (window.location.pathname == '/admins/overview/') {
         //RBs
         let date = new Date();
         let i = 0;
@@ -335,7 +335,7 @@ function calculateDays(month) {
 
 //rediger side
 async function redigerSide() {
-    if (window.location.pathname == '/admins/oversigt/redigerRejse') {
+    if (window.location.pathname == '/admins/overview/editBooking') {
         let url = '/admins/api/getBookings/';
         const res = await fetch(url);
         const bookings = await res.json();
@@ -377,7 +377,7 @@ async function redigeringsBtnOnclick() {
 }
 
 async function editBooking(booking) {
-    const response = await fetch(`/admins/api/oversigt/redigerRejse/${booking}`, {
+    const response = await fetch(`/admins/api/overview/editBooking/${booking}`, {
         method: 'put',
         body: JSON.stringify(booking),
         headers: { 'Content-Type': 'application/json' }
