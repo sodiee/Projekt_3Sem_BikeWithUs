@@ -7,24 +7,24 @@ import DBFunctions from '../../Storage/DBFunctions.js';
 // driver-ENDPOINTS for LOGIN |
 //-------------------------------
 
-// Middleware til at kræve log ind for beskyttede ruter
+// Middleware to require login for protected routes
 driverRouter.use((req, res, next) => {
     res.locals.isDriverLoggedIn = req.session.isDriverLoggedIn || false;
     res.locals.driverUser = req.session.driverUser || null;
     next();
 })
 
-// Middleware til at kræve log ing for beskyttede ruter
+// Middleware to require login for protected routes
 function requireDriverLogin(req, res, next) {
     if (!req.session.isDriverLoggedIn) {
-        // Omdiriger kun, hvis brugen er ikke logget ind
+        // Redirect only if the user is not logged in
         res.redirect('/')
     } else {
         next();
     }
 }
 
-// Anvend middleware på alle bestyttede ruter, undtagen login-ruten
+// Apply middleware to all supported routes except the login route
 driverRouter.use((req, res, next) => {
     if (req.path !== '/driverLogin') {
         requireDriverLogin(req, res, next);
@@ -55,7 +55,7 @@ driverRouter.post('/driverLogin', async (req, res) => {
           req.session.driverUser = driverData;
           res.redirect('/drivers/');
         } else {
-          res.status(401).send('Forkert brugernavn eller adgangskode');
+          res.status(401).send('Wrong username or password');
         }
       } catch (error) {
         console.error(error);
@@ -80,8 +80,8 @@ driverRouter.get('/Tasks/Assign', async (req, res) => {
 
         res.json({ tasks });
     } catch (error) {
-        console.error('Fejl ved tildeling af opgaver:', error);
-        res.status(500).send('Der opstod en fejl ved tildeling af opgaver.');
+        console.error('Errors when assigning tasks:', error);
+        res.status(500).send('An error occurred while assigning tasks.');
     }
 });
 
@@ -92,18 +92,18 @@ driverRouter.get('/Guests/Options', async (req, res) => {
 
         res.json({ guestOptions });
     } catch (error) {
-        console.error('Fejl ved hentning af tilvalg for gæster:', error);
-        res.status(500).send('Der opstod en fejl ved hentning af tilvalg for gæster.');
+        console.error('Error retrieving options for guests:', error);
+        res.status(500).send('An error occurred while retrieving options for guests.');
     }
 });
 
-//hent driver tasks
+// Get driver tasks
 driverRouter.get('/driverTasks', async (req, res) => {
     const driverTasks = await getDriverTasks();
     res.render('driverTasks', {tasks: driverTasks});
 });
 
-//hent driver tasks
+// Get driver tasks
 driverRouter.get('/driverTasks', async (req, res) => {
     const driverTasks = await getDriverTasks();
     res.render('driverTasks', {tasks: driverTasks});
@@ -114,8 +114,8 @@ driverRouter.delete('/:driverID', async (req, res) => {
         const driver = await DBFunctions.deleteDriverDB(req.params.driverID);
         res.status(200).json({ driver });
     } catch (error) {
-        console.error('Fejl ved sletning af chauffør:', error);
-        res.status(500).send('Der opstod en fejl ved sletning af chauffør.');
+        console.error('Error deleting driver:', error);
+        res.status(500).send('An error occurred while deleting the driver.');
     }
 });
 
@@ -124,8 +124,8 @@ driverRouter.put('/:driverID', async (req, res) => {
         const driver = await DBFunctions.editDriverDB(req.params.driverID, req.body);
         res.json({ driver });
     } catch (error) {
-        console.error('Fejl ved redigering af chauffør:', error);
-        res.status(500).send('Der opstod en fejl ved redigering af chauffør.');
+        console.error('Error editing driver:', error);
+        res.status(500).send('An error occurred while editing the driver.');
     }
 });
 
@@ -134,8 +134,8 @@ driverRouter.post('/', async (req, res) => {
         const driver = await DBFunctions.addDriverDB(req.body);
         res.status(201).json({ driver });
     } catch (error) {
-        console.error('Fejl ved tilføjelse af chauffør:', error);
-        res.status(500).send('Der opstod en fejl ved tilføjelse af chauffør.');
+        console.error('Error adding driver:', error);
+        res.status(500).send('An error occurred while adding driver.');
     }
 });
 
