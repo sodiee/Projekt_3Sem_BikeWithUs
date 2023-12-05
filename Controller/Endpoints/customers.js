@@ -133,6 +133,18 @@ customerRouter.get('/Calendar/Book', async (req, res) => {
         }
     });
 
+customerRouter.get('/customers/api/journeys/:journeyID', async (req, res) =>{
+    try{
+        const journeyID = req.params.journeyID
+        const journey = await journeyController.getJourney(journeyID)
+        res.json(journey)
+
+    } catch(error) {
+        console.log('Fejl ved hentning af tur: ', error)
+        res.status(500).send('Der opstod en fejl ved tilføjelse af rejse.');
+    }
+})
+
 customerRouter.post('/Calendar/Book', async (req, res) => {
         try {
             const selectedJourneyId = req.body.journeyId;
