@@ -88,7 +88,7 @@ section>* {
 #table-container {
     margin-top: 30px;
     overflow-x: auto;
-    display: table; /* Tilføjet for at få thead og tbody til at passe sammen */
+    display: table-header-group; /* Tilføjet for at få thead og tbody til at passe sammen */
     width: 100%;
 }
 
@@ -124,17 +124,19 @@ section>* {
 
 #table-container p {
     margin: 0;
+    display: table-header-group;
 }
 
 #table-container thead,
 #table-container tbody {
-    display: table; /* Tilføjet for at få thead og tbody til at passe sammen */
+    display: table-header-group; /* Tilføjet for at få thead og tbody til at passe sammen */
     width: 100%;
 }
 
 #table-container tbody {
     max-height: 500px;
     overflow-y: auto;
+    display: table-header-group;
 }
 
 #buttons {
