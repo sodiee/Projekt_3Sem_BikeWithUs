@@ -8,14 +8,14 @@ block content
     each booking in bookings
       if booking.customer.id === currentCustomerId
         li 
-          - const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+          - const options = { day: '2-digit', month: '2-digit', year: '2-digit' };
           - const startDateFormat = new Date(booking.startDate.seconds * 1000).toLocaleString(da-DK, options)
-        
-          p test: #{startDateFormat}
-          p Start Dato: #{booking.startDate}
-          p Slut Dato: #{booking.endDate} 
+          - const endDateFormat = new Date(booking.endDate.seconds * 1000).toLocaleString(da-DK, options)
+          
+          p Start Dato: #{startDateFormat}
+          p Slut Dato: #{endDateFormat} 
           p Number of persons: #{booking.nrOfPersons}
-          p Price: #{booking.bookingPrice}
+          p Price: #{booking.price}
           - totalBookings += 1
 
   h3 Total antal ture: #{totalBookings}
