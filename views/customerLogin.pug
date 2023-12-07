@@ -1,6 +1,6 @@
 html
     head 
-        title BikeWithUs customer
+        title BikeWithUs Kunde
     
         link(rel="stylesheet" href="/CSS/core.css")
         link(rel="preconnect" href="https://fonts.googleapis.com")
@@ -9,7 +9,7 @@ html
     
     body 
         main 
-            h2 Customer login
+            h2 BikeWithUs kunde Login
             form(action='/customers/customerLogin', method='POST')
                 label(for='username') Brugernavn
                 input(type='text', id='customerUsername', name='username', required)
@@ -17,4 +17,4 @@ html
                 label(for='password') Adgangskode
                 input(type='password', id='customerPassword', name='password', required)
                 br
-                button(type='submit', name='action', value='login') Login Customer
+                button(type='submit', name='action', value='login') Login Kunde
